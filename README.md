@@ -1,1 +1,1 @@
-# lab-reservation
+# EECS-ONLINE
