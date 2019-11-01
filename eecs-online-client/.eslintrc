@@ -1,3 +1,8 @@
 {
-  "extends": "eslint-config-umi"
+  "extends": "eslint-config-umi",
+  "rules": {
+    "@typescript-eslint/no-angle-bracket-type-assertion": 0
+  }
 }
+
+// @typescript-eslint/no-angle-bracket-type-assertion

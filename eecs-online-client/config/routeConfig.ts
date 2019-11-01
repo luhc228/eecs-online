@@ -3,10 +3,20 @@ const UserLayoutPath = '../layouts/UserLayout';
 
 export default [
   {
-    path: '/',
+    path: '/teacher',
     component: BasicLayoutPath,
     routes: [
-      { path: '/', component: '../pages/index' }
+      { path: '/teacher/course', component: '' }
     ]
+  },
+  {
+    path: '/login',
+    component: UserLayoutPath,
+    routes: [
+      { path: '/login', component: './login' }
+    ]
+  },
+  {
+    component: '404',
   },
 ]
