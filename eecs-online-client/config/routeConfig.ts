@@ -5,8 +5,9 @@ export default [
   {
     path: '/teacher',
     component: BasicLayoutPath,
+    // Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
     routes: [
-      { path: '/teacher/course', component: '' }
+      { path: '/teacher/course', component: './course' }
     ]
   },
   {
@@ -15,6 +16,14 @@ export default [
     routes: [
       { path: '/login', component: './login' }
     ]
+  },
+  {
+    path: '/',
+    component: BasicLayoutPath,
+    // Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
+    routes: [
+      { path: '/', redirect: '/teacher/course' },
+    ],
   },
   {
     component: '404',

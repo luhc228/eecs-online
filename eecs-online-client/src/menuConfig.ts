@@ -1,15 +1,9 @@
 const menuConfig = [
   {
-    key: 'homepage',
-    name: '首页',
-    link: '/homepage',
+    key: 'course',
+    name: '课程',
+    link: '/teacher/course',
     icon: 'icon-shouye1',
-  },
-  {
-    key: 'thermometer',
-    name: '温度检测',
-    link: '/thermometer',
-    icon: 'icon-wendu',
   },
   {
     key: 'subMenu',

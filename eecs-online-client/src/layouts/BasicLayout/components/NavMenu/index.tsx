@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu } from 'antd';
 import _ from 'lodash';
 import CustomIcon from '@/components/CustomIcon';
-import menuConfig from '../../../../../config/menuConfig';
+import menuConfig from '@/menuConfig';
 import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
 import { PageMatchModel, CustomLocation } from '@/interfaces/component';

@@ -1,4 +1,5 @@
 import { IConfig } from 'umi-types';
+import theme from './theme';
 import routeConfig from './routeConfig';
 
 // ref: https://umijs.org/config/
@@ -25,6 +26,8 @@ const config: IConfig = {
       },
     }],
   ],
+  // antd basic styles configs
+  theme,
 }
 
 export default config;
