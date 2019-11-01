@@ -1,26 +1,19 @@
 import { IConfig } from 'umi-types';
+import routeConfig from './routeConfig';
 
 // ref: https://umijs.org/config/
-const config: IConfig =  {
+const config: IConfig = {
   treeShaking: true,
-  routes: [
-    {
-      path: '/',
-      component: '../layouts/index',
-      routes: [
-        { path: '/', component: '../pages/index' }
-      ]
-    }
-  ],
+  routes: routeConfig,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
       antd: true,
       dva: true,
       dynamicImport: false,
-      title: 'eecs-online-client',
+      title: 'EECS在线判分系统',
       dll: true,
-      
+
       routes: {
         exclude: [
           /models\//,
