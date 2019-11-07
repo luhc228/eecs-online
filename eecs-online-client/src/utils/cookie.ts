@@ -18,10 +18,10 @@ const cookieUtil = {
     const cookies: Cookies = {};
     if (document.cookie) {
       const objects = document.cookie.split(';');
-      for (let i in objects) {
-        var index = objects[i].indexOf('=');
-        var key = objects[i].substr(0, index).trim();
-        var value = objects[i].substr(index + 1, objects[i].length);
+      for (const i in objects) {
+        const index = objects[i].indexOf('=');
+        const key = objects[i].substr(0, index).trim();
+        const value = objects[i].substr(index + 1, objects[i].length);
         cookies[key] = value;
       }
     }
@@ -33,26 +33,25 @@ const cookieUtil = {
       let cookie = `${name}=${value}`;
       if (opts) {
         if (opts.expires) {
-          cookie += ';expires=' + opts.expires;
+          cookie += `;expires=${opts.expires}`;
         }
         if (opts.maxAge) {
-          cookie += ';max-age=' + opts.maxAge;
+          cookie += `;max-age=${opts.maxAge}`;
         }
         if (opts.path) {
-          cookie += ';path=' + opts.path;
+          cookie += `;path=${opts.path}`;
         }
         if (opts.domain) {
-          cookie += ';domain=' + opts.domain;
+          cookie += `;domain=${opts.domain}`;
         }
         if (opts.secure) {
-          cookie += ';secure=' + opts.secure;
+          cookie += `;secure=${opts.secure}`;
         }
       }
       document.cookie = cookie;
       return cookie;
-    } else {
-      return '';
     }
+    return '';
   },
 
   getItem(name: string) {
@@ -61,14 +60,14 @@ const cookieUtil = {
 
   removeItem(name: string) {
     if (this.getCookiesObj()[name]) {
-      document.cookie = name + '=;max-age=0';
+      document.cookie = `${name}=;max-age=0`;
     }
   },
 
   clear() {
     const cookies = this.getCookiesObj();
-    for (let i in cookies) {
-      document.cookie = cookies[i] + '=;max-age=0';
+    for (const i in cookies) {
+      document.cookie = `${cookies[i]}=;max-age=0`;
     }
   },
 };

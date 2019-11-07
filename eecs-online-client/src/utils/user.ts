@@ -1,5 +1,5 @@
-import cookie from './cookie';
 import router from 'umi/router';
+import cookie from './cookie';
 
 /**
  * 保存和操作用户登录信息

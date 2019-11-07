@@ -1,20 +1,33 @@
 import * as React from 'react';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { FormComponentProps } from 'antd/es/form';
 import styles from './index.less';
+import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 
-interface LoginFormProps {
-  form: any;
+interface LoginFormProps extends FormComponentProps {
+  userType: string;
+  dispatch: Dispatch<any>;
+  loading: boolean;
 }
 
 const LoginForm: React.SFC<LoginFormProps> = ({
-  form
+  form,
+  userType,
+  loading,
+  dispatch,
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    form.validateFields((err: any, values: any) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+    form.validateFields((err: any, values: StudentLoginForm | TeacherLoginForm) => {
+      if (err) {
+        return;
       }
+      dispatch({
+        type: 'login/userLogin',
+        payload: { userType, values },
+      })
     });
   };
 
@@ -48,7 +61,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
           valuePropName: 'checked',
           initialValue: true,
         })(<Checkbox>Remember me</Checkbox>)}
-        <Button type="primary" htmlType="submit" className={styles.submit}>
+        <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
           登　录
         </Button>
       </Form.Item>
@@ -56,4 +69,12 @@ const LoginForm: React.SFC<LoginFormProps> = ({
   )
 }
 
-export default Form.create({ name: 'normal_login' })(LoginForm);
+const mapStateToProps = (state: any) => {
+  const { userType } = state.login;
+  return {
+    userType,
+    loading: state.loading.models.login,
+  }
+}
+
+export default Form.create({ name: 'normal_login' })(connect(mapStateToProps)(LoginForm));

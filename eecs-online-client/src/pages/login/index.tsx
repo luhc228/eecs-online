@@ -1,27 +1,45 @@
 import React from 'react';
-import { Form, Tabs } from 'antd';
+import { Tabs } from 'antd';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import LoginForm from './components/LoginForm';
+import { USER_TYPE } from '@/enums';
 import styles from './index.less';
 
 const { TabPane } = Tabs;
 
 const TabPanes: React.ReactNode[] = [
-  <TabPane tab="学生登录" key="studentLogin">
+  <TabPane tab="学生登录" key={USER_TYPE.Student}>
     <LoginForm />
   </TabPane>,
-  <TabPane tab="教师登录" key="teacherLogin">
+  <TabPane tab="教师登录" key={USER_TYPE.Teacher}>
     <LoginForm />
-  </TabPane>
+  </TabPane>,
 ]
 
-const Login: React.FC = () => {
-  return (
-    <div className={styles.main}>
-      <Tabs animated={false}>
-        {...TabPanes}
-      </Tabs>
-    </div>
-  )
+interface LoginProps {
+  dispatch: Dispatch<any>;
+  userType: USER_TYPE.Student | USER_TYPE.Teacher,
 }
 
-export default Form.create({ name: 'user_login' })(Login);
+const Login: React.FC<LoginProps> = props => (
+  <div className={styles.main}>
+    <Tabs animated={false} activeKey={props.userType} onChange={activeKey => {
+      props.dispatch({
+        type: 'login/changeUserType',
+        payload: activeKey,
+      })
+    }}>
+      {...TabPanes}
+    </Tabs>
+  </div>
+)
+
+const mapStateToProps = (state: any) => {
+  const { userType } = state.login;
+  return {
+    userType,
+  }
+}
+
+export default connect(mapStateToProps)(Login);
