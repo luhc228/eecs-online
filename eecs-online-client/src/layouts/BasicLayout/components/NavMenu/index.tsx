@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 import _ from 'lodash';
 import CustomIcon from '@/components/CustomIcon';
 import menuConfig from '@/menuConfig';
@@ -19,7 +19,7 @@ interface MenuTitleProps {
 
 const MenuTitle: React.SFC<MenuTitleProps> = ({ icon, name }) => (
   <React.Fragment>
-    <CustomIcon name={icon} />
+    {icon && <CustomIcon name={icon} />}
     <span>{name}</span>
   </React.Fragment>
 )
