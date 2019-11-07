@@ -45,14 +45,6 @@ const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
             <Menu.SubMenu
               key={item.key}
               title={
-                // <span className={styles.title}>
-                //   <CustomIcon name={item.icon} />
-                //   {item.name}
-                // </span>
-                // <React.Fragment>
-                //   <Icon type="pie-chart" />
-                //   <span>Option 1</span>
-                // </React.Fragment>
                 <MenuTitle icon={item.icon} name={item.name} />
               }
             >
@@ -60,23 +52,9 @@ const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
                 <Menu.Item key={ele.key}>
                   {ele.link ? (
                     <Link to={ele.link}>
-                      {/* <span className={styles.title}>
-                        <CustomIcon name={ele.icon} />
-                        <span>{ele.name}</span>
-                      </span> */}
-                      {/* <Icon type="pie-chart" />
-                      <span>Option 1</span> */}
                       <MenuTitle icon={ele.icon} name={ele.name} />
                     </Link>
                   ) : (
-                      // <span className={styles.title}>
-                      //   <CustomIcon name={ele.icon} />
-                      //   <span>{ele.name}</span>
-                      // </span>
-                      // <React.Fragment>
-                      //   <Icon type="pie-chart" />
-                      //   <span>Option 1</span>
-                      // </React.Fragment>
                       <MenuTitle icon={ele.icon} name={ele.name} />
                     )}
                 </Menu.Item>
@@ -89,17 +67,9 @@ const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
           <Menu.Item key={item.key}>
             {item.link ? (
               <Link to={item.link}>
-                {/* <span className={styles.title}>
-                  <CustomIcon name={item.icon} />
-                  <span>{item.name}</span>
-                </span> */}
                 <MenuTitle icon={item.icon} name={item.name} />
               </Link>
             ) : (
-                // <span className={styles.title}>
-                //   <CustomIcon name={item.icon} />
-                //   <span>{item.name}</span>
-                // </span>
                 <MenuTitle icon={item.icon} name={item.name} />
               )}
           </Menu.Item>
