@@ -8,13 +8,13 @@ const menuConfig = [
   {
     key: 'subMenu',
     name: '子菜单',
-    icon: 'icon-homepage',
+    icon: 'icon-changjingguanli',
     children: [
       {
         key: 'homepage',
         name: '子菜单1',
         link: '/submenu',
-        icon: 'icon-homepage',
+        icon: 'icon-changjingguanli',
       }
     ]
   },
