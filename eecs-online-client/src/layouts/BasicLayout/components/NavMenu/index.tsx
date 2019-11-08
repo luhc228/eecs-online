@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { Menu } from 'antd';
 import _ from 'lodash';
-import CustomIcon from '@/components/CustomIcon';
-import menuConfig from '@/menuConfig';
 import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
-import { PageMatchModel, CustomLocation } from '@/interfaces/component';
+import CustomIcon from '@/components/CustomIcon';
+import menuConfig from '@/menuConfig';
+import { PageBasiocPropsModel } from '@/interfaces/component';
 
-interface NavMenuProps {
-  location: CustomLocation;
-  match: PageMatchModel;
+interface NavMenuProps extends PageBasiocPropsModel {
 }
 
 interface MenuTitleProps {
@@ -24,9 +22,9 @@ const MenuTitle: React.SFC<MenuTitleProps> = ({ icon, name }) => (
   </React.Fragment>
 )
 
-const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
+const NavMenu: React.SFC<NavMenuProps> = props => {
   const [selectedKeys, setSelectedKeys] = useState(() => {
-    const { pathname } = location;
+    const { pathname } = props.location;
     return [pathname.split('/')[1]];
   });
 
