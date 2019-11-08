@@ -68,6 +68,7 @@ import { CurrentUser } from '@/models/user';
 // export default new User();
 
 export default {
+  isLogin: () => localStorage.getItem('accesstoken'),
   saveToken: (token: string) => {
     localStorage.setItem('accesstoken', token)
   },
