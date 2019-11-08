@@ -1,4 +1,5 @@
 import { routerRedux } from 'dva/router';
+import { stringify } from 'qs';
 import * as service from '../services';
 import { USER_TYPE } from '@/enums';
 import { getPageQuery } from '@/utils/utils';
@@ -55,19 +56,19 @@ export default {
       yield put(routerRedux.replace(redirect || `${pathnamePrefix}`));
     },
 
-    *logout(_, { put }) {
-      // const { redirect } = getPageQuery();
-      // // redirect
-      // if (window.location.pathname !== '/user/login' && !redirect) {
-      //   yield put(
-      //     routerRedux.replace({
-      //       pathname: '/user/login',
-      //       search: stringify({
-      //         redirect: window.location.href,
-      //       }),
-      //     }),
-      //   );
-      // }
+    *logout(_: any, { put }: any) {
+      const { redirect } = getPageQuery();
+      // redirect
+      if (window.location.pathname !== '/login' && !redirect) {
+        yield put(
+          routerRedux.replace({
+            pathname: '/login',
+            search: stringify({
+              redirect: window.location.href,
+            }),
+          }),
+        );
+      }
     },
   },
 
