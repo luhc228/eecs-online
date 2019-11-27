@@ -2,13 +2,24 @@ import React, { useState } from 'react';
 
 interface EditModalProps {
   record: any;
-  onOk: () => void
+  onOk: () => void;
 }
 
-const EditModal: React.SFC<EditModalProps> = ({ record }) => {
+const EditModal: React.SFC<EditModalProps> = ({ record, onOk, children }) => {
   const [visible, setVisible] = useState(false);
+
+  const showModalHandler = (e: React.BaseSyntheticEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setVisible(true);
+  }
   return (
-    <div>111</div>
+    <span>
+      <span onClick={showModalHandler}>
+        {children}
+      </span>
+    </span>
   )
 }
 
