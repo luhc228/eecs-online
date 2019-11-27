@@ -1,3 +1,6 @@
+import React from 'react';
+
+
 export interface PageMatchModel {
   isExact: boolean;
   params: object;
@@ -16,4 +19,18 @@ export interface CustomLocation extends Location {
   query: {
     [x: string]: string;
   };
+}
+
+export interface TableColumnsProps<T> {
+  title: string;
+  dataIndex: string;
+  key: string;
+  render?: (_: string, record: T, index: any) => React.ReactNode;
+}
+
+export interface ButtonProps {
+  text: string;
+  icon: string;
+  type?: 'default' | 'primary' | 'ghost' | 'dashed' | 'danger';
+  onClick: () => void;
 }

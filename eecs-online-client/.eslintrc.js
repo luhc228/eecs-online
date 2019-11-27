@@ -5,4 +5,7 @@ module.exports = {
   globals: {
     page: true,
   },
+  rules: Object.assign(
+    strictEslint.rules,
+    { "jsx-a11y/label-has-associated-control": "off" })
 };

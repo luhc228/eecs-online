@@ -1,0 +1,78 @@
+import React from 'react';
+import { TableComponents, TableEventListeners } from 'antd/es/table';
+import { Table, Pagination } from 'antd';
+import { ButtonProps } from '@/interfaces/component';
+import { PAGINATIUON_CONFIGS } from '@/enums';
+
+
+interface CustomTableProps {
+  loading: boolean;
+  total?: number;
+  current?: number;
+  pageSize?: number;
+  columns: object[];
+  dataSource: object[];
+  buttons?: ButtonProps[];
+  rowSelection?: object;
+  expandedRowKeys?: string[];
+  components?: TableComponents;
+  rowKey: string | ((record: any) => string);
+  onRow?: (record: any, index?: number) => TableEventListeners;
+  onPagination?: (current: number) => void;
+  onExpand?: (expanded: any, record: any) => void;
+  expandedRowRender?: () => React.ReactNode;
+}
+
+const CustomTable: React.SFC<CustomTableProps> = ({
+  loading,
+  columns,
+  dataSource,
+  rowKey,
+  onPagination,
+  total,
+  current,
+  pageSize,
+  components,
+  expandedRowRender,
+  onExpand,
+  expandedRowKeys,
+  rowSelection,
+  onRow,
+}) => (
+    <React.Fragment>
+      <Table
+        loading={loading}
+        columns={columns}
+        dataSource={dataSource}
+        pagination={false}
+        rowKey={rowKey}
+        components={components}
+        size="middle"
+        expandedRowRender={expandedRowRender}
+        onExpand={onExpand}
+        expandedRowKeys={expandedRowKeys !== undefined ? expandedRowKeys : []}
+        rowSelection={rowSelection}
+        onRow={onRow}
+        scroll={{ x: true }}
+      />
+      {onPagination !== undefined && (
+        <Pagination
+          className="ant-table-pagination"
+          showQuickJumper
+          size="middle"
+          total={total}
+          pageSize={pageSize}
+          current={current}
+          onChange={onPagination}
+        />
+      )}
+    </React.Fragment>
+  )
+
+CustomTable.defaultProps = {
+  buttons: [],
+  loading: false,
+  pageSize: PAGINATIUON_CONFIGS.pageSize,
+}
+
+export default CustomTable;

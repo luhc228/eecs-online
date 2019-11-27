@@ -18,7 +18,7 @@ interface BasicLayoutProps {
 
 const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children }) => (
   <Layout>
-    <Sider trigger={null} collapsible collapsed={collapsed} collapsedWidth={80}>
+    <Sider trigger={null} collapsible width={250} collapsed={collapsed} collapsedWidth={80}>
       <div className={styles.logo} />
       <NavMenu />
     </Sider>
