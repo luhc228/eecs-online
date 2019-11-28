@@ -14,7 +14,7 @@ const columns: ColumnProps<CourseListItem>[] = [
   { title: '课程名称', dataIndex: 'courseName' },
   { title: '上课地点', dataIndex: 'location' },
   { title: '上课时间', dataIndex: 'time' },
-  { title: '上课班级', dataIndex: 'className' },
+  { title: '上课班级', dataIndex: 'classNames' },
   {
     title: '操作',
     render: (_: string, record: CourseListItem) => (
@@ -37,16 +37,6 @@ interface CourseProps {
 }
 
 const Course: React.FC<CourseProps> = props => {
-  const dataSource: any[] = [
-    {
-      courseName: '123',
-      location: '123123',
-      time: '123123123',
-      className: '1231233123123123',
-    },
-  ]
-  // const page = 1
-  // const total = 10
   useEffect(() => {
     props.dispatch({
       type: 'course/fetchCoursePagination',
@@ -55,7 +45,7 @@ const Course: React.FC<CourseProps> = props => {
   }, []);
 
   const { data: { page, total, courseList } } = props.course;
-  console.log(page, total, courseList);
+
   return (
     <div>
       <div className={styles.buttons}>
@@ -65,18 +55,20 @@ const Course: React.FC<CourseProps> = props => {
 
       </div>
       <CustomTable
-        loading={false}
+        loading={props.loading}
         columns={columns}
         dataSource={courseList}
         current={page}
         total={total}
         rowKey={(record: CourseListItem) => record.id}
         onPagination={(current: number) => {
-          console.log(current);
+          props.dispatch({
+            type: 'course/fetchCoursePagination',
+            payload: { ...PAGINATION_CONFIGS, page: current },
+          })
         }}
       />
     </div>
-
   )
 }
 

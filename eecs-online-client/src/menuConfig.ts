@@ -1,7 +1,13 @@
 const menuConfig = [
   {
+    key: 'class',
+    name: '班级信息',
+    link: '/teacher/class',
+    icon: 'icon-shouye1',
+  },
+  {
     key: 'course',
-    name: '课程',
+    name: '课程信息',
     link: '/teacher/course',
     icon: 'icon-shouye1',
   },
@@ -15,8 +21,8 @@ const menuConfig = [
         name: '子菜单1',
         link: '/submenu',
         icon: 'icon-changjingguanli',
-      }
-    ]
+      },
+    ],
   },
 ]
 

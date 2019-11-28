@@ -11,7 +11,9 @@ export default {
           page,
           pageSize,
           total: 100,
-          'courseList|10': [{ name: '@city', 'value|1-100': 50, 'type|0-2': 1 }],
+          'courseList|8': [
+            { id: '@id', courseName: 'EECS', location: 'N5', time: '@time("A HH:mm:ss")', classNames: '崇新20' },
+          ],
         },
       }),
     )

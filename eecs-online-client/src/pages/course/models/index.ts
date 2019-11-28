@@ -19,7 +19,8 @@ export interface ModelType {
     save: Reducer<StateType>;
   };
   effects: {
-    fetchCoursePagination: Effect;
+    fetchCoursePagination: Effect,
+    removeCourse: Effect,
   };
 }
 
@@ -42,6 +43,9 @@ const Model: ModelType = {
   },
 
   effects: {
+    /**
+     * 获取课程信息分页
+     */
     *fetchCoursePagination({ payload }: any, { call, put }: any) {
       const response = yield call(courseService.fetchCoursePagination, payload);
       const { data } = response;
@@ -49,6 +53,22 @@ const Model: ModelType = {
         type: 'save',
         payload: {
           data,
+        },
+      })
+    },
+
+    /**
+     * 删除某个课程
+     */
+    *removeCourse({ payload }: any, { call, put, select }: any) {
+      const response = yield call(courseService.removeCourse, payload);
+      const { data } = response;
+
+      const page = yield select((state: any) => state.data.page);
+      yield put({
+        type: 'fetchCoursePagination',
+        payload: {
+          page,
         },
       })
     },
