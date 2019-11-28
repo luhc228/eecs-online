@@ -2,7 +2,7 @@ import React from 'react';
 import { TableComponents, TableEventListeners } from 'antd/es/table';
 import { Table, Pagination } from 'antd';
 import { ButtonProps } from '@/interfaces/component';
-import { PAGINATIUON_CONFIGS } from '@/enums';
+import { PAGINATION_CONFIGS } from '@/constants';
 
 
 interface CustomTableProps {
@@ -72,7 +72,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
 CustomTable.defaultProps = {
   buttons: [],
   loading: false,
-  pageSize: PAGINATIUON_CONFIGS.pageSize,
+  pageSize: PAGINATION_CONFIGS.pageSize,
 }
 
 export default CustomTable;

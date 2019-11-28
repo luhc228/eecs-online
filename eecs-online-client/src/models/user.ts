@@ -20,7 +20,7 @@ const UserModel: UserModelType = {
   state: {
     currentUser: {
       id: '201700121000',
-      name: '姜小白',
+      name: 'Hengchang',
     },
   },
 }

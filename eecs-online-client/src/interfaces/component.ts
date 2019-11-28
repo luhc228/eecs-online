@@ -34,3 +34,9 @@ export interface ButtonProps {
   type?: 'default' | 'primary' | 'ghost' | 'dashed' | 'danger';
   onClick: () => void;
 }
+
+export interface TableListPagination {
+  total: number;
+  pageSize: number;
+  page: number;
+}

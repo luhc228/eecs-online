@@ -1,4 +1,6 @@
-export interface CourseTableModel {
+import { TableListPagination } from './component';
+
+export interface CourseListItem {
   // 课程唯一id
   id: string;
   // 课程名称
@@ -9,4 +11,8 @@ export interface CourseTableModel {
   time: string;
   // 虚拟班级名称
   classNames: string;
+}
+
+export interface CourseTableData extends TableListPagination {
+  courseList: CourseListItem[];
 }
