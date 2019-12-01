@@ -8,6 +8,7 @@ import { CourseListItem } from '@/interfaces/course';
 import EditModal from './components/EditModal';
 import styles from './index.less';
 import { PAGINATION_CONFIGS } from '@/constants';
+import CustomFilter from '@/components/CustomFilter';
 import { StateType } from './models';
 
 const columns: ColumnProps<CourseListItem>[] = [
@@ -48,11 +49,11 @@ const Course: React.FC<CourseProps> = props => {
 
   return (
     <div>
+      <CustomFilter onSubmit={value => { console.log(value) }} />
       <div className={styles.buttons}>
         <EditModal title="新增课程" record={{}} onOk={() => { }}>
           <Button type="primary">新增课程</Button>
         </EditModal>
-
       </div>
       <CustomTable
         loading={props.loading}

@@ -5,6 +5,6 @@ export default {
   '@layout-sider-background': '#001529',
   // '@btn-height-base': '38px',
   '@padding-md': '20px',
-  '@input-height-base': '38px',
+  // '@input-height-base': '38px',
   '@pagination-item-size': '38px',
 };
