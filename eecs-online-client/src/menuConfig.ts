@@ -1,12 +1,12 @@
 const menuConfig = [
   {
-    key: 'class',
+    key: 'teacher-class',
     name: '班级信息',
     link: '/teacher/class',
     icon: 'icon-shouye1',
   },
   {
-    key: 'course',
+    key: 'teacher-course',
     name: '课程信息',
     link: '/teacher/course',
     icon: 'icon-shouye1',

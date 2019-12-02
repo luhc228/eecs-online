@@ -25,7 +25,8 @@ const MenuTitle: React.SFC<MenuTitleProps> = ({ icon, name }) => (
 const NavMenu: React.SFC<NavMenuProps> = props => {
   const [selectedKeys, setSelectedKeys] = useState(() => {
     const { pathname } = props.location;
-    return [pathname.split('/')[1]];
+    console.log([pathname.split('/').slice(1, 3).join('-')]);
+    return [pathname.split('/').slice(1, 3).join('-')];
   });
 
   return (
@@ -34,6 +35,7 @@ const NavMenu: React.SFC<NavMenuProps> = props => {
       mode="inline"
       selectedKeys={selectedKeys}
       onSelect={({ key }: { key: string }) => {
+        console.log([key]);
         setSelectedKeys([key]);
       }}
     >
