@@ -6,6 +6,7 @@ import { Form, Row, Col, Input, Select, InputNumber, Button } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
+import { TWO_COLUMNS_FORM_LAYOUT } from '@/constants';
 import styles from './index.less';
 
 const { Option } = Select;
@@ -22,12 +23,14 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
   const { form, formConfig, onSubmit, loading } = props;
   const { getFieldDecorator } = form;
 
+  const formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
+
   const renderForm = (formItem: FormItemComponentProps) => {
     switch (formItem.component) {
       case FORM_COMPONENT.Input:
         return (
 
-          <Form.Item label={formItem.label}>
+          <Form.Item label={formItem.label} {...formItemLayout}>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
             })(<Input placeholder="请输入" />)}
@@ -35,7 +38,7 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
         )
       case FORM_COMPONENT.Select:
         return (
-          <Form.Item label={formItem.label}>
+          <Form.Item label={formItem.label} {...formItemLayout}>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
             })(
@@ -50,7 +53,7 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
         )
       case FORM_COMPONENT.InputNumber:
         return (
-          <Form.Item label={formItem.label}>
+          <Form.Item label={formItem.label} {...formItemLayout}>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
             },
@@ -79,16 +82,17 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
     props.onSubmit({});
   }
   return (
-    <div className={styles.tableListForm}>
-      <Form onSubmit={submitHandler} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+    // <div className={styles.tableListForm}>
+    <Form onSubmit={submitHandler} layout="vertical">
+      {/* <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
             <Col md={8} sm={24} key={formItem.name}>
               {renderForm(formItem)}
             </Col>
           ))}
-        </Row>
-        <Row>
+        </Row> */}
+
+      {/* <Row>
           <span className={styles.submitButtons}>
             <Button type="primary" htmlType="submit" loading={loading}>
               查询
@@ -97,9 +101,25 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
               重置
           </Button>
           </span>
-        </Row>
-      </Form>
-    </div>
+        </Row> */}
+
+      {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
+        // <Col md={8} sm={24} key={formItem.name}>
+        renderForm(formItem)
+        // </Col>
+      ))}
+      <Form.Item>
+        <span className={styles.submitButtons}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            查询
+          </Button>
+          <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
+            重置
+          </Button>
+        </span>
+      </Form.Item>
+    </Form>
+    // </div>
 
   )
 }
