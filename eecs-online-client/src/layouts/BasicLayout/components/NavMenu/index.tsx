@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
 import CustomIcon from '@/components/CustomIcon';
-import menuConfig from '@/menuConfig';
+import menuConfig from '../../../../../config/menuConfig';
 import { PageBasiocPropsModel } from '@/interfaces/components';
 
 interface NavMenuProps extends PageBasiocPropsModel {
@@ -25,7 +25,6 @@ const MenuTitle: React.SFC<MenuTitleProps> = ({ icon, name }) => (
 const NavMenu: React.SFC<NavMenuProps> = props => {
   const [selectedKeys, setSelectedKeys] = useState(() => {
     const { pathname } = props.location;
-    console.log([pathname.split('/').slice(1, 3).join('-')]);
     return [pathname.split('/').slice(1, 3).join('-')];
   });
 
