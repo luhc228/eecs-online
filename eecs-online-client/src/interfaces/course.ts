@@ -1,4 +1,4 @@
-import { TableListPagination } from './component';
+import { TableListPaginationProps } from './components';
 
 export interface CourseListItem {
   // 课程唯一id
@@ -13,6 +13,6 @@ export interface CourseListItem {
   classNames: string;
 }
 
-export interface CourseTableData extends TableListPagination {
+export interface CourseTableData extends TableListPaginationProps {
   courseList: CourseListItem[];
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FORM_COMPONENT } from '@/enums';
 
 export interface PageMatchModel {
   isExact: boolean;
@@ -35,8 +35,20 @@ export interface ButtonProps {
   onClick: () => void;
 }
 
-export interface TableListPagination {
+export interface TableListPaginationProps {
   total: number;
   pageSize: number;
   page: number;
+}
+
+export interface SelectComponentDatasourceModel {
+  value: string | number;
+  label: string | number;
+}
+
+export interface FilterFormComponentProps {
+  label: string;
+  name: string;
+  component: FORM_COMPONENT.Input | FORM_COMPONENT.Select | FORM_COMPONENT.InputNumber;
+  datasource?: SelectComponentDatasourceModel[];
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableComponents, TableEventListeners } from 'antd/es/table';
 import { Table, Pagination } from 'antd';
-import { ButtonProps } from '@/interfaces/component';
+import { ButtonProps } from '@/interfaces/components';
 import { PAGINATION_CONFIGS } from '@/constants';
 
 

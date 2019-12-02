@@ -5,7 +5,7 @@ import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
 import CustomIcon from '@/components/CustomIcon';
 import menuConfig from '@/menuConfig';
-import { PageBasiocPropsModel } from '@/interfaces/component';
+import { PageBasiocPropsModel } from '@/interfaces/components';
 
 interface NavMenuProps extends PageBasiocPropsModel {
 }

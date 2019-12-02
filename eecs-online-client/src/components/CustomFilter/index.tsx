@@ -6,6 +6,7 @@ import { Form, Row, Col, Input, Select, InputNumber, Button } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT } from '@/enums';
 import styles from './index.less';
+import { FilterFormComponentProps } from '@/interfaces/components';
 
 const { Option } = Select;
 
@@ -17,7 +18,7 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
   const { form } = props;
   const { getFieldDecorator } = form;
 
-  const renderForm = (formItem: any) => {
+  const renderForm = (formItem: FilterFormComponentProps) => {
     switch (formItem.component) {
       case FORM_COMPONENT.Input:
         return (
