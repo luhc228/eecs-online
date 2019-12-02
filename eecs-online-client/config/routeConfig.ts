@@ -9,6 +9,8 @@ export default [
     routes: [
       { path: '/teacher/class', component: './class' },
       { path: '/teacher/course', component: './course' },
+      { path: '/teacher/course/edit', component: './courseEdit' },
+      { path: '/teacher/course/create', component: './courseEdit' },
       { path: '/teacher', redirect: '/teacher/course' },
     ],
   },

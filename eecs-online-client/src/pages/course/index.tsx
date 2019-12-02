@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import { Button, Popconfirm } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { Dispatch } from 'redux';
 import CustomTable from '@/components/CustomTable';
 import { CourseListItem } from '@/interfaces/course';
-import EditModal from './components/EditModal';
 import styles from './index.less';
 import { PAGINATION_CONFIGS } from '@/constants';
-import CustomFilter from '@/components/CustomFilter';
+import FilterForm from '@/components/CustomForm';
 import { StateType } from './models';
 import { FormItemComponentProps } from '@/interfaces/components';
-import { FORM_COMPONENT } from '@/enums';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 
 const columns: ColumnProps<CourseListItem>[] = [
   { title: '课程名称', dataIndex: 'courseName' },
@@ -22,15 +22,17 @@ const columns: ColumnProps<CourseListItem>[] = [
     title: '操作',
     render: (_: string, record: CourseListItem) => (
       <span className={styles.operation}>
-        <EditModal
-          title="编辑课程"
-          record={record}
-          onOk={() => {
-
-          }}>
+        {/* <EditModal title="编辑课程" record={record} onOk={() => router.push('/teacher/course/edit')}>
           <a>编辑课程</a>
-        </EditModal>
-        <Popconfirm title="确定删除该课程" onConfirm={() => { }}>
+        </EditModal> */}
+        <span>
+          <a onClick={() => router.push('/teacher/course/edit')}>编辑课程</a>
+        </span>
+        <Popconfirm
+          title="确定删除该课程"
+          onConfirm={() => {
+            console.log(record);
+          }}>
           <a href="">删除</a>
         </Popconfirm>
       </span>
@@ -73,18 +75,22 @@ const Course: React.FC<CourseProps> = props => {
     })
   }, []);
   return (
-    <>
-      <CustomFilter
-        filterValues={{}}
+    <div>
+      <FilterForm
+        values={{}}
         loading={loading}
+        formTypes={CUSTOM_FORM_TYPES.Filter}
         onFieldsChange={(allFields: object) => { console.log(allFields) }}
         formConfig={filterFormConfig}
         onSubmit={value => { console.log(value) }}
       />
       <div className={styles.buttons}>
-        <EditModal title="新增课程" record={{}} onOk={() => { }}>
+        {/* <EditModal title="新增课程" record={{}} onOk={() => {
+
+        }}>
           <Button type="primary">新增课程</Button>
-        </EditModal>
+        </EditModal> */}
+        <Button type="primary" onClick={() => router.push('/teacher/course/create')}>新增课程</Button>
       </div>
       <CustomTable
         loading={loading}
@@ -100,7 +106,7 @@ const Course: React.FC<CourseProps> = props => {
           })
         }}
       />
-    </>
+    </div>
   )
 }
 

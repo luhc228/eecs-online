@@ -12,13 +12,8 @@ export const PAGINATION_CONFIGS = Object.freeze({
  * ref: https://ant.design/components/grid/#Col
  */
 export const ONE_COLUMN_FORM_LAYOUT = Object.freeze({
-  // labelCol: {
-  //   span: 4,
-  // },
-  // wrapperCol: {
-  //   span: 20,
-  // },
-  span: 24,
+  offset: 4,
+  span: 12,
 });
 
 /**
@@ -33,6 +28,12 @@ export const TWO_COLUMNS_FORM_LAYOUT = Object.freeze({
   // wrapperCol: {
   //   span: 8,
   // },
+  md: 8,
+  sm: 24,
+});
+
+
+export const INLINE_FORM_LAYOUT = Object.freeze({
   md: 8,
   sm: 24,
 });
