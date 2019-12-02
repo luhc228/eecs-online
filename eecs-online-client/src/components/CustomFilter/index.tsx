@@ -5,61 +5,61 @@ import React from 'react';
 import { Form, Row, Col, Input, Select, InputNumber, Button } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT } from '@/enums';
+import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import styles from './index.less';
-import { FilterFormComponentProps } from '@/interfaces/components';
 
 const { Option } = Select;
 
 interface CustomFilterProps extends FormComponentProps {
+  formConfig: FormItemComponentProps[];
+  filterValues: object;
+  loading: boolean;
+  onFieldsChange: (allFields: object) => void;
   onSubmit: (value: object) => void;
 }
 
 const CustomFilter: React.FC<CustomFilterProps> = props => {
-  const { form } = props;
+  const { form, formConfig, onSubmit, loading } = props;
   const { getFieldDecorator } = form;
 
-  const renderForm = (formItem: FilterFormComponentProps) => {
+  const renderForm = (formItem: FormItemComponentProps) => {
     switch (formItem.component) {
       case FORM_COMPONENT.Input:
         return (
-          <Form.Item label="规则名称">
-            {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+
+          <Form.Item label={formItem.label}>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+            })(<Input placeholder="请输入" />)}
           </Form.Item>
         )
       case FORM_COMPONENT.Select:
         return (
-          <Form.Item label="使用状态">
-            {getFieldDecorator('status')(
+          <Form.Item label={formItem.label}>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+            })(
               <Select placeholder="请选择" style={{ width: '100%' }}>
-                <Option value="0">关闭</Option>
-                <Option value="1">运行中</Option>
+                {formItem.datasource &&
+                  formItem.datasource.map((item: SelectComponentDatasourceModel) => (
+                    <Option value={item.value} key={item.label}>{item.label}</Option>
+                  ))}
               </Select>,
             )}
           </Form.Item>
         )
       case FORM_COMPONENT.InputNumber:
         return (
-          <Form.Item label="调用次数">
-            {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
+          <Form.Item label={formItem.label}>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+            },
+            )(<InputNumber style={{ width: '100%' }} />)}
           </Form.Item>
         )
       default:
         return null;
     }
-    // if (formItem.component === 'Input') {
-    //   return (
-    //     <Form.Item label="规则名称">
-    //       {getFieldDecorator('name')(<Input placeholder="请输入" />)}
-    //     </Form.Item>
-    //   )
-    // }
-    // if (formItem.component === 'Select') {
-    //   return renderSelect(item);
-    // }
-    // if (item.component === 'NumberRange') {
-    //   return renderNumberRange(item);
-    // }
-    // return null;
   }
 
 
@@ -70,7 +70,7 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
         console.log('Received values of form: ', values);
       }
 
-      props.onSubmit(values);
+      onSubmit(values);
     });
   }
 
@@ -82,44 +82,42 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
     <div className={styles.tableListForm}>
       <Form onSubmit={submitHandler} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <Form.Item label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
-            </Form.Item>
-          </Col>
-          <Col md={8} sm={24}>
-            <Form.Item label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>,
-              )}
-            </Form.Item>
-          </Col>
-          <Col md={8} sm={24}>
-            <Form.Item label="调用次数">
-              {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
-            </Form.Item>
-          </Col>
-          <Col md={8} sm={24}>
-            <Form.Item label="调用次数">
-              {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
-            </Form.Item>
-          </Col>
+          {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
+            <Col md={8} sm={24} key={formItem.name}>
+              {renderForm(formItem)}
+            </Col>
+          ))}
         </Row>
-        <span className={styles.submitButtons}>
-          <Button type="primary" htmlType="submit">
-            查询
+        <Row>
+          <span className={styles.submitButtons}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              查询
           </Button>
-          <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
-            重置
+            <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
+              重置
           </Button>
-        </span>
+          </span>
+        </Row>
       </Form>
     </div>
 
   )
 }
 
-export default Form.create<CustomFilterProps>()(CustomFilter);
+export default Form.create<CustomFilterProps>({
+  mapPropsToFields(props: CustomFilterProps) {
+    const result: { [key: string]: string | number; } = {};
+
+    if (props.filterValues) {
+      Object.entries(props.filterValues).forEach(formField => {
+        const [key, field] = formField;
+        result[key] = Form.createFormField(field);
+      });
+    }
+
+    return result;
+  },
+  onFieldsChange(props: CustomFilterProps, _: any, allFields: object) {
+    props.onFieldsChange(allFields);
+  },
+})(CustomFilter);

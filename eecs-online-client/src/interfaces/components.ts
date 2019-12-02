@@ -46,9 +46,10 @@ export interface SelectComponentDatasourceModel {
   label: string | number;
 }
 
-export interface FilterFormComponentProps {
+export interface FormItemComponentProps {
   label: string;
   name: string;
   component: FORM_COMPONENT.Input | FORM_COMPONENT.Select | FORM_COMPONENT.InputNumber;
   datasource?: SelectComponentDatasourceModel[];
+  initialValue?: string;
 }

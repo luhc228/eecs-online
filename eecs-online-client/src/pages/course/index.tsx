@@ -10,6 +10,8 @@ import styles from './index.less';
 import { PAGINATION_CONFIGS } from '@/constants';
 import CustomFilter from '@/components/CustomFilter';
 import { StateType } from './models';
+import { FormItemComponentProps } from '@/interfaces/components';
+import { FORM_COMPONENT } from '@/enums';
 
 const columns: ColumnProps<CourseListItem>[] = [
   { title: '课程名称', dataIndex: 'courseName' },
@@ -31,6 +33,24 @@ const columns: ColumnProps<CourseListItem>[] = [
   },
 ];
 
+const filterFormConfig: FormItemComponentProps[] = [
+  {
+    label: '课程名称',
+    name: 'courseName',
+    component: FORM_COMPONENT.Input,
+  },
+  {
+    label: '上课地点',
+    name: 'location',
+    component: FORM_COMPONENT.Input,
+  },
+  {
+    label: '上课班级',
+    name: 'classNames',
+    component: FORM_COMPONENT.Input,
+  },
+]
+
 interface CourseProps {
   dispatch: Dispatch<any>;
   loading: boolean;
@@ -38,32 +58,38 @@ interface CourseProps {
 }
 
 const Course: React.FC<CourseProps> = props => {
+  const { course: { data: { page, total, courseList } }, loading, dispatch } = props;
+
+
   useEffect(() => {
-    props.dispatch({
+    dispatch({
       type: 'course/fetchCoursePagination',
       payload: { ...PAGINATION_CONFIGS },
     })
   }, []);
-
-  const { data: { page, total, courseList } } = props.course;
-
   return (
     <div>
-      <CustomFilter onSubmit={value => { console.log(value) }} />
+      <CustomFilter
+        filterValues={{}}
+        loading={loading}
+        onFieldsChange={(allFields: object) => { console.log(allFields) }}
+        formConfig={filterFormConfig}
+        onSubmit={value => { console.log(value) }}
+      />
       <div className={styles.buttons}>
         <EditModal title="新增课程" record={{}} onOk={() => { }}>
           <Button type="primary">新增课程</Button>
         </EditModal>
       </div>
       <CustomTable
-        loading={props.loading}
+        loading={loading}
         columns={columns}
         dataSource={courseList}
         current={page}
         total={total}
         rowKey={(record: CourseListItem) => record.id}
         onPagination={(current: number) => {
-          props.dispatch({
+          dispatch({
             type: 'course/fetchCoursePagination',
             payload: { ...PAGINATION_CONFIGS, page: current },
           })
