@@ -12,12 +12,12 @@ export const PAGINATION_CONFIGS = Object.freeze({
  * ref: https://ant.design/components/grid/#Col
  */
 export const ONE_COLUMN_FORM_LAYOUT = Object.freeze({
-  labelCol: {
-    span: 4,
-  },
-  wrapperCol: {
-    span: 20,
-  },
+  // labelCol: {
+  //   span: 4,
+  // },
+  // wrapperCol: {
+  //   span: 20,
+  // },
 });
 
 /**
@@ -26,10 +26,15 @@ export const ONE_COLUMN_FORM_LAYOUT = Object.freeze({
  * ref: https://ant.design/components/grid/#Col
  */
 export const TWO_COLUMNS_FORM_LAYOUT = Object.freeze({
-  labelCol: {
-    span: 4,
-  },
-  wrapperCol: {
-    span: 8,
-  },
+  // labelCol: {
+  //   span: 4,
+  // },
+  // wrapperCol: {
+  //   span: 8,
+  // },
+
+  // md: 12,
+  // sm: 24,
+
+  span: 8,
 });

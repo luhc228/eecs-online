@@ -23,7 +23,7 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
   const { form, formConfig, onSubmit, loading } = props;
   const { getFieldDecorator } = form;
 
-  const formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
+  const formItemLayout = null;
 
   const renderForm = (formItem: FormItemComponentProps) => {
     switch (formItem.component) {
@@ -82,9 +82,9 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
     props.onSubmit({});
   }
   return (
-    // <div className={styles.tableListForm}>
-    <Form onSubmit={submitHandler} layout="vertical">
-      {/* <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+    <div className={styles.tableListForm}>
+      <Form onSubmit={submitHandler} layout="vertical">
+        {/* <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
             <Col md={8} sm={24} key={formItem.name}>
               {renderForm(formItem)}
@@ -92,7 +92,7 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
           ))}
         </Row> */}
 
-      {/* <Row>
+        {/* <Row>
           <span className={styles.submitButtons}>
             <Button type="primary" htmlType="submit" loading={loading}>
               查询
@@ -102,24 +102,25 @@ const CustomFilter: React.FC<CustomFilterProps> = props => {
           </Button>
           </span>
         </Row> */}
-
-      {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
-        // <Col md={8} sm={24} key={formItem.name}>
-        renderForm(formItem)
-        // </Col>
-      ))}
-      <Form.Item>
-        <span className={styles.submitButtons}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            查询
+        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+          {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
+            <Col {...TWO_COLUMNS_FORM_LAYOUT} key={formItem.name}>
+              {renderForm(formItem)}
+            </Col>
+          ))}
+        </Row>
+        <Form.Item>
+          <span className={styles.submitButtons}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              查询
           </Button>
-          <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
-            重置
+            <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
+              重置
           </Button>
-        </span>
-      </Form.Item>
-    </Form>
-    // </div>
+          </span>
+        </Form.Item>
+      </Form>
+    </div>
 
   )
 }
