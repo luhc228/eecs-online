@@ -22,7 +22,12 @@ const columns: ColumnProps<CourseListItem>[] = [
     title: '操作',
     render: (_: string, record: CourseListItem) => (
       <span className={styles.operation}>
-        <EditModal title="编辑课程" record={record} onOk={() => { }}>
+        <EditModal
+          title="编辑课程"
+          record={record}
+          onOk={() => {
+
+          }}>
           <a>编辑课程</a>
         </EditModal>
         <Popconfirm title="确定删除该课程" onConfirm={() => { }}>
@@ -68,7 +73,7 @@ const Course: React.FC<CourseProps> = props => {
     })
   }, []);
   return (
-    <div>
+    <>
       <CustomFilter
         filterValues={{}}
         loading={loading}
@@ -95,7 +100,7 @@ const Course: React.FC<CourseProps> = props => {
           })
         }}
       />
-    </div>
+    </>
   )
 }
 

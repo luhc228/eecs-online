@@ -7,6 +7,7 @@ export default [
     component: BasicLayoutPath,
     // Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
     routes: [
+      { path: '/teacher/class', component: './class' },
       { path: '/teacher/course', component: './course' },
       { path: '/teacher', redirect: '/teacher/course' },
     ],

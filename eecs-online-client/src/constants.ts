@@ -18,6 +18,7 @@ export const ONE_COLUMN_FORM_LAYOUT = Object.freeze({
   // wrapperCol: {
   //   span: 20,
   // },
+  span: 24,
 });
 
 /**
@@ -32,9 +33,6 @@ export const TWO_COLUMNS_FORM_LAYOUT = Object.freeze({
   // wrapperCol: {
   //   span: 8,
   // },
-
-  // md: 12,
-  // sm: 24,
-
-  span: 8,
+  md: 8,
+  sm: 24,
 });
