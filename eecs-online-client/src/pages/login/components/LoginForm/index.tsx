@@ -7,7 +7,7 @@ import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 
 interface LoginFormProps extends FormComponentProps {
-  userType: string;
+  userType: number;
   dispatch: Dispatch<any>;
   loading: boolean;
 }
@@ -37,7 +37,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
     <Form onSubmit={handleSubmit} className={styles.loginForm}>
       <Form.Item>
         {getFieldDecorator('username', {
-          rules: [{ required: true, message: 'Please input your username!' }],
+          rules: [{ required: true, message: '请输入' }],
         })(
           <Input
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}

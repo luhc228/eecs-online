@@ -4,10 +4,13 @@ export default {
       success: true,
       message: 'Login Success',
       data: {
-        accessToken: 'xxxx',
+        accessToken: 'sdklfjklasdlfaerhuqhjkhjkafhjl123',
         gender: '男',
         class: '大一',
-        name: 'winter',
+        name: 'winter1',
+        studentId: '201100220000',
+        college: '信息科学与工程学院',
+        userType: 0,
       },
     });
   },
@@ -18,9 +21,12 @@ export default {
       success: true,
       message: 'Login Success',
       data: {
-        accessToken: 'xxxx',
+        accessToken: 'sdklfjklasfjsslkfjalk123skdjfhasjk123',
         gender: '男',
-        name: 'winterss',
+        name: 'winter',
+        teacherId: '201100220000',
+        college: '信息科学与工程学院',
+        userType: 1,
       },
     });
   },

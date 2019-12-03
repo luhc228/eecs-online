@@ -9,10 +9,10 @@ import styles from './index.less';
 const { TabPane } = Tabs;
 
 const TabPanes: React.ReactNode[] = [
-  <TabPane tab="学生登录" key={USER_TYPE.Student}>
+  <TabPane tab="学生登录" key={String(USER_TYPE.Student)}>
     <LoginForm />
   </TabPane>,
-  <TabPane tab="教师登录" key={USER_TYPE.Teacher}>
+  <TabPane tab="教师登录" key={String(USER_TYPE.Teacher)}>
     <LoginForm />
   </TabPane>,
 ]
@@ -24,7 +24,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = props => (
   <div className={styles.main}>
-    <Tabs animated={false} activeKey={props.userType} onChange={activeKey => {
+    <Tabs animated={false} activeKey={String(props.userType)} onChange={(activeKey: string) => {
       props.dispatch({
         type: 'login/changeUserType',
         payload: activeKey,
