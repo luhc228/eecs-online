@@ -12,11 +12,10 @@ import FilterForm from '@/components/CustomForm';
 import { StateType } from './models';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
-import { StateType } from '../class/models';
 
 const columns: ColumnProps<ClassListItem>[] = [
   { title: '虚拟班级名称', dataIndex: 'classNames' },
-  { title: '课程名称', dataIndex: 'coureName'},
+  { title: '课程名称', dataIndex: 'coureName' },
   { title: '学生总人数', dataIndex: 'studentTotal' },
   {
     title: '操作',
