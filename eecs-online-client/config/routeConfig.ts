@@ -1,11 +1,11 @@
-const BasicLayoutPath = '../layouts/BasicLayout';
-const UserLayoutPath = '../layouts/UserLayout';
+const BasicLayout = '../layouts/BasicLayout';
+const UserLayout = '../layouts/UserLayout';
 
 export default [
   {
     path: '/teacher',
-    component: BasicLayoutPath,
-    // Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
+    component: BasicLayout,
+    Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
     routes: [
       { path: '/teacher/class', component: './class' },
       { path: '/teacher/course', component: './course' },
@@ -16,15 +16,15 @@ export default [
   },
   {
     path: '/login',
-    component: UserLayoutPath,
+    component: UserLayout,
     routes: [
       { path: '/login', component: './login' },
     ],
   },
   {
     path: '/',
-    component: BasicLayoutPath,
-    // Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
+    component: BasicLayout,
+    Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
     routes: [
       { path: '/', redirect: '/teacher/course' },
     ],

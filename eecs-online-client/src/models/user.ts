@@ -1,8 +1,19 @@
+import { USER_TYPE } from '@/enums';
+
+
 export interface CurrentUser {
-  avatar?: string;
-  name?: string;
-  gender?: string;
-  id?: string;
+  // 用户姓名
+  name: string,
+  // 性别
+  gender: string,
+  // 学号 或 工号
+  id: string,
+  // 班级
+  class?: string,
+  // 学院
+  college?: string,
+  // 用户类型
+  userType: USER_TYPE.Student | USER_TYPE.Teacher,
 }
 
 export interface UserModelState {
@@ -16,13 +27,7 @@ export interface UserModelType {
 
 const UserModel: UserModelType = {
   namespace: 'user',
-
-  state: {
-    currentUser: {
-      id: '201700121000',
-      name: 'Hengchang',
-    },
-  },
+  state: {},
 }
 
 export default UserModel;

@@ -3,6 +3,7 @@ import { stringify } from 'qs';
 import * as service from '../services';
 import { USER_TYPE } from '@/enums';
 import { getPageQuery } from '@/utils/utils';
+import userUtils from '@/utils/user-utils';
 
 export default {
   namespace: 'login',
@@ -35,6 +36,9 @@ export default {
       }
 
       const response = yield call(userLogin, value);
+      const { accessToken, ...userInfo } = response.data;
+      userUtils.saveToken(accessToken);
+      userUtils.saveUserInfo(userInfo);
 
       const urlParams = new URL(window.location.href);
       const params = getPageQuery();
@@ -58,6 +62,7 @@ export default {
 
     *logout(_: any, { put }: any) {
       const { redirect } = getPageQuery();
+      userUtils.logout();
       // redirect
       if (window.location.pathname !== '/login' && !redirect) {
         yield put(
