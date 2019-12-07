@@ -60,12 +60,12 @@ const filterFormConfig: FormItemComponentProps[] = [
 
 interface CourseProps {
   dispatch: Dispatch<any>;
-  loading: boolean;
+  fetchCoursePaginationLoading: boolean;
   course: StateType;
 }
 
 const Course: React.FC<CourseProps> = props => {
-  const { course: { data: { page, total, courseList } }, loading, dispatch } = props;
+  const { course: { data: { page, total, courseList } }, fetchCoursePaginationLoading, dispatch } = props;
 
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const Course: React.FC<CourseProps> = props => {
     <div>
       <FilterForm
         values={{}}
-        loading={loading}
+        loading={false}
         formTypes={CUSTOM_FORM_TYPES.Filter}
         onFieldsChange={(allFields: object) => { console.log(allFields) }}
         formConfig={filterFormConfig}
@@ -93,7 +93,7 @@ const Course: React.FC<CourseProps> = props => {
         <Button type="primary" onClick={() => router.push('/teacher/course/create')}>新增课程</Button>
       </div>
       <CustomTable
-        loading={loading}
+        loading={fetchCoursePaginationLoading}
         columns={columns}
         dataSource={courseList}
         current={page}
@@ -116,13 +116,13 @@ const mapStaetToProps = ({
 }: {
   course: StateType;
   loading: {
-    models: {
+    effects: {
       [key: string]: boolean;
     };
   };
 }) => ({
   course,
-  loading: loading.models.course,
+  fetchCoursePaginationLoading: loading.effects['course/fetchCoursePagination'],
 })
 
 export default connect(mapStaetToProps)(Course);
