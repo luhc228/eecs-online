@@ -6,17 +6,17 @@ import { Dispatch } from 'redux';
 import HeaderDropdown from '@/components/CustomDropdown';
 import styles from './index.less';
 import { ConnectState } from '@/models/connect';
-import { CurrentUser } from '@/models/user';
+import { CurrentUserModels } from '@/models/user';
 
 interface AvatarDropdownProps {
-  currentUser?: CurrentUser;
+  currentUser?: CurrentUserModels;
   dispatch: Dispatch<any>;
 }
 
 const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
 
 const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
-  const [color] = useState(colorList[0]);
+  const [color] = useState(colorList[Math.floor(Math.random() * (colorList.length))]);
 
   const onMenuClick = (event: ClickParam) => {
     const { key } = event;
@@ -39,15 +39,14 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
       </Menu.Item>
     </Menu>
   );
-  const { currentUser = {} } = props;
+  const { currentUser } = props;
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         <Avatar className={styles.avatar} style={{ backgroundColor: color, verticalAlign: 'middle' }} size="small" alt="avatar">
-          {currentUser.name && currentUser.name[0]}
+          {currentUser && currentUser.name && (typeof currentUser.name) === 'string' && currentUser.name[0]}
         </Avatar>
-        {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
-        <span className={styles.name}>{currentUser.id}</span>
+        <span className={styles.name}>{currentUser && currentUser.id}</span>
       </span>
     </HeaderDropdown>
   )

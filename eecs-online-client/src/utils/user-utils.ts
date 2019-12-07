@@ -1,4 +1,4 @@
-import { CurrentUser } from '@/models/user';
+import { CurrentUserModels } from '@/models/user';
 
 export default {
   /**
@@ -23,7 +23,7 @@ export default {
   /**
    * 保存用户信息
    */
-  saveUserInfo: (currentUser: CurrentUser) => {
+  saveUserInfo: (currentUser: CurrentUserModels) => {
     localStorage.setItem('userInfo', JSON.stringify(currentUser))
   },
 
