@@ -110,7 +110,7 @@ const Course: React.FC<CourseProps> = props => {
   )
 }
 
-const mapStaetToProps = ({
+const mapStateToProps = ({
   course,
   loading,
 }: {
@@ -125,4 +125,4 @@ const mapStaetToProps = ({
   loading: loading.models.course,
 })
 
-export default connect(mapStaetToProps)(Course);
+export default connect(mapStateToProps)(Course);
