@@ -1,10 +1,11 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import * as courseService from '../services';
-import { CourseTableData } from '@/interfaces/course';
+import { CourseTableData, filterFieldsProps } from '@/interfaces/course';
 
 export interface StateType {
   data: CourseTableData;
+  filterFields: filterFieldsProps
 }
 
 export type Effect = (
@@ -17,6 +18,7 @@ export interface ModelType {
   state: StateType;
   reducers: {
     save: Reducer<StateType>;
+    changeFilterFields: Reducer<StateType>;
   };
   effects: {
     fetchCoursePagination: Effect,
@@ -34,17 +36,27 @@ const Model: ModelType = {
       pageSize: 8,
       page: 1,
     },
+    filterFields: {
+      courseName: undefined,
+      location: undefined,
+      classNames: undefined,
+    },
   },
 
   reducers: {
     save(state: any, { payload: { data } }: any) {
       return { ...state, data }
     },
+
+    changeFilterFields(state: any, { payload: { filterFields } }: any) {
+      return { ...state, filterFields }
+    },
   },
 
   effects: {
     /**
      * 获取课程信息分页
+     * 包括信息筛选
      */
     *fetchCoursePagination({ payload }: any, { call, put }: any) {
       const response = yield call(courseService.fetchCoursePagination, payload);
@@ -61,8 +73,7 @@ const Model: ModelType = {
      * 删除某个课程
      */
     *removeCourse({ payload }: any, { call, put, select }: any) {
-      const response = yield call(courseService.removeCourse, payload);
-      const { data } = response;
+      yield call(courseService.removeCourse, payload);
 
       const page = yield select((state: any) => state.data.page);
       yield put({

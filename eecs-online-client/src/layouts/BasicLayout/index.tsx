@@ -18,34 +18,30 @@ interface BasicLayoutProps {
   location: Location;
 }
 
-const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location }) => {
-  console.log(location)
-  return (
+const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location }) => (
+  <Layout>
+    <Sider trigger={null} collapsible width={250} collapsed={collapsed} collapsedWidth={80}>
+      <div className={styles.logo} />
+      <NavMenu />
+    </Sider>
     <Layout>
-      <Sider trigger={null} collapsible width={250} collapsed={collapsed} collapsedWidth={80}>
-        <div className={styles.logo} />
-        <NavMenu />
-      </Sider>
-      <Layout>
-        <Header />
-        <Breadcrumb location={location} />
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            background: '#fff',
-            minHeight: 800,
-          }}
-        >
-          {children}
-        </Content>
-        <Footer />
-      </Layout>
+      <Header />
+      <Breadcrumb location={location} />
+      <Content
+        style={{
+          margin: '24px 16px',
+          padding: 24,
+          background: '#fff',
+          minHeight: 800,
+        }}
+      >
+        {children}
+      </Content>
+      <Footer />
     </Layout>
-  )
-};
+  </Layout>
+);
 
 export default withRouter(connect(({ global }: ConnectState) => ({
   collapsed: global.collapsed,
-  // location: Location,
 }))(BasicLayout));

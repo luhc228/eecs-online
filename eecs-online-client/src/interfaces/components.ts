@@ -2,10 +2,10 @@ import React from 'react';
 import { FORM_COMPONENT } from '@/enums';
 
 export interface PageMatchModel {
-  isExact: boolean;
-  params: object;
-  path: string;
-  url: string;
+  isExact: boolean,
+  params: object,
+  path: string,
+  url: string,
 }
 
 export interface PageBasiocPropsModel {
@@ -17,15 +17,15 @@ export interface PageBasiocPropsModel {
 
 export interface CustomLocation extends Location {
   query: {
-    [x: string]: string;
+    [x: string]: string,
   };
 }
 
 export interface TableColumnsProps<T> {
-  title: string;
-  dataIndex: string;
-  key: string;
-  render?: (_: string, record: T, index: any) => React.ReactNode;
+  title: string,
+  dataIndex: string,
+  key: string,
+  render?: (_: string, record: T, index: any) => React.ReactNode,
 }
 
 export interface ButtonProps {
@@ -42,14 +42,16 @@ export interface TableListPaginationProps {
 }
 
 export interface SelectComponentDatasourceModel {
-  value: string | number;
-  label: string | number;
+  value: string | number,
+  label: string | number,
 }
 
 export interface FormItemComponentProps {
-  label: string;
-  name: string;
+  label: string,
+  name: string,
   component: FORM_COMPONENT.Input | FORM_COMPONENT.Select | FORM_COMPONENT.InputNumber;
-  datasource?: SelectComponentDatasourceModel[];
-  initialValue?: string;
+  datasource?: SelectComponentDatasourceModel[],
+  props?: { [key: string]: any },
+  initialValue?: string,
+  selectMode?: 'multiple' | 'tags',
 }

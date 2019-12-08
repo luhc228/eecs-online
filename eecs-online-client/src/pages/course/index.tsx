@@ -65,7 +65,14 @@ interface CourseProps {
 }
 
 const Course: React.FC<CourseProps> = props => {
-  const { course: { data: { page, total, courseList } }, fetchCoursePaginationLoading, dispatch } = props;
+  const {
+    course: {
+      data: { page, total, courseList },
+      filterFields,
+    },
+    fetchCoursePaginationLoading,
+    dispatch,
+  } = props;
 
 
   useEffect(() => {
@@ -74,15 +81,24 @@ const Course: React.FC<CourseProps> = props => {
       payload: { ...PAGINATION_CONFIGS },
     })
   }, []);
+
   return (
     <div>
       <FilterForm
-        values={{}}
+        values={filterFields}
         loading={false}
         formTypes={CUSTOM_FORM_TYPES.Filter}
-        onFieldsChange={(allFields: object) => { console.log(allFields) }}
+        onFieldsChange={(allFields: object) => {
+          dispatch({
+            type: 'course/changeFilterFields',
+            payload: { filterFields: allFields },
+          })
+        }}
         formConfig={filterFormConfig}
-        onSubmit={value => { console.log(value) }}
+        onSubmit={value => dispatch({
+          type: 'course/fetchCoursePagination',
+          payload: { ...PAGINATION_CONFIGS, ...value },
+        })}
       />
       <div className={styles.buttons}>
         {/* <EditModal title="新增课程" record={{}} onOk={() => {

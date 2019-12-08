@@ -50,7 +50,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
             })(
-              <Select placeholder="请选择" style={{ width: '100%' }}>
+              <Select placeholder="请选择" style={{ width: '100%' }} mode={formItem.selectMode} {...formItem.props}>
                 {formItem.datasource &&
                   formItem.datasource.map((item: SelectComponentDatasourceModel) => (
                     <Option value={item.value} key={item.label}>{item.label}</Option>
