@@ -1,10 +1,12 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import router from 'umi/router';
 import * as courseEditService from '../services';
 import { CourseFieldsModel } from '@/interfaces/course';
 
 export interface StateType {
-  courseFields: CourseFieldsModel
+  courseFields: CourseFieldsModel,
+  when: boolean,
 }
 
 export type Effect = (
@@ -17,6 +19,7 @@ export interface ModelType {
   state: StateType;
   reducers: {
     changeCourseFields: Reducer<StateType>;
+    changePromptStatus: Reducer<StateType>;
   };
   effects: {
     createCourse: Effect,
@@ -34,11 +37,16 @@ const Model: ModelType = {
       time: undefined,
       classNames: undefined,
     },
+    when: true,
   },
 
   reducers: {
     changeCourseFields(state: any, { payload: { data } }: any) {
-      return { ...state, courseFields: data }
+      return { ...state, courseFields: data, when: true }
+    },
+
+    changePromptStatus(state: any, { payload: { when } }: any) {
+      return { ...state, when }
     },
   },
 
@@ -46,15 +54,29 @@ const Model: ModelType = {
     /**
      * 新增课程信息
      */
-    *createCourse({ payload }: any, { call }: any) {
+    *createCourse({ payload }: any, { call, put }: any) {
       yield call(courseEditService.createCourse, payload);
+      yield put({
+        type: 'changePromptStatus',
+        payload: {
+          when: false,
+        },
+      })
+      router.goBack();
     },
 
     /**
     * 更新课程信息(Edit)
     */
-    *updateCourse({ payload }: any, { call }: any) {
+    *updateCourse({ payload }: any, { call, put }: any) {
       yield call(courseEditService.updateCourse, payload);
+      yield put({
+        type: 'changePromptStatus',
+        payload: {
+          when: false,
+        },
+      })
+      router.goBack();
     },
   },
 }

@@ -37,13 +37,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
 
-  /**
-   * 动态添加表单域
-   */
-  const handleAdd = () => {
-
-  }
-
   const renderForm = (formItem: FormItemComponentProps) => {
     switch (formItem.component) {
       case FORM_COMPONENT.Input:
@@ -160,7 +153,15 @@ export default Form.create<CustomFormProps>({
 
     return result;
   },
+
   onFieldsChange(props: CustomFormProps, _: any, allFields: object) {
-    props.onFieldsChange(allFields);
+    const result: { [key: string]: any } = {}
+    if (allFields) {
+      Object.entries(allFields).forEach(formField => {
+        const [key, field] = formField;
+        result[key] = field.value;
+      });
+    }
+    props.onFieldsChange(result);
   },
 })(CustomForm);
