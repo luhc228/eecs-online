@@ -1,49 +1,51 @@
-import React, { useState } from 'react';
-import { Layout, Icon } from 'antd';
+import * as React from 'react';
+import { Layout } from 'antd';
+import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
-import { PageMatchModel, CustomLocation } from '@/interfaces/component';
+import { Dispatch } from 'redux';
 import NavMenu from './components/NavMenu';
 import Footer from './components/Footer';
 import styles from './index.less';
+import { ConnectState } from '@/models/connect';
+import Header from './components/Header';
+import Breadcrumb from './components/Breadcrumb';
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 interface BasicLayoutProps {
-  location: CustomLocation;
-  match: PageMatchModel;
+  collapsed: boolean,
+  dispatch: Dispatch<any>;
+  location: Location;
 }
 
-const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const [collapsed, changeCollapsed] = useState(false);
-
+const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location }) => {
+  console.log(location)
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed} collapsedWidth={80}>
+      <Sider trigger={null} collapsible width={250} collapsed={collapsed} collapsedWidth={80}>
         <div className={styles.logo} />
         <NavMenu />
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: 0 }}>
-          <Icon
-            className={styles.trigger}
-            type={collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={() => changeCollapsed(!collapsed)}
-          />
-        </Header>
+        <Header />
+        <Breadcrumb location={location} />
         <Content
           style={{
             margin: '24px 16px',
             padding: 24,
             background: '#fff',
-            minHeight: 280,
+            minHeight: 800,
           }}
         >
-          {props.children}
+          {children}
         </Content>
         <Footer />
       </Layout>
     </Layout>
-  );
+  )
 };
 
-export default withRouter(BasicLayout);
+export default withRouter(connect(({ global }: ConnectState) => ({
+  collapsed: global.collapsed,
+  // location: Location,
+}))(BasicLayout));

@@ -1,14 +1,26 @@
 import * as React from 'react';
-import user from '@/utils/user';
-import router from 'umi/router';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import user from '@/utils/user-utils';
+
+interface AuthorizedProps {
+  dispatch: Dispatch<any>;
+}
 
 /**
  * 判断有没有权限，如果没有，则跳转至登录页面
  */
-export default (props: any) => {
-  if (!user.isLogin()) {
-    const { pathname } = props.location;
-    router.push(`/user/login?redirectUrl=${pathname}`);
+const Anthorized: React.SFC<AuthorizedProps> = props => {
+  const { dispatch, children } = props;
+  if (!user.isLogin() && dispatch) {
+    dispatch({
+      type: 'login/logout',
+    });
+
+    return null;
   }
-  return <>{props.children}</>;
-};
+
+  return <>{children}</>;
+}
+
+export default connect()(Anthorized);

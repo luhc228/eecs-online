@@ -9,16 +9,25 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "antd": "^3.19.5",
-    "dva": "^2.6.0-beta.6",
+    "antd": "^3.26.0",
+    "classnames": "^2.2.6",
+    "dva": "^2.6.0-beta.19",
     "lodash": "^4.17.15",
-    "react": "^16.8.6",
+    "mockjs": "^1.1.0",
+    "qs": "^6.9.0",
+    "react": "^16.12.0",
     "react-dom": "^16.8.6",
+    "redux": "^4.0.4",
+    "umi": "^2.12.5",
+    "umi-plugin-react": "^1.8.0",
     "umi-request": "^1.2.8"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.9",
     "@types/jest": "^23.3.12",
     "@types/lodash": "^4.14.144",
+    "@types/mockjs": "^1.0.2",
+    "@types/qs": "^6.5.3",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-test-renderer": "^16.0.3",
@@ -35,8 +44,6 @@
     "tslint": "^5.12.0",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^3.6.0",
-    "umi": "^2.9.0",
-    "umi-plugin-react": "^1.8.0",
     "umi-types": "^0.3.0"
   },
   "lint-staged": {

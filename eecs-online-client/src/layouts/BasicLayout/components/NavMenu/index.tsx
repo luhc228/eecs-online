@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import { Menu } from 'antd';
 import _ from 'lodash';
-import CustomIcon from '@/components/CustomIcon';
-import menuConfig from '@/menuConfig';
 import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
-import { PageMatchModel, CustomLocation } from '@/interfaces/component';
-import styles from './index.less';
+import CustomIcon from '@/components/CustomIcon';
+import menuConfig from '../../../../../config/menuConfig';
+import { PageBasiocPropsModel } from '@/interfaces/components';
 
-interface NavMenuProps {
-  location: CustomLocation;
-  match: PageMatchModel;
+interface NavMenuProps extends PageBasiocPropsModel {
 }
 
-const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
+interface MenuTitleProps {
+  icon?: string;
+  name: string;
+}
+
+const MenuTitle: React.SFC<MenuTitleProps> = ({ icon, name }) => (
+  <React.Fragment>
+    {icon && <CustomIcon name={icon} />}
+    <span>{name}</span>
+  </React.Fragment>
+)
+
+const NavMenu: React.SFC<NavMenuProps> = props => {
   const [selectedKeys, setSelectedKeys] = useState(() => {
-    const { pathname } = location;
-    return [pathname.split('/')[1]];
+    const { pathname } = props.location;
+    return [pathname.split('/').slice(1, 3).join('-')];
   });
 
   return (
@@ -25,6 +34,7 @@ const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
       mode="inline"
       selectedKeys={selectedKeys}
       onSelect={({ key }: { key: string }) => {
+        console.log([key]);
         setSelectedKeys([key]);
       }}
     >
@@ -34,26 +44,17 @@ const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
             <Menu.SubMenu
               key={item.key}
               title={
-                <span className={styles.title}>
-                  <CustomIcon name={item.icon} />
-                  {item.name}
-                </span>
+                <MenuTitle icon={item.icon} name={item.name} />
               }
             >
               {item.children.map(ele => (
                 <Menu.Item key={ele.key}>
                   {ele.link ? (
                     <Link to={ele.link}>
-                      <span className={styles.title}>
-                        <CustomIcon name={ele.icon} />
-                        <span>{ele.name}</span>
-                      </span>
+                      <MenuTitle icon={ele.icon} name={ele.name} />
                     </Link>
                   ) : (
-                      <span className={styles.title}>
-                        <CustomIcon name={ele.icon} />
-                        <span>{ele.name}</span>
-                      </span>
+                      <MenuTitle icon={ele.icon} name={ele.name} />
                     )}
                 </Menu.Item>
               ))}
@@ -65,16 +66,10 @@ const NavMenu: React.SFC<NavMenuProps> = ({ location, match }) => {
           <Menu.Item key={item.key}>
             {item.link ? (
               <Link to={item.link}>
-                <span className={styles.title}>
-                  <CustomIcon name={item.icon} />
-                  <span>{item.name}</span>
-                </span>
+                <MenuTitle icon={item.icon} name={item.name} />
               </Link>
             ) : (
-                <span className={styles.title}>
-                  <CustomIcon name={item.icon} />
-                  <span>{item.name}</span>
-                </span>
+                <MenuTitle icon={item.icon} name={item.name} />
               )}
           </Menu.Item>
         )

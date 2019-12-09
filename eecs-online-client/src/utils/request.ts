@@ -1,8 +1,9 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import appConfig from '@/appConfig';
+import userUtils from '@/utils/user-utils';
 
-const codeMessage = {
+const codeMessage: { [key: string]: any } = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
@@ -17,15 +18,14 @@ const codeMessage = {
   500: '服务器发生错误，请检查服务器。',
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
-  '504': '网关超时。',
+  504: '网关超时。',
 };
 
 const errorHandler = (error: { response: Response }): Response => {
   const { response } = error;
   if (response && response.status) {
-    const { url, statusText } = response;
-    const status = response.status;
-    const errorText = codeMessage[status] || statusText;
+    const { status, url } = response;
+    const errorText = codeMessage[status] || response.statusText;
 
     notification.error({
       message: `请求错误 ${status}: ${url}`,
@@ -42,10 +42,29 @@ const errorHandler = (error: { response: Response }): Response => {
 
 const host = process.env.NODE_ENV === 'production' ? appConfig.apiUrl : '';
 
+// authorization
+// ref: https://github.com/umijs/umi-request/blob/master/README.md
 const request = extend({
   prefix: `${host}/api`,
   errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  credentials: 'same-origin', // 默认请求是否带上cookie
 });
+
+// request 拦截器
+request.interceptors.request.use((url: string, options: any) => {
+  const token = userUtils.getToken();
+
+  if (token) {
+    options.headers.Authorization = token;
+  }
+
+  return { url, options };
+});
+
+// response 拦截器
+// request.interceptors.response.use((response: any, options: any) => {
+//   const contentType = response.headers.get('Content-Type');
+//   return response;
+// });
 
 export default request;
