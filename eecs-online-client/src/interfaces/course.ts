@@ -4,8 +4,6 @@ export interface CourseFieldsModel {
   courseName?: string,
   // 上课地点
   location?: string,
-  // 上课时间
-  time?: string,
   // 虚拟班级名称
   classNames?: string,
 }

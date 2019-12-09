@@ -70,7 +70,6 @@ const Course: React.FC<CourseProps> = props => {
   const columns: ColumnProps<CourseListItem>[] = [
     { title: '课程名称', dataIndex: 'courseName' },
     { title: '上课地点', dataIndex: 'location' },
-    { title: '上课时间', dataIndex: 'time' },
     { title: '上课班级', dataIndex: 'classNames' },
     {
       title: '操作',

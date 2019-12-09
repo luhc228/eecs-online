@@ -27,6 +27,6 @@ const GlobalModel: GlobalModelType = {
       };
     },
   },
-}
+};
 
 export default GlobalModel;

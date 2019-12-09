@@ -49,7 +49,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
       type: 'courseEdit/changeCourseFields',
       payload: { data: allFields },
     })
-  }
+  };
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
@@ -64,7 +64,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
         payload: { ...allFields },
       })
     }
-  }
+  };
 
   const { courseFields, when } = courseEdit;
   return (
@@ -82,9 +82,9 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
       </CustomForm>
     </div>
   )
-}
+};
 
-const mapStaetToProps = ({
+const mapStateToProps = ({
   courseEdit,
   router,
 }: {
@@ -95,7 +95,7 @@ const mapStaetToProps = ({
 }) => ({
   courseEdit,
   location: router.location,
-})
+});
 
 
-export default connect(mapStaetToProps)(CourseEdit);
+export default connect(mapStateToProps)(CourseEdit);
