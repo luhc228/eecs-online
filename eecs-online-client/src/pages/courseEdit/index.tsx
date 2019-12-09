@@ -2,16 +2,18 @@
  * 课程信息新增和编辑共用页面
  */
 import React from 'react';
+import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import { StateType } from './models';
 
 interface CourseEditProps {
-  values: object;
+  courseEdit: StateType;
 }
 
 
-const CourseEdit: React.FC<CourseEditProps> = ({ values }) => {
+const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit }) => {
   const formConfig: FormItemComponentProps[] = [
     {
       label: '课程名称',
@@ -41,11 +43,13 @@ const CourseEdit: React.FC<CourseEditProps> = ({ values }) => {
       component: FORM_COMPONENT.DynamicFieldSet,
     },
   ]
+  const { courseFields } = courseEdit;
+  console.log(courseFields)
   return (
     <div style={{ padding: 30 }}>
       <CustomForm
         layout="horizontal"
-        values={values}
+        values={courseFields}
         formTypes={CUSTOM_FORM_TYPES.ONE_COLUMN}
         loading={false}
         onFieldsChange={(allFields: object) => { console.log(allFields) }}
@@ -57,4 +61,13 @@ const CourseEdit: React.FC<CourseEditProps> = ({ values }) => {
   )
 }
 
-export default CourseEdit;
+const mapStaetToProps = ({
+  courseEdit,
+}: {
+  courseEdit: StateType;
+}) => ({
+  courseEdit,
+})
+
+
+export default connect(mapStaetToProps)(CourseEdit);

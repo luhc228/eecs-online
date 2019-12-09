@@ -81,7 +81,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
         )
 
       case FORM_COMPONENT.DynamicFieldSet:
-        console.log(getFieldValue());
+        console.log(getFieldValue('location'));
         return (
           // <>
           //   {getFieldDecorator(formItem.name, {
@@ -162,13 +162,16 @@ CustomForm.defaultProps = {
 }
 
 export default Form.create<CustomFormProps>({
+  // ref: http://react-component.github.io/form/examples/redux.html
   mapPropsToFields(props: CustomFormProps) {
-    const result: { [key: string]: string | number; } = {};
+    const result: { [key: string]: { value: string | number | string[], [key: string]: any } } = {};
 
     if (props.values) {
       Object.entries(props.values).forEach(formField => {
         const [key, field] = formField;
-        result[key] = Form.createFormField(field);
+        result[key] = Form.createFormField({
+          value: field,
+        });
       });
     }
 

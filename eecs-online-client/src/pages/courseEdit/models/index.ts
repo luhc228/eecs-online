@@ -16,7 +16,7 @@ export interface ModelType {
   namespace: string;
   state: StateType;
   reducers: {
-    changeFields: Reducer<StateType>;
+    changeCourseFields: Reducer<StateType>;
   };
   effects: {
     createCourse: Effect,
@@ -28,7 +28,6 @@ const Model: ModelType = {
   namespace: 'courseEdit',
 
   state: {
-
     courseFields: {
       courseName: undefined,
       location: undefined,
@@ -38,8 +37,8 @@ const Model: ModelType = {
   },
 
   reducers: {
-    changeFields(state: any, { payload: { fields } }: any) {
-      return { ...state, fields }
+    changeCourseFields(state: any, { payload: { data } }: any) {
+      return { ...state, courseFields: data }
     },
   },
 

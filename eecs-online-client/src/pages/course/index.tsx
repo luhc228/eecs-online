@@ -55,7 +55,11 @@ const Course: React.FC<CourseProps> = props => {
     })
   }, []);
 
-  const handleEdit = () => {
+  const handleEdit = (allFields: CourseListItem) => {
+    dispatch({
+      type: 'courseEdit/changeCourseFields',
+      payload: { data: allFields },
+    })
     router.push('/teacher/course/edit');
   }
 
@@ -73,7 +77,7 @@ const Course: React.FC<CourseProps> = props => {
       render: (_: string, record: CourseListItem) => (
         <span className={styles.operation}>
           <span>
-            <a onClick={handleEdit}>编辑课程</a>
+            <a onClick={() => handleEdit(record)}>编辑课程</a>
           </span>
           <Popconfirm
             title="确定删除该课程"
