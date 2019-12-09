@@ -1,21 +1,19 @@
 import * as React from 'react';
 import { Layout } from 'antd';
 import { connect } from 'dva';
-import withRouter from 'umi/withRouter';
 import { Dispatch } from 'redux';
 import NavMenu from './components/NavMenu';
 import Footer from './components/Footer';
 import styles from './index.less';
-import { ConnectState } from '@/models/connect';
 import Header from './components/Header';
 import Breadcrumb from './components/Breadcrumb';
+import { GlobalModelState } from '@/models/global';
 
 const { Content, Sider } = Layout;
 
-interface BasicLayoutProps {
+interface BasicLayoutProps extends RoutingType {
   collapsed: boolean,
   dispatch: Dispatch<any>;
-  location: Location;
 }
 
 const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location }) => (
@@ -42,6 +40,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location
   </Layout>
 );
 
-export default withRouter(connect(({ global }: ConnectState) => ({
+interface RoutingType {
+  location: Location
+}
+
+export default connect(({ global, router }: { global: GlobalModelState, router: RoutingType }) => ({
   collapsed: global.collapsed,
-}))(BasicLayout));
+  location: router.location,
+}))(BasicLayout);

@@ -45,9 +45,7 @@ export interface SelectComponentDatasourceModel {
   value: string | number,
   label: string | number,
 }
-export interface DynamicFieldSetProps {
 
-}
 
 export interface FormItemComponentProps {
   label?: string,
@@ -55,11 +53,20 @@ export interface FormItemComponentProps {
   component:
   FORM_COMPONENT.Input |
   FORM_COMPONENT.Select |
-  FORM_COMPONENT.InputNumber |
-  FORM_COMPONENT.DynamicFieldSet,
+  FORM_COMPONENT.InputNumber,
   datasource?: SelectComponentDatasourceModel[],
   props?: { [key: string]: any },
   initialValue?: string,
   selectMode?: 'multiple' | 'tags',
-  DynamicFieldSetProps?: DynamicFieldSetProps
+}
+
+export interface MenuItem {
+  key: string,
+  name: string,
+  link?: string,
+  icon?: string,
+}
+
+export interface MenuListItemModel extends MenuItem {
+  children?: MenuItem[]
 }

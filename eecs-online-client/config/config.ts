@@ -1,6 +1,7 @@
 import { IConfig } from 'umi-types';
 import theme from './theme';
-import routeConfig from './routeConfig'; // ref: https://umijs.org/config/
+// ref: https://umijs.org/config/
+import routeConfig from './routeConfig';
 
 const config: IConfig = {
   treeShaking: true,
@@ -32,4 +33,3 @@ const config: IConfig = {
   outputPath: './build',
 };
 export default config;
-

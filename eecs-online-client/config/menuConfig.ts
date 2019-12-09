@@ -1,4 +1,6 @@
-const menuConfig = [
+import { MenuListItemModel } from '@/interfaces/components';
+
+const menuConfig: MenuListItemModel[] = [
   {
     key: 'teacher-class',
     name: '班级信息',
@@ -11,19 +13,19 @@ const menuConfig = [
     link: '/teacher/course',
     icon: 'icon-shouye1',
   },
-  {
-    key: 'subMenu',
-    name: '子菜单',
-    icon: 'icon-changjingguanli',
-    children: [
-      {
-        key: 'homepage',
-        name: '子菜单1',
-        link: '/submenu',
-        icon: 'icon-changjingguanli',
-      },
-    ],
-  },
+  // {
+  //   key: 'subMenu',
+  //   name: '子菜单',
+  //   icon: 'icon-changjingguanli',
+  //   children: [
+  //     {
+  //       key: 'homepage',
+  //       name: '子菜单1',
+  //       link: '/submenu',
+  //       icon: 'icon-changjingguanli',
+  //     },
+  //   ],
+  // },
 ]
 
 export default menuConfig;

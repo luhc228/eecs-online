@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Menu } from 'antd';
 import _ from 'lodash';
 import Link from 'umi/link';
-import withRouter from 'umi/withRouter';
+import { connect } from 'dva';
 import CustomIcon from '@/components/CustomIcon';
 import menuConfig from '../../../../../config/menuConfig';
-import { PageBasiocPropsModel } from '@/interfaces/components';
+import { MenuListItemModel } from '@/interfaces/components';
 
-interface NavMenuProps extends PageBasiocPropsModel {
+interface NavMenuProps extends RoutingType {
 }
 
 interface MenuTitleProps {
@@ -34,11 +34,10 @@ const NavMenu: React.SFC<NavMenuProps> = props => {
       mode="inline"
       selectedKeys={selectedKeys}
       onSelect={({ key }: { key: string }) => {
-        console.log([key]);
         setSelectedKeys([key]);
       }}
     >
-      {menuConfig.map(item => {
+      {menuConfig.map((item: MenuListItemModel) => {
         if (item.children && !_.isEmpty(item.children)) {
           return (
             <Menu.SubMenu
@@ -78,4 +77,10 @@ const NavMenu: React.SFC<NavMenuProps> = props => {
   )
 }
 
-export default withRouter(NavMenu);
+interface RoutingType {
+  location: Location
+}
+
+export default connect(({ router }: { router: RoutingType }) => ({
+  location: router.location,
+}))(NavMenu);
