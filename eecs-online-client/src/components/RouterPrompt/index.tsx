@@ -3,7 +3,6 @@ import Prompt from 'umi/prompt';
 
 export default () => (
   <>
-    <span>提示</span>
     <Prompt
       when
       // message={location => window.confirm(`confirm to leave to ${location.pathname}?`)}

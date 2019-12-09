@@ -8,7 +8,6 @@ import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
-import DynamicFieldSet from '@/components/DynamicFieldSet';
 import styles from './index.less';
 
 const { Option } = Select;
@@ -79,22 +78,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )(<InputNumber style={{ width: '100%' }} />)}
           </>
         )
-
-      case FORM_COMPONENT.DynamicFieldSet:
-        console.log(getFieldValue('location'));
-        return (
-          // <>
-          //   {getFieldDecorator(formItem.name, {
-          //     initialValue: formItem.initialValue,
-          //   },
-          //   )(<InputNumber style={{ width: '100%' }} />)}
-          // </>
-          <>
-            <Button type="dashed" onClick={handleAdd} style={{ width: '100%' }}>
-              <Icon type="plus" /> Add field
-        </Button>
-          </>
-        )
       default:
         return null;
     }
@@ -136,7 +119,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Button type="primary" htmlType="submit" loading={loading}>
                 保存
           </Button>
-              <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
+              <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
                 取消
           </Button>
             </span>)}
@@ -145,7 +128,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Button type="primary" htmlType="submit" loading={loading}>
                 查询
           </Button>
-              <Button style={{ marginLeft: 8 }} onClick={handleFormReset}>
+              <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
                 重置
           </Button>
             </span>

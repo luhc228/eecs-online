@@ -38,16 +38,11 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit }) => {
         },
       ],
     },
-    {
-      label: '上课时间',
-      name: 'time',
-      component: FORM_COMPONENT.DynamicFieldSet,
-    },
   ]
+
   const { courseFields } = courseEdit;
-  console.log(courseFields)
   return (
-    <div style={{ padding: 30 }}>
+    <div style={{ padding: '50px 0' }}>
       <RouterPrompt />
       <CustomForm
         layout="horizontal"
