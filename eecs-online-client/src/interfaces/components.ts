@@ -45,13 +45,21 @@ export interface SelectComponentDatasourceModel {
   value: string | number,
   label: string | number,
 }
+export interface DynamicFieldSetProps {
+
+}
 
 export interface FormItemComponentProps {
-  label: string,
+  label?: string,
   name: string,
-  component: FORM_COMPONENT.Input | FORM_COMPONENT.Select | FORM_COMPONENT.InputNumber;
+  component:
+  FORM_COMPONENT.Input |
+  FORM_COMPONENT.Select |
+  FORM_COMPONENT.InputNumber |
+  FORM_COMPONENT.DynamicFieldSet,
   datasource?: SelectComponentDatasourceModel[],
   props?: { [key: string]: any },
   initialValue?: string,
   selectMode?: 'multiple' | 'tags',
+  DynamicFieldSetProps?: DynamicFieldSetProps
 }

@@ -35,13 +35,18 @@ const CourseEdit: React.FC<CourseEditProps> = ({ values }) => {
         },
       ],
     },
+    {
+      label: '上课时间',
+      name: 'time',
+      component: FORM_COMPONENT.DynamicFieldSet,
+    },
   ]
   return (
     <div style={{ padding: 30 }}>
       <CustomForm
         layout="horizontal"
         values={values}
-        formTypes={CUSTOM_FORM_TYPES.Common}
+        formTypes={CUSTOM_FORM_TYPES.ONE_COLUMN}
         loading={false}
         onFieldsChange={(allFields: object) => { console.log(allFields) }}
         formConfig={formConfig}

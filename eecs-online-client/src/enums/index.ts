@@ -10,6 +10,7 @@ export enum FORM_COMPONENT {
   Input = 'Input',
   Select = 'Select',
   InputNumber = 'InputNumber',
+  DynamicFieldSet = 'DynamicFieldSet',
 }
 
 export enum FORM_LAYOUTS {
@@ -20,5 +21,6 @@ export enum FORM_LAYOUTS {
 
 export enum CUSTOM_FORM_TYPES {
   Filter = 'filter',
-  Common = 'common',
+  TWO_COLUMN = 'twoColumns',
+  ONE_COLUMN = 'oneColumns',
 }

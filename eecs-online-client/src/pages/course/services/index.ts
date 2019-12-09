@@ -15,6 +15,7 @@ export function fetchCoursePagination(data: any) {
  * @param data
  */
 export function removeCourse(data: any) {
+  console.log(data);
   return request.post('/course/delete', {
     data,
   })

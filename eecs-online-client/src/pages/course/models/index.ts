@@ -75,7 +75,11 @@ const Model: ModelType = {
     *removeCourse({ payload }: any, { call, put, select }: any) {
       yield call(courseService.removeCourse, payload);
 
-      const page = yield select((state: any) => state.data.page);
+      const page = yield select((state: any) => {
+        const { course: { data } } = state;
+        return data.page
+      });
+
       yield put({
         type: 'fetchCoursePagination',
         payload: {

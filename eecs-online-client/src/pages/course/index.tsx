@@ -13,33 +13,6 @@ import { StateType } from './models';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 
-const columns: ColumnProps<CourseListItem>[] = [
-  { title: '课程名称', dataIndex: 'courseName' },
-  { title: '上课地点', dataIndex: 'location' },
-  { title: '上课时间', dataIndex: 'time' },
-  { title: '上课班级', dataIndex: 'classNames' },
-  {
-    title: '操作',
-    render: (_: string, record: CourseListItem) => (
-      <span className={styles.operation}>
-        {/* <EditModal title="编辑课程" record={record} onOk={() => router.push('/teacher/course/edit')}>
-          <a>编辑课程</a>
-        </EditModal> */}
-        <span>
-          <a onClick={() => router.push('/teacher/course/edit')}>编辑课程</a>
-        </span>
-        <Popconfirm
-          title="确定删除该课程"
-          onConfirm={() => {
-            console.log(record);
-          }}>
-          <a href="">删除</a>
-        </Popconfirm>
-      </span>
-    ),
-  },
-];
-
 const filterFormConfig: FormItemComponentProps[] = [
   {
     label: '课程名称',
@@ -82,6 +55,41 @@ const Course: React.FC<CourseProps> = props => {
     })
   }, []);
 
+  const handleEdit = () => {
+    router.push('/teacher/course/edit');
+  }
+
+  const handleCreate = () => {
+    router.push('/teacher/course/create');
+  }
+
+  const columns: ColumnProps<CourseListItem>[] = [
+    { title: '课程名称', dataIndex: 'courseName' },
+    { title: '上课地点', dataIndex: 'location' },
+    { title: '上课时间', dataIndex: 'time' },
+    { title: '上课班级', dataIndex: 'classNames' },
+    {
+      title: '操作',
+      render: (_: string, record: CourseListItem) => (
+        <span className={styles.operation}>
+          <span>
+            <a onClick={handleEdit}>编辑课程</a>
+          </span>
+          <Popconfirm
+            title="确定删除该课程"
+            onConfirm={() => {
+              dispatch({
+                type: 'course/removeCourse',
+                payload: { id: record.id },
+              })
+            }}>
+            <a href="">删除</a>
+          </Popconfirm>
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div>
       <FilterForm
@@ -101,12 +109,7 @@ const Course: React.FC<CourseProps> = props => {
         })}
       />
       <div className={styles.buttons}>
-        {/* <EditModal title="新增课程" record={{}} onOk={() => {
-
-        }}>
-          <Button type="primary">新增课程</Button>
-        </EditModal> */}
-        <Button type="primary" onClick={() => router.push('/teacher/course/create')}>新增课程</Button>
+        <Button type="primary" onClick={handleCreate}>新增课程</Button>
       </div>
       <CustomTable
         loading={fetchCoursePaginationLoading}
