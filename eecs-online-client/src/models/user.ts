@@ -36,9 +36,6 @@ export interface UserModelType {
   subscriptions: {
     setup: ({ dispatch, history }: { dispatch: any, history: any }) => void;
   }
-  // effects: {
-  //   changeUserInfo: Effect,
-  // },
 }
 
 const UserModel: UserModelType = {
@@ -59,15 +56,6 @@ const UserModel: UserModelType = {
     },
   },
 
-  // effects: {
-  //   *changeUserInfo(
-  //     { payload }: any, { put }: { put: any }) {
-  //     yield put({
-  //       type: 'save',
-  //       payload,
-  //     })
-  //   },
-  // },
   subscriptions: {
     setup({ dispatch, history }: { dispatch: any, history: any }) {
       return history.listen(({ pathname }: { pathname: string }) => {

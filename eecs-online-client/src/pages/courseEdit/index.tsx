@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import RouterPrompt from '@/components/RouterPrompt';
 import { StateType } from './models';
 
 interface CourseEditProps {
@@ -47,6 +48,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit }) => {
   console.log(courseFields)
   return (
     <div style={{ padding: 30 }}>
+      <RouterPrompt />
       <CustomForm
         layout="horizontal"
         values={courseFields}
