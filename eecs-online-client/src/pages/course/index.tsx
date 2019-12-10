@@ -64,6 +64,10 @@ const Course: React.FC<CourseProps> = props => {
   }
 
   const handleCreate = () => {
+    dispatch({
+      type: 'courseEdit/changeCourseFields',
+      payload: { data: {} },
+    })
     router.push('/teacher/course/create');
   }
 

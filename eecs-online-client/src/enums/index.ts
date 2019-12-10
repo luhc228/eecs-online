@@ -10,7 +10,6 @@ export enum FORM_COMPONENT {
   Input = 'Input',
   Select = 'Select',
   InputNumber = 'InputNumber',
-  DynamicFieldSet = 'DynamicFieldSet',
 }
 
 export enum FORM_LAYOUTS {
@@ -20,7 +19,15 @@ export enum FORM_LAYOUTS {
 }
 
 export enum CUSTOM_FORM_TYPES {
-  Filter = 'filter',
-  TWO_COLUMN = 'twoColumns',
-  ONE_COLUMN = 'oneColumns',
+  Filter,
+  TwoColumn,
+  OneColumn,
+}
+
+export enum QUESTION_TYPE {
+  Single,
+  Multiple,
+  Judge,
+  Program,
+
 }

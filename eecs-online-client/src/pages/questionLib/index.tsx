@@ -1,0 +1,51 @@
+import React from 'react';
+import { Tabs } from 'antd';
+import { QUESTION_TYPE } from '@/enums';
+
+const { TabPane } = Tabs;
+
+interface QuestionEditProps {
+
+}
+
+interface TabsContentProps {
+  tab: string,
+  key: number,
+}
+
+const QuestionEdit: React.FC<QuestionEditProps> = props => {
+  function callback(key) {
+    console.log(key);
+  }
+  const tabsContent: TabsContentProps[] = [
+    {
+      tab: '单选题',
+      key: QUESTION_TYPE.Single,
+    },
+    {
+      tab: '多选题',
+      key: QUESTION_TYPE.Multiple,
+    },
+    {
+      tab: '判断题',
+      key: QUESTION_TYPE.Judge,
+    },
+    {
+      tab: '编程题',
+      key: QUESTION_TYPE.Program,
+    },
+  ]
+  const { } = props;
+  return (
+    <Tabs defaultActiveKey="0" onChange={callback}>
+      {tabsContent.map((item: TabsContentProps) => (
+        <TabPane tab={item.tab} key={item.key.toString()}>
+
+        </TabPane>
+      ))}
+    </Tabs>
+  )
+}
+
+
+export default QuestionEdit;

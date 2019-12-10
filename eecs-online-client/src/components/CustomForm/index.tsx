@@ -3,7 +3,7 @@
  * Filter component usually in the header of the table or the page.
  */
 import React from 'react';
-import { Form, Row, Col, Input, Select, InputNumber, Button, Icon } from 'antd';
+import { Form, Row, Col, Input, Select, InputNumber, Button } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -13,7 +13,7 @@ import styles from './index.less';
 const { Option } = Select;
 
 interface CustomFormProps extends FormComponentProps {
-  formTypes: CUSTOM_FORM_TYPES.TWO_COLUMN | CUSTOM_FORM_TYPES.Filter | CUSTOM_FORM_TYPES.ONE_COLUMN;
+  formTypes: CUSTOM_FORM_TYPES.TwoColumn | CUSTOM_FORM_TYPES.Filter | CUSTOM_FORM_TYPES.OneColumn;
   layout?: 'horizontal' | 'inline' | 'vertical';
   formConfig: FormItemComponentProps[];
   values: object;
@@ -30,10 +30,10 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
     formItemLayout = INLINE_FORM_LAYOUT;
   }
-  if (formTypes === CUSTOM_FORM_TYPES.ONE_COLUMN) {
+  if (formTypes === CUSTOM_FORM_TYPES.OneColumn) {
     formItemLayout = ONE_COLUMN_FORM_LAYOUT;
   }
-  if (formTypes === CUSTOM_FORM_TYPES.TWO_COLUMN) {
+  if (formTypes === CUSTOM_FORM_TYPES.TwoColumn) {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
 
@@ -107,7 +107,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
         </Row>
 
         <Form.Item>
-          {(formTypes === CUSTOM_FORM_TYPES.ONE_COLUMN || formTypes === CUSTOM_FORM_TYPES.TWO_COLUMN) && (
+          {(formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) && (
             <span className={styles.commonButtons}>
               <Button type="primary" htmlType="submit" loading={loading}>
                 保存

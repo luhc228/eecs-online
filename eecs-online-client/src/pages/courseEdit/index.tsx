@@ -73,7 +73,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
       <CustomForm
         layout="horizontal"
         values={courseFields}
-        formTypes={CUSTOM_FORM_TYPES.ONE_COLUMN}
+        formTypes={CUSTOM_FORM_TYPES.OneColumn}
         loading={false}
         onFieldsChange={handleFieldsChange}
         formConfig={formConfig}
