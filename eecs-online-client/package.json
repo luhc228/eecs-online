@@ -9,16 +9,17 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "antd": "^3.26.0",
+    "antd": "^3.19.5",
     "classnames": "^2.2.6",
-    "dva": "^2.6.0-beta.19",
+    "dva": "^2.6.0-beta.6",
     "lodash": "^4.17.15",
     "mockjs": "^1.1.0",
     "qs": "^6.9.0",
-    "react": "^16.12.0",
+    "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "redux": "^4.0.4",
-    "umi": "^2.12.5",
+    "redux-persist": "^6.0.0",
+    "umi": "^2.9.0",
     "umi-plugin-react": "^1.8.0",
     "umi-request": "^1.2.8"
   },

@@ -6,11 +6,12 @@ export enum USER_TYPE {
   Teacher,
 }
 
-// 相关渲染与值更新在CustomForm
+
 export enum FORM_COMPONENT {
-  Input = 'Input',  
+  Input = 'Input',
   Select = 'Select',
   InputNumber = 'InputNumber',
+  DynamicFieldSet = 'DynamicFieldSet',
 }
 
 export enum FORM_LAYOUTS {
@@ -21,5 +22,6 @@ export enum FORM_LAYOUTS {
 
 export enum CUSTOM_FORM_TYPES {
   Filter = 'filter',
-  Common = 'common',
+  TWO_COLUMN = 'twoColumns',
+  ONE_COLUMN = 'oneColumns',
 }
