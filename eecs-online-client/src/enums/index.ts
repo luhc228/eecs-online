@@ -6,7 +6,6 @@ export enum USER_TYPE {
   Teacher,
 }
 
-
 export enum FORM_COMPONENT {
   Input = 'Input',
   Select = 'Select',

@@ -2,7 +2,6 @@ import React from 'react';
 import { FORM_COMPONENT } from '@/enums';
 
 export interface PageMatchModel {
-
   isExact: boolean,
   params: object,
   path: string,
@@ -18,13 +17,11 @@ export interface PageBasiocPropsModel {
 
 export interface CustomLocation extends Location {
   query: {
-
     [x: string]: string,
   };
 }
 
 export interface TableColumnsProps<T> {
-
   title: string,
   dataIndex: string,
   key: string,

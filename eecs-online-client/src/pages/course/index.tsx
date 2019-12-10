@@ -133,7 +133,10 @@ const Course: React.FC<CourseProps> = props => {
   )
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 const mapStaetToProps = ({
   course,
   loading,

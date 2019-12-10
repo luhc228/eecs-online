@@ -1,6 +1,5 @@
 import { TableListPaginationProps } from './components';
 
-
 export interface CourseFieldsModel {
   courseName?: string,
   // 上课地点
@@ -28,4 +27,3 @@ export interface filterFieldsProps {
   // 上课班级
   classNames?: string,
 }
-

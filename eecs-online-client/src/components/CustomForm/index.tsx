@@ -13,7 +13,6 @@ import styles from './index.less';
 const { Option } = Select;
 
 interface CustomFormProps extends FormComponentProps {
-
   formTypes: CUSTOM_FORM_TYPES.TWO_COLUMN | CUSTOM_FORM_TYPES.Filter | CUSTOM_FORM_TYPES.ONE_COLUMN;
   layout?: 'horizontal' | 'inline' | 'vertical';
   formConfig: FormItemComponentProps[];
@@ -25,14 +24,12 @@ interface CustomFormProps extends FormComponentProps {
 
 const CustomForm: React.FC<CustomFormProps> = props => {
   const { formTypes, form, formConfig, onSubmit, loading, layout } = props;
-
   const { getFieldDecorator, getFieldValue } = form;
 
   let formItemLayout: any = null;
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
     formItemLayout = INLINE_FORM_LAYOUT;
   }
-
   if (formTypes === CUSTOM_FORM_TYPES.ONE_COLUMN) {
     formItemLayout = ONE_COLUMN_FORM_LAYOUT;
   }
@@ -79,7 +76,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               initialValue: formItem.initialValue,
             },
             )(<InputNumber style={{ width: '100%' }} />)}
-
           </>
         )
       default:
@@ -127,7 +123,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
                 取消
           </Button>
             </span>)}
-
           {(formTypes === CUSTOM_FORM_TYPES.Filter) && (
             <span className={styles.filterButtons}>
               <Button type="primary" htmlType="submit" loading={loading}>
@@ -150,7 +145,6 @@ CustomForm.defaultProps = {
 }
 
 export default Form.create<CustomFormProps>({
-
   // ref: http://react-component.github.io/form/examples/redux.html
   mapPropsToFields(props: CustomFormProps) {
     const result: { [key: string]: { value: string | number | string[], [key: string]: any } } = {};
