@@ -47,22 +47,16 @@ const Model: ModelType = {
     save(state: any, { payload: { data } }: any) {
       return { ...state, data }
     },
-<<<<<<< HEAD
-=======
 
     changeFilterFields(state: any, { payload: { filterFields } }: any) {
       return { ...state, filterFields }
     },
->>>>>>> dev
   },
 
   effects: {
     /**
      * 获取课程信息分页
-<<<<<<< HEAD
-=======
      * 包括信息筛选
->>>>>>> dev
      */
     *fetchCoursePagination({ payload }: any, { call, put }: any) {
       const response = yield call(courseService.fetchCoursePagination, payload);

@@ -71,11 +71,6 @@ const CourseClass: React.FC<ClassProps> = props => {
           <span>
             <a onClick={() => handleEdit(record)}>编辑班级</a>
           </span>
-{/*
-          <span>
-            <a onClick={() => studentEdit(record)}>学生管理</a>
-          </span>
-*/}
           <Popconfirm
             title='确定删除该班级'
             onConfirm={() => {
@@ -129,7 +124,6 @@ const CourseClass: React.FC<ClassProps> = props => {
   )
 }
 
-// 监控节点
 const mapStateToProps = ({
   courseClass,
   loading,

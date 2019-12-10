@@ -1,10 +1,10 @@
-import { ClassTableData, filterFieldsProps } from '@/interfaces/class';
+import { ClassTableData, ClassFieldsModel } from '@/interfaces/class';
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 
 export interface StateType {
     data: ClassTableData;
-    filterFields: filterFieldsProps;
+    filterFields: ClassFieldsModel;
 }
 
 export type Effect = (
@@ -28,6 +28,9 @@ export interface ModelType {
 const Model: ModelType = {
   namespace: 'courseClass';
   state: {
-    
+    data: {
+      classList: [];
+
+    }
   }
 }

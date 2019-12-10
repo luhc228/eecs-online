@@ -1,7 +1,7 @@
 import { TableListPaginationProps } from './components';
 import { Table, List } from 'antd';
 
-export interface ClassFieldsModal{
+export interface ClassFieldsModel{
     // 班级名称
     courseClassName?: string;
     // 所属课程名称
@@ -12,18 +12,18 @@ export interface ClassFieldsModal{
     studentList: StudentListItem[]; 
 }
 
-export interface ClassListItem extends ClassFieldsModal{
+export interface ClassListItem extends ClassFieldsModel{
     // 班级ID
     id: string;
 }
 
-export interface StudentFieldsModal{
+export interface StudentFieldsModel{
     // 学生姓名
     studentName?: string;
     // 学生学号
     studentNumber?: string;
 }
-export interface StudentListItem extends StudentFieldsModal{
+export interface StudentListItem extends StudentFieldsModel{
     // 学生ID
     id: string;
 }
@@ -31,7 +31,4 @@ export interface StudentListItem extends StudentFieldsModal{
 export interface ClassTableData extends TableListPaginationProps{
     // 班级列表
     classList: ClassListItem[];
-}
-
-export interface filterFieldsProps extends ClassFieldsModal{
 }
