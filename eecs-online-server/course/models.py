@@ -1,7 +1,6 @@
 from django.db import models
-from django.forms import model_to_dict
-
-from vir_class.models import VirClass
+from login.models import *
+from vir_class.models import *
 
 
 # Create your models here.
@@ -9,29 +8,31 @@ from vir_class.models import VirClass
 
 class CourseManage(models.Manager):
     def all(self):  # 重写all()方法
-        course_dict = super().all().filter(deleted=0)
-        return course_dict  # 获取所有未删除的课程
+        course_queryset = super().all().filter(deleted=0)
+        return course_queryset  # 获取所有未删除的课程
 
-    def creat_course(self, name, location, time, class_name):
+    def creat_course(self, name, location, time, class_name, teacher_id):
         course = self.model()
         course.course_name = name
         course.course_location = location
         course.course_time = time
-        course.class_id = self.VirClass.get(class_name=class_name)  # 先建立班级，后创建课程
+        course.teacher_id = Teacher.objects.get(id=str(teacher_id))
+        course.class_id = VirClass.objects.get(class_name=class_name)  # 先建立班级，后创建课程
         course.save()
         return course  # 返回创建的对象
 
-    def update_course(self, id, name, location, time, class_name):
-        course = self.Course.get(id=id)  # 获取对应的course对象
+    def update_course(self, id, name, location, time, class_name, teacher_id):
+        course = Course.course_manage.get(id=id)  # 获取对应的course对象
         course.course_name = name
         course.course_location = location
         course.course_time = time
-        course.class_id = self.VirClass.get(class_name=class_name)  # 先建立班级，后创建课程
+        course.teacher_id = Teacher.objects.get(id=str(teacher_id))
+        course.class_id = VirClass.objects.get(class_name=class_name)  # 先建立班级，后创建课程
         course.save()
         return course  # 返回创建的对象
 
     def delete_course(self, id):
-        course = self.Course.get(id=id)  # 获取对应的course对象
+        course = Course.course_manage.get(id=id)  # 获取对应的course对象
         course.deleted = 1
         course.save()
         return course  # 返回创建的对象

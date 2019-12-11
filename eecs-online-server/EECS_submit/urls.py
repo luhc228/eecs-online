@@ -21,8 +21,6 @@ from login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('login/', views.login),
-    # path('login/success/', views.success),
     url('api/login', include('login.urls')),
     url('api/course', include('course.urls')),
 

@@ -3,6 +3,7 @@ from django.shortcuts import HttpResponse
 from login.models import *
 import json
 
+
 # Create your views here.
 
 
@@ -20,7 +21,8 @@ def teacher(request):
                     'teacherId': 'userId',
                 },
             }
-            return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
         if user.password == str(password):  # 测试用的条件，实际中是模拟爬虫返回一个登陆成功的信息
             con = {
                 'success': True,
@@ -32,7 +34,8 @@ def teacher(request):
                     'teacher_college': user.teacher_college,
                 },
             }
-            return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
         else:
             con = {
                 'success': False,
@@ -41,12 +44,13 @@ def teacher(request):
                     'teacherId': 'userId',
                 },
             }
-            return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
     con = {
         'success': False,
         'message': '请求错误',
     }
-    return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
 
 
 def student(request):
@@ -63,7 +67,8 @@ def student(request):
                     'studentId': 'userId',
                 },
             }
-            return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
         if user.password == str(password):
             con = {
                 'success': True,
@@ -76,7 +81,8 @@ def student(request):
                     'student_class': user.student_class,
                 },
             }
-            return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
         else:
             con = {
                 'success': False,
@@ -85,9 +91,10 @@ def student(request):
                     'studentId': 'userId',
                 },
             }
-            return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
     con = {
         'success': False,
         'message': '请求错误',
     }
-    return HttpResponse(content=json.dumps(con), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
