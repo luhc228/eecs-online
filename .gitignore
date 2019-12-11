@@ -1,0 +1,10 @@
+eecs-online-server/course/migrations/0001_initial.py
+eecs-online-server/login/migrations/0001_initial.py
+eecs-online-server/vir-class/migrations/0001_initial.py
+
+eecs-online-server/course/__pycache__/
+eecs-online-server/login/__pycache__/
+eecs-online-server/vir_class/__pycache__/
+eecs-online-server/student/__pycache__/
+eecs-online-server/teacher/__pycache__/
+eecs-online-server/EECS_submit/__pycache__/
