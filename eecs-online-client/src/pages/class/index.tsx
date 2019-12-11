@@ -1,17 +1,17 @@
-import { FormItemComponentProps } from '@/interfaces/components';
-import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { Dispatch } from 'redux';
-import { StateType } from './models';
-import { ClassListItem } from '@/interfaces/class';
 import React, { useEffect } from 'react';
-import { PAGINATION_CONFIGS } from '@/constants';
 import router from 'umi/router';
-import styles from './index.less';
-import { Button, Popconfirm, Menu } from 'antd';
-import FilterForm from '@/components/CustomForm';
-import CustomTable from '@/components/CustomTable';
+import { Button, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { ColumnProps } from 'antd/es/table';
+import { FormItemComponentProps } from '@/interfaces/components';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import { StateType } from './models';
+import { ClassListItem } from '@/interfaces/class';
+import { PAGINATION_CONFIGS } from '@/constants';
+import styles from './index.less';
+import FilterForm from '@/components/CustomForm';
+import CustomTable from '@/components/CustomTable';
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -35,7 +35,7 @@ interface ClassProps {
 const CourseClass: React.FC<ClassProps> = props => {
   const {
     courseClass: {
-      data: {page, total, classList},
+      data: { page, total, classList },
       filterFields,
     },
     fetchClassPaginationLoading,
@@ -45,42 +45,43 @@ const CourseClass: React.FC<ClassProps> = props => {
   useEffect(() => {
     dispatch({
       type: 'class/fetchClassPagination',
-      payload: {...PAGINATION_CONFIGS },
+      payload: { ...PAGINATION_CONFIGS },
     })
   }, []);
 
   const handleEdit = (allFields: ClassListItem) => {
     dispatch({
       type: 'class/changeClassFields',
-      payload: {data: allFields},
+      payload: { data: allFields },
     })
-    router.push('teacher/class/edit');
+    router.push('/teacher/class/edit');
   }
 
   const handleCreate = () => {
-    router.push('teacher/class/create');
+    router.push('/teacher/class/create');
   }
 
   const columns: ColumnProps<ClassListItem>[] = [
-    { title: '班级名称', dataIndex: 'courseClassName'},
-    { title: '所属课程', dataIndex: 'courseName'},
-    { title: '学生人数', dataIndex: 'StudentTotal'},
-    { title: '操作班级',
-      render:(_:string, record: ClassListItem) =>(
+    { title: '班级名称', dataIndex: 'courseClassName' },
+    { title: '所属课程', dataIndex: 'courseName' },
+    { title: '学生人数', dataIndex: 'StudentTotal' },
+    {
+      title: '操作',
+      render: (_: string, record: ClassListItem) => (
         <span className={styles.operation}>
           <span>
             <a onClick={() => handleEdit(record)}>编辑班级</a>
           </span>
           <Popconfirm
-            title='确定删除该班级'
+            title="确定删除该班级"
             onConfirm={() => {
               dispatch({
                 type: 'class/removeClass',
-                payload: {id: record.id},
+                payload: { id: record.id },
               })
             }}>
-              <a href="">删除</a>
-            </Popconfirm>
+            <a href="">删除</a>
+          </Popconfirm>
         </span>
       ),
     },
@@ -88,19 +89,19 @@ const CourseClass: React.FC<ClassProps> = props => {
   return (
     <div>
       <FilterForm
-        value={filterFields}
+        values={filterFields}
         loading={false}
         formTypes={CUSTOM_FORM_TYPES.Filter}
         onFieldsChange={(allFields: object) => {
           dispatch({
             type: 'class/changeFilterFields',
-            payload: {filterFields: allFields},
+            payload: { filterFields: allFields },
           })
         }}
         formConfig={filterFormConfig}
         onSubmit={value => dispatch({
           type: 'class/fetchClassPagination',
-          payload: {...PAGINATION_CONFIGS, ...value},
+          payload: { ...PAGINATION_CONFIGS, ...value },
         })}
       />
       <div className={styles.buttons}>

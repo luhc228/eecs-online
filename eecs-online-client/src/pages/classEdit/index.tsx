@@ -7,13 +7,10 @@ import CustomForm from '@/components/CustomForm';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import RouterPrompt from '@/components/RouterPrompt';
-import { StateType } from './models';
-import { List, message, Avatar, Spin } from 'antd';
-import reqwest from 'reqwest';
-import InfiniteScroll from 'react-infinite-scroller';
+// import { StateType } from './models';
 
 interface ClassEditProps {
-  classEdit: StateType;
+  // classEdit: StateType;
 }
 
 
@@ -33,6 +30,15 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit }) => {
       label: '',
       name: '',
       component: FORM_COMPONENT.Select,
-      
-    }   
+
+    },
   ]
+
+  return (
+    <div>
+      fff
+    </div>
+  )
+}
+
+export default ClassEdit;

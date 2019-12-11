@@ -8,6 +8,8 @@ export default [
     Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
     routes: [
       { path: '/teacher/class', component: './class' },
+      { path: '/teacher/class/edit', component: './classEdit' },
+      { path: '/teacher/class/create', component: './classEdit' },
       { path: '/teacher/course', component: './course' },
       { path: '/teacher/course/edit', component: './courseEdit' },
       { path: '/teacher/course/create', component: './courseEdit' },
