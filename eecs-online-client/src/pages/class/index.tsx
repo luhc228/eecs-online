@@ -110,7 +110,7 @@ const CourseClass: React.FC<ClassProps> = props => {
       <CustomTable
         loading={fetchClassPaginationLoading}
         columns={columns}
-        dataSource={classList}
+        dataSource={list}
         current={page}
         total={total}
         rowKey={(record: ClassListItem) => record.id}
