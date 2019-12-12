@@ -5,7 +5,7 @@ import request from '@/utils/request';
  * @param data
  */
 export function fetchClassPagination(data: any) {
-  return request.post('/class/pagination', {
+  return request.post('/vir_class/pagination', {
     data,
   })
 }
@@ -15,7 +15,7 @@ export function fetchClassPagination(data: any) {
  * @param data
  */
 export function removeClass(data: any) {
-  return request.post('/class/delete', {
+  return request.post('/vir_class/delete', {
     data,
   })
 }

@@ -35,7 +35,7 @@ interface ClassProps {
 const CourseClass: React.FC<ClassProps> = props => {
   const {
     courseClass: {
-      data: { page, total, classList },
+      data: { page, total, list },
       filterFields,
     },
     fetchClassPaginationLoading,
@@ -44,14 +44,14 @@ const CourseClass: React.FC<ClassProps> = props => {
 
   useEffect(() => {
     dispatch({
-      type: 'class/fetchClassPagination',
+      type: 'courseClass/fetchClassPagination',
       payload: { ...PAGINATION_CONFIGS },
     })
   }, []);
 
   const handleEdit = (allFields: ClassListItem) => {
     dispatch({
-      type: 'class/changeClassFields',
+      type: 'courseClass/changeClassFields',
       payload: { data: allFields },
     })
     router.push('/teacher/class/edit');
@@ -76,7 +76,7 @@ const CourseClass: React.FC<ClassProps> = props => {
             title="确定删除该班级"
             onConfirm={() => {
               dispatch({
-                type: 'class/removeClass',
+                type: 'courseClass/removeClass',
                 payload: { id: record.id },
               })
             }}>
@@ -94,13 +94,13 @@ const CourseClass: React.FC<ClassProps> = props => {
         formTypes={CUSTOM_FORM_TYPES.Filter}
         onFieldsChange={(allFields: object) => {
           dispatch({
-            type: 'class/changeFilterFields',
+            type: 'courseClass/changeFilterFields',
             payload: { filterFields: allFields },
           })
         }}
         formConfig={filterFormConfig}
         onSubmit={value => dispatch({
-          type: 'class/fetchClassPagination',
+          type: 'courseClass/fetchClassPagination',
           payload: { ...PAGINATION_CONFIGS, ...value },
         })}
       />
@@ -116,7 +116,7 @@ const CourseClass: React.FC<ClassProps> = props => {
         rowKey={(record: ClassListItem) => record.id}
         onPagination={(current: number) => {
           dispatch({
-            type: 'class/fetchClassPagination',
+            type: 'courseClass/fetchClassPagination',
             payload: { ...PAGINATION_CONFIGS, page: current },
           })
         }}

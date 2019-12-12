@@ -1,34 +1,30 @@
 import { TableListPaginationProps } from './components';
-import { Table, List } from 'antd';
 
-export interface ClassFieldsModel{
+export interface ClassFieldsModel {
     // 班级名称
-    courseClassName?: string;
-    // 所属课程名称
-    courseName?: string;
+    className?: string;
     // 学生总数
-    studentTotal?: number;
-    // 学生列表
-    studentList: StudentListItem[]; 
+    studentNum?: number;
 }
 
-export interface ClassListItem extends ClassFieldsModel{
+export interface ClassListItem extends ClassFieldsModel {
     // 班级ID
     id: string;
 }
 
-export interface StudentFieldsModel{
+export interface ClassTableData extends TableListPaginationProps {
+    // 班级列表
+    list: ClassListItem[];
+}
+
+export interface StudentFieldsModel {
     // 学生姓名
     studentName?: string;
     // 学生学号
-    studentNumber?: string;
-}
-export interface StudentListItem extends StudentFieldsModel{
-    // 学生ID
-    id: string;
+    studentId?: string;
 }
 
-export interface ClassTableData extends TableListPaginationProps{
-    // 班级列表
-    classList: ClassListItem[];
+export interface StudentListItem extends StudentFieldsModel {
+    // 学生ID
+    id: string;
 }

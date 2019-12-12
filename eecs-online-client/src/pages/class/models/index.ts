@@ -1,11 +1,11 @@
-import { ClassTableData, ClassFieldsModel } from '@/interfaces/class';
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import { ClassTableData, ClassFieldsModel } from '@/interfaces/class';
 import * as classService from '../services';
 
 export interface StateType {
-    data: ClassTableData;
-    filterFields: ClassFieldsModel;
+  data: ClassTableData;
+  filterFields: ClassFieldsModel;
 }
 
 export type Effect = (
@@ -37,11 +37,10 @@ const Model: ModelType = {
       page: 1,
     },
     filterFields: {
-      courseClassName: undefined,
-      courseName: undefined,
-      studentTotal: undefined,
-      studentList: [],
-    }
+      className: undefined,
+      studentNum: undefined,
+      list: [],
+    },
   },
 
   reducers: {
@@ -62,6 +61,7 @@ const Model: ModelType = {
     *fetchClassPagination({ payload }: any, { call, put }: any) {
       const response = yield call(classService.fetchClassPagination, payload);
       const { data } = response;
+      console.log(data);
       yield put({
         type: 'save',
         payload: {
@@ -88,7 +88,7 @@ const Model: ModelType = {
         },
       })
     },
- },
+  },
 }
 
 export default Model
