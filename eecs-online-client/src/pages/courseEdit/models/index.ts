@@ -1,18 +1,14 @@
-import { AnyAction, Reducer } from 'redux';
-import { EffectsCommandMap } from 'dva';
+import { Reducer } from 'redux';
 import router from 'umi/router';
 import * as courseEditService from '../services';
 import { CourseFieldsModel } from '@/interfaces/course';
+import { Effect } from '@/interfaces/reduxState';
 
 export interface StateType {
   courseFields: CourseFieldsModel,
   when: boolean,
 }
 
-export type Effect = (
-  action: AnyAction,
-  effects: EffectsCommandMap & { select: <T>(func: (state: StateType) => T) => T },
-) => void;
 
 export interface ModelType {
   namespace: string;
@@ -22,8 +18,8 @@ export interface ModelType {
     changePromptStatus: Reducer<StateType>;
   };
   effects: {
-    createCourse: Effect,
-    updateCourse: Effect,
+    createCourse: Effect<StateType>,
+    updateCourse: Effect<StateType>,
   };
 }
 
@@ -34,7 +30,6 @@ const Model: ModelType = {
     courseFields: {
       courseName: undefined,
       location: undefined,
-      time: undefined,
       classNames: undefined,
     },
     when: true,

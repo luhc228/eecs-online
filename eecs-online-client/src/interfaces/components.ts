@@ -8,7 +8,7 @@ export interface PageMatchModel {
   url: string,
 }
 
-export interface PageBasiocPropsModel {
+export interface PageBasicPropsModel {
   history: History;
   location: CustomLocation;
   match: PageMatchModel;

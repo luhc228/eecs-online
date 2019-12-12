@@ -18,12 +18,13 @@ interface CustomFormProps extends FormComponentProps {
   formConfig: FormItemComponentProps[];
   values: object;
   loading: boolean;
+  children?: React.ReactNode;
   onFieldsChange: (allFields: object) => void;
   onSubmit: (value: object) => void;
 }
 
 const CustomForm: React.FC<CustomFormProps> = props => {
-  const { formTypes, form, formConfig, onSubmit, loading, layout } = props;
+  const { formTypes, form, formConfig, onSubmit, loading, layout, children } = props;
   const { getFieldDecorator, getFieldValue } = form;
 
   let formItemLayout: any = null;
@@ -105,7 +106,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             </Col>
           ))}
         </Row>
-
+        {children}
         <Form.Item>
           {(formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) && (
             <span className={styles.commonButtons}>

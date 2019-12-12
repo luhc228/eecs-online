@@ -78,8 +78,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
         onFieldsChange={handleFieldsChange}
         formConfig={formConfig}
         onSubmit={handleSubmit}
-      >
-      </CustomForm>
+      />
     </div>
   )
 };
