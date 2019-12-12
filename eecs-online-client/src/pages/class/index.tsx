@@ -19,11 +19,6 @@ const filterFormConfig: FormItemComponentProps[] = [
     name: 'courseClassName',
     component: FORM_COMPONENT.Input,
   },
-  {
-    label: '上课地点',
-    name: 'courseName',
-    component: FORM_COMPONENT.Input,
-  },
 ]
 
 interface ClassProps {
@@ -61,10 +56,16 @@ const CourseClass: React.FC<ClassProps> = props => {
     router.push('/teacher/class/create');
   }
 
+  const handleDelete = (id: string) => {
+    dispatch({
+      type: 'courseClass/removeClass',
+      payload: { id },
+    })
+  }
+
   const columns: ColumnProps<ClassListItem>[] = [
-    { title: '班级名称', dataIndex: 'courseClassName' },
-    { title: '所属课程', dataIndex: 'courseName' },
-    { title: '学生人数', dataIndex: 'StudentTotal' },
+    { title: '班级名称', dataIndex: 'className' },
+    { title: '学生人数', dataIndex: 'studentNum' },
     {
       title: '操作',
       render: (_: string, record: ClassListItem) => (
@@ -75,10 +76,7 @@ const CourseClass: React.FC<ClassProps> = props => {
           <Popconfirm
             title="确定删除该班级"
             onConfirm={() => {
-              dispatch({
-                type: 'courseClass/removeClass',
-                payload: { id: record.id },
-              })
+              handleDelete(record.id)
             }}>
             <a href="">删除</a>
           </Popconfirm>
@@ -86,8 +84,9 @@ const CourseClass: React.FC<ClassProps> = props => {
       ),
     },
   ];
+
   return (
-    <div>
+    <>
       <FilterForm
         values={filterFields}
         loading={false}
@@ -121,7 +120,7 @@ const CourseClass: React.FC<ClassProps> = props => {
           })
         }}
       />
-    </div>
+    </>
   )
 }
 

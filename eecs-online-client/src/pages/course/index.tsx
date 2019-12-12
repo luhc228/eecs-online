@@ -40,7 +40,7 @@ interface CourseProps {
 const Course: React.FC<CourseProps> = props => {
   const {
     course: {
-      data: { page, total, courseList },
+      data: { page, total, list },
       filterFields,
     },
     fetchCoursePaginationLoading,
@@ -121,7 +121,7 @@ const Course: React.FC<CourseProps> = props => {
       <CustomTable
         loading={fetchCoursePaginationLoading}
         columns={columns}
-        dataSource={courseList}
+        dataSource={list}
         current={page}
         total={total}
         rowKey={(record: CourseListItem) => record.id}

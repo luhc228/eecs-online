@@ -31,7 +31,7 @@ const Model: ModelType = {
 
   state: {
     data: {
-      courseList: [],
+      list: [],
       total: 0,
       pageSize: 8,
       page: 1,

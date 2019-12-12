@@ -14,7 +14,7 @@ export interface CourseListItem extends CourseFieldsModel {
 }
 
 export interface CourseTableData extends TableListPaginationProps {
-  courseList: CourseListItem[];
+  list: CourseListItem[];
 }
 
 export interface filterFieldsProps {
