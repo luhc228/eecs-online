@@ -27,6 +27,7 @@ const formConfig: FormItemComponentProps[] = [
     label: '虚拟班级名称',
     name: 'className',
     component: FORM_COMPONENT.Input,
+    required: true,
   },
 ]
 const leftTableColumns: ColumnProps<any>[] = [
@@ -57,33 +58,34 @@ interface ClassEditProps {
   location: Location
 }
 
-const ClassEdit: React.FC<ClassEditProps> = ({ classEdit }) => {
+const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location }) => {
   const originTargetKeys: any[] = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
 
   const [targetKeys, changeTargetKeys] = useState(originTargetKeys);
 
-  const handleChange = (nextTargetKeys: any[], direction: string, moveKeys: string[]) => {
+  const handleChange = (nextTargetKeys: string[]) => {
     // console.log(nextTargetKeys);
     // console.log(direction);
     // console.log(moveKeys);
     changeTargetKeys(nextTargetKeys);
   }
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (allFields: object) => {
+    const isCreate = location.pathname.split('/')[3] === 'create';
+    console.log(allFields);
   }
 
   const handleFieldsChange = () => {
 
   }
-  const { courseFields, when } = courseEdit;
+  const { classDetail, when } = classEdit;
   return (
-    <div style={{ padding: '50px 0' }}>
-      <RouterPrompt />
+    <div style={{ padding: '20px 0' }}>
+      <RouterPrompt when={when} />
       <CustomForm
         layout="horizontal"
         values={classDetail}
-        formTypes={CUSTOM_FORM_TYPES.OneColumn}
+        formTypes={CUSTOM_FORM_TYPES.TwoColumn}
         loading={false}
         onFieldsChange={handleFieldsChange}
         formConfig={formConfig}
@@ -103,7 +105,6 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit }) => {
         />
       </CustomForm>
     </div>
-
   )
 }
 

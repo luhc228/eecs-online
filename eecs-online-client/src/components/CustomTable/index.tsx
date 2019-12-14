@@ -17,6 +17,7 @@ interface CustomTableProps {
   expandedRowKeys?: string[];
   components?: TableComponents;
   rowKey: string | ((record: any) => string);
+  size?: 'small' | 'middle';
   onRow?: (record: any, index?: number) => TableEventListeners;
   onPagination?: (current: number) => void;
   onExpand?: (expanded: any, record: any) => void;
@@ -38,6 +39,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
   expandedRowKeys,
   rowSelection,
   onRow,
+  size,
 }) => (
     <React.Fragment>
       <Table
@@ -47,7 +49,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
         pagination={false}
         rowKey={rowKey}
         components={components}
-        size="middle"
+        size={size}
         expandedRowRender={expandedRowRender}
         onExpand={onExpand}
         expandedRowKeys={expandedRowKeys !== undefined ? expandedRowKeys : []}
@@ -59,7 +61,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
         <Pagination
           className="ant-table-pagination"
           showQuickJumper
-          size="middle"
+          size={size}
           total={total}
           pageSize={pageSize}
           current={current}
@@ -73,6 +75,7 @@ CustomTable.defaultProps = {
   buttons: [],
   loading: false,
   pageSize: PAGINATION_CONFIGS.pageSize,
+  size: 'middle',
 }
 
 export default CustomTable;

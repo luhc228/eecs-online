@@ -50,6 +50,8 @@ export interface SelectComponentDatasourceModel {
 export interface FormItemComponentProps {
   label?: string,
   name: string,
+  required: boolean;
+  message?: string;
   component:
   FORM_COMPONENT.Input |
   FORM_COMPONENT.Select |

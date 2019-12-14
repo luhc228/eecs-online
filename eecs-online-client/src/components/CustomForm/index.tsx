@@ -45,7 +45,8 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           <>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
-            })(<Input placeholder="请输入" />)}
+              rules: [{ required: formItem.required, message: formItem.message ? formItem.message : '请输入' }],
+            })(<Input placeholder="请输入" style={{ width: '100%' }} />)}
           </>
         )
       case FORM_COMPONENT.Select:

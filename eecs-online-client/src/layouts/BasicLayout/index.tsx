@@ -30,7 +30,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
-          minHeight: 800,
+          minHeight: 1000,
+          overflow: 'initial',
         }}
       >
         {children}

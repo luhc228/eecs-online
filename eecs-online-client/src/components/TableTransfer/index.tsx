@@ -2,6 +2,7 @@ import React from 'react';
 import { Transfer, Table } from 'antd';
 import difference from 'lodash/difference';
 import { ColumnProps } from 'antd/es/table';
+import CustomTable from '../CustomTable';
 
 export interface TableTransferProps {
   dataSource: any[];
@@ -45,18 +46,30 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
       };
 
       return (
-        <Table
+        // <Table
+        //   rowSelection={rowSelection}
+        //   columns={columns}
+        //   dataSource={filteredItems}
+        //   size="small"
+        //   style={{ pointerEvents: listDisabled ? 'none' : null }}
+        //   onRow={({ key, disabled: itemDisabled }) => ({
+        //     onClick: () => {
+        //       if (itemDisabled || listDisabled) return;
+        //       onItemSelect(key, !listSelectedKeys.includes(key));
+        //     },
+        //   })}
+        // />
+        <CustomTable
+          loading={false}
           rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredItems}
+          rowKey="id"
           size="small"
-          style={{ pointerEvents: listDisabled ? 'none' : null }}
-          onRow={({ key, disabled: itemDisabled }) => ({
-            onClick: () => {
-              if (itemDisabled || listDisabled) return;
-              onItemSelect(key, !listSelectedKeys.includes(key));
-            },
-          })}
+          total={20}
+          current={1}
+          pageSize={8}
+          onPagination={(current: number) => { }}
         />
       );
     }}
