@@ -7,7 +7,8 @@ import { StudentDetailModel } from '@/interfaces/class';
 export interface StateType {
   classDetail: any;
   when: boolean;
-  studentList: StudentDetailModel[]
+  studentList: StudentDetailModel[];
+  targetKeys: string[];
 }
 
 export interface ModelType {
@@ -27,11 +28,21 @@ const Model = {
     classFields: {},
     when: true,
     studentList: [],
+    targetKeys: [],
   },
 
   reducers: {
-    changeStudentList(state: StateType, { payload: { studentList } }: any) {
+    changeStudentList(state: StateType, { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
       return { ...state, studentList }
+    },
+
+    changeOriginTargetKeys(state: StateType, { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
+      const originTargetKeys: string[] = studentList.map((item: StudentDetailModel) => item.studentId);
+      return { ...state, targetKeys: originTargetKeys }
+    },
+
+    changeTargetKeys(state: StateType, { payload: { nextTargetKeys } }: { payload: { nextTargetKeys: string[] } }) {
+      return { ...state, targetKeys: nextTargetKeys }
     },
   },
 
@@ -61,6 +72,12 @@ const Model = {
         payload: {
           studentList,
         },
+      });
+      yield put({
+        type: 'changeOriginTargetKeys',
+        payload: {
+          studentList,
+        },
       })
     },
   },
@@ -73,7 +90,6 @@ const Model = {
       //     dispatch({ type: 'save', payload: { currentUser } });
       //   }
       // });
-      console.log(123123123213)
       const payload = { studentClass: '通信一班', college: '信息科学与工程学院' }
       dispatch({
         type: 'fetchStudentDetail',
