@@ -18,4 +18,24 @@ export default {
       }),
     )
   },
+
+  'POST /api/student/detail': (req: any, res: any) => {
+    const { college, studentClass } = req.body;
+    res.send(
+      mockjs.mock({
+        success: true,
+        message: '获取学生详情成功',
+        data: {
+          'list|100': [
+            {
+              studentClass,
+              college,
+              studentId: '@id',
+              studentName: '@name',
+            },
+          ],
+        },
+      }),
+    )
+  },
 }

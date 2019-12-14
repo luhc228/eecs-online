@@ -11,6 +11,7 @@ import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
+import { StudentDetailModel } from '@/interfaces/class';
 
 const mockData: any[] = [];
 for (let i = 0; i < 20; i++) {
@@ -24,7 +25,7 @@ for (let i = 0; i < 20; i++) {
 
 const formConfig: FormItemComponentProps[] = [
   {
-    label: '虚拟班级名称',
+    label: '班级名称',
     name: 'className',
     component: FORM_COMPONENT.Input,
     required: true,
@@ -32,23 +33,27 @@ const formConfig: FormItemComponentProps[] = [
 ]
 const leftTableColumns: ColumnProps<any>[] = [
   {
-    dataIndex: 'title',
-    title: 'Name',
-  },
-  {
-    dataIndex: 'tag',
-    title: 'Tag',
-  },
-  {
-    dataIndex: 'description',
-    title: 'Description',
+    dataIndex: 'studentName',
+    title: '学生姓名',
   },
 ];
 
 const rightTableColumns: ColumnProps<any>[] = [
   {
-    dataIndex: 'title',
-    title: 'Name',
+    dataIndex: 'college',
+    title: '学院',
+  },
+  {
+    dataIndex: 'studentClass',
+    title: '班级',
+  },
+  {
+    dataIndex: 'studentName',
+    title: '学生姓名',
+  },
+  {
+    dataIndex: 'studentId',
+    title: '学号',
   },
 ];
 
@@ -59,7 +64,12 @@ interface ClassEditProps {
 }
 
 const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location }) => {
-  const originTargetKeys: any[] = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
+  // const originTargetKeys: any[] = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
+
+  const { classDetail, when, studentList } = classEdit;
+
+  const originTargetKeys: string[] = studentList.map(item => item.studentId)
+  console.log(originTargetKeys);
 
   const [targetKeys, changeTargetKeys] = useState(originTargetKeys);
 
@@ -78,7 +88,8 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location }) => {
   const handleFieldsChange = () => {
 
   }
-  const { classDetail, when } = classEdit;
+  console.log(targetKeys);
+
   return (
     <div style={{ padding: '20px 0' }}>
       <RouterPrompt when={when} />
@@ -92,14 +103,13 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location }) => {
         onSubmit={handleSubmit}
       >
         <TableTransfer
-          dataSource={mockData}
+          rowKey={(record: StudentDetailModel) => record.studentId}
+          dataSource={studentList}
           targetKeys={targetKeys}
           disabled={false}
           showSearch
           onChange={handleChange}
-          filterOption={(inputValue, item) => item.title.indexOf(inputValue) !== -1
-
-          }
+          filterOption={(inputValue, item) => item.title.indexOf(inputValue) !== -1}
           leftColumns={leftTableColumns}
           rightColumns={rightTableColumns}
         />

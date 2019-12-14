@@ -20,12 +20,17 @@ export function updateClass(data: any) {
   })
 }
 
+export interface StudentDetailData {
+  college: string;
+  studentClass?: string;
+}
+
 /**
  * 获取学生分页
  * @param data
  */
-export function fetchStudentDetailPagination(data: any) {
-  return request.post('/student/detail/pagination', {
+export function fetchStudentDetail(data: StudentDetailData) {
+  return request.post('/student/detail', {
     data,
   })
 }

@@ -13,6 +13,7 @@ export interface TableTransferProps {
   filterOption: (inputValue: string, option: any) => boolean;
   leftColumns: ColumnProps<any>[];
   rightColumns: ColumnProps<any>[];
+  rowKey: (record: any) => string;
 }
 
 const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumns, ...restProps }) => (
@@ -46,31 +47,31 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
       };
 
       return (
-        // <Table
-        //   rowSelection={rowSelection}
-        //   columns={columns}
-        //   dataSource={filteredItems}
-        //   size="small"
-        //   style={{ pointerEvents: listDisabled ? 'none' : null }}
-        //   onRow={({ key, disabled: itemDisabled }) => ({
-        //     onClick: () => {
-        //       if (itemDisabled || listDisabled) return;
-        //       onItemSelect(key, !listSelectedKeys.includes(key));
-        //     },
-        //   })}
-        // />
-        <CustomTable
-          loading={false}
+        <Table
           rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredItems}
-          rowKey="id"
           size="small"
-          total={20}
-          current={1}
-          pageSize={8}
-          onPagination={(current: number) => { }}
+          style={{ pointerEvents: listDisabled ? 'none' : null }}
+          onRow={({ key, disabled: itemDisabled }) => ({
+            onClick: () => {
+              if (itemDisabled || listDisabled) return;
+              onItemSelect(key, !listSelectedKeys.includes(key));
+            },
+          })}
         />
+        // <CustomTable
+        //   loading={false}
+        //   rowSelection={rowSelection}
+        //   columns={columns}
+        //   dataSource={filteredItems}
+        //   rowKey="id"
+        //   size="small"
+        //   total={20}
+        //   current={1}
+        //   pageSize={8}
+        //   onPagination={(current: number) => { }}
+        // />
       );
     }}
   </Transfer>

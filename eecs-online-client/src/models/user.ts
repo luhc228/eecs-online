@@ -1,5 +1,5 @@
 import { AnyAction, Reducer } from 'redux';
-import { EffectsCommandMap } from 'dva';
+import { EffectsCommandMap, Dispatch } from 'dva';
 import { USER_TYPE } from '@/enums';
 import userUtils from '@/utils/user-utils';
 
@@ -57,7 +57,7 @@ const UserModel: UserModelType = {
   },
 
   subscriptions: {
-    setup({ dispatch, history }: { dispatch: any, history: any }) {
+    setup({ dispatch, history }: { dispatch: Dispatch<any>, history: any }) {
       return history.listen(({ pathname }: { pathname: string }) => {
         if (pathname !== '/login') {
           const currentUser: CurrentUserModels = userUtils.getUserInfo();

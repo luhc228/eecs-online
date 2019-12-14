@@ -5,6 +5,7 @@ import { Reducer } from 'redux';
 const persistConfig = {
   key: 'root',
   storage,
+  // blacklist: ['courseEdit'],
 };
 
 const persistEnhancer = () => (createStore: any) => (reducer: Reducer, initialState: any, enhancer: any) => {
