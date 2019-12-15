@@ -1,18 +1,21 @@
-const { strictEslint } = require('@umijs/fabric');
+const fabric = require('@umijs/fabric');
 
 module.exports = {
-  ...strictEslint,
+  ...fabric.default,
   globals: {
     page: true,
   },
   rules: Object.assign(
-    strictEslint.rules,
+    ...fabric.default.rules,
     {
       "jsx-a11y/label-has-associated-control": "off",
       "jsx-a11y/anchor-has-content": "off",
       "jsx-no-multiline-js": false,
-      "prettier/prettier": "error"
+      // "prettier/prettier": "error"
     }),
   plugins: ["prettier"],
-  extends: ["prettier"],
+  // extends: ["prettier"],
 };
+// {
+//   "extends": "eslint-config-umi"
+// }

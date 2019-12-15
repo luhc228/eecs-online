@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
-import { Effect } from '@/interfaces/reduxState';
 import { Dispatch } from 'dva';
+import { Effect } from '@/interfaces/reduxState';
 import * as classEditService from '../services';
 import { StudentDetailModel } from '@/interfaces/class';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -39,6 +39,7 @@ export interface ModelType {
   }
 }
 
+// @ts-ignore
 const Model: ModelType = {
   namespace: 'classEdit',
 
@@ -72,14 +73,14 @@ const Model: ModelType = {
 
     setTableFilterValue(state: StateType, { payload: { tableFilterValue } }: { payload: { tableFilterValue: [string, string] } }) {
       return { ...state, tableFilterValue }
-    }
+    },
   },
 
   effects: {
     /**
      * 获取所有学院信息
      */
-    *fetchCollegeList(_: any, { call, put }: any) {
+    * fetchCollegeList(_: any, { call, put }: any) {
       const response = yield call(classEditService.fetchCollegeList);
       const collegeList: collegeListItem[] = response.data.list;
       yield put({
@@ -96,15 +97,15 @@ const Model: ModelType = {
       yield put({
         type: 'setTableFilterValue',
         payload: {
-          tableFilterValue
-        }
+          tableFilterValue,
+        },
       });
     },
 
     /**
      * 获取所有学生详情
      */
-    *fetchStudentDetail({ payload }: any, { call, put }: any) {
+    * fetchStudentDetail({ payload }: any, { call, put }: any) {
       const response = yield call(classEditService.fetchStudentDetail, payload);
       const studentList = response.data.list;
       console.log(studentList);
@@ -123,16 +124,16 @@ const Model: ModelType = {
     },
 
     /**
-    * 新增班级信息
-    */
-    *createClass({ payload }: any, { call }: any) {
+     * 新增班级信息
+     */
+    * createClass({ payload }: any, { call }: any) {
       yield call(classEditService.createClass, payload);
     },
 
     /**
      * 更新班级信息
      */
-    *updateClass({ payload }: any, { call }: any) {
+    * updateClass({ payload }: any, { call }: any) {
       yield call(classEditService.updateClass, payload);
     },
   },
