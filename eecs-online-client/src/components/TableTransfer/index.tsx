@@ -2,7 +2,6 @@ import React from 'react';
 import { Transfer, Table } from 'antd';
 import difference from 'lodash/difference';
 import { ColumnProps } from 'antd/es/table';
-import CustomTable from '../CustomTable';
 
 export interface TableTransferProps {
   dataSource: any[];
@@ -11,12 +10,13 @@ export interface TableTransferProps {
   showSearch: boolean;
   onChange: (targetKeys: any[], direction: string, moveKeys: string[]) => void;
   filterOption: (inputValue: string, option: any) => boolean;
+  rowKey: (record: any) => string;
   leftColumns: ColumnProps<any>[];
   rightColumns: ColumnProps<any>[];
-  rowKey: (record: any) => string;
+  children?: React.ReactNode;
 }
 
-const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumns, ...restProps }) => (
+const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumns, children, ...restProps }) => (
   <Transfer {...restProps} showSelectAll={false}>
     {({
       direction,
@@ -26,7 +26,6 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
       selectedKeys: listSelectedKeys,
       disabled: listDisabled,
     }) => {
-      console.log(filteredItems);
       const columns = direction === 'left' ? leftColumns : rightColumns;
 
       const rowSelection = {
@@ -47,19 +46,22 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
       };
 
       return (
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={filteredItems}
-          size="small"
-          style={{ pointerEvents: listDisabled ? 'none' : null }}
-          onRow={({ key, disabled: itemDisabled }) => ({
-            onClick: () => {
-              if (itemDisabled || listDisabled) return;
-              onItemSelect(key, !listSelectedKeys.includes(key));
-            },
-          })}
-        />
+        <React.Fragment>
+
+          {direction === 'right' && children}
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={filteredItems}
+            size="small"
+            onRow={({ key, disabled: itemDisabled }) => ({
+              onClick: () => {
+                if (itemDisabled || listDisabled) return;
+                onItemSelect(key, !listSelectedKeys.includes(key));
+              },
+            })}
+          />
+        </React.Fragment>
         // <CustomTable
         //   loading={false}
         //   rowSelection={rowSelection}

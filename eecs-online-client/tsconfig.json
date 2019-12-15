@@ -13,5 +13,12 @@
       "@/*": ["src/*"]
     },
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "tslint:latest",
+    "tslint-config-prettier"
+  ]
 }

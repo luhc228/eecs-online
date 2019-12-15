@@ -1,14 +1,23 @@
 import { Reducer } from 'redux';
-import router from 'umi/router';
+import { Effect } from '@/interfaces/reduxState';
 import { Dispatch } from 'dva';
 import * as classEditService from '../services';
 import { StudentDetailModel } from '@/interfaces/class';
+import { SelectComponentDatasourceModel } from '@/interfaces/components';
+
+export interface collegeListItem extends SelectComponentDatasourceModel {
+  studentClassList: SelectComponentDatasourceModel[]
+}
 
 export interface StateType {
-  classDetail: any;
+  classFields: object;
   when: boolean;
   studentList: StudentDetailModel[];
   targetKeys: string[];
+  studentClassList: SelectComponentDatasourceModel[];
+  collegeList: collegeListItem[];
+  currentSelectedCollege?: string;
+  currentSelectedStudentClass?: string;
 }
 
 export interface ModelType {
@@ -16,12 +25,24 @@ export interface ModelType {
 
   state: StateType;
 
+  reducers: {
+    changeStudentList: Reducer<any>;
+    changeOriginTargetKeys: Reducer<any>;
+  };
+  effects: {
+    createClass: Effect<StateType>,
+    updateClass: Effect<StateType>,
+    fetchStudentDetail: Effect<StateType>,
+    fetchCollegeList: Effect<StateType>,
+    // fetchStudentClassList: Effect<StateType>,
+  };
+
   subscriptions: {
-    setup: ({ dispatch, history }: { dispatch: any, history: any }) => void;
+    setup: ({ dispatch }: { dispatch: Dispatch<any> }) => void;
   }
 }
 
-const Model = {
+const Model: ModelType = {
   namespace: 'classEdit',
 
   state: {
@@ -29,6 +50,10 @@ const Model = {
     when: true,
     studentList: [],
     targetKeys: [],
+    collegeList: [],
+    studentClassList: [],
+    currentSelectedCollege: undefined,
+    currentSelectedStudentClass: undefined,
   },
 
   reducers: {
@@ -44,21 +69,60 @@ const Model = {
     changeTargetKeys(state: StateType, { payload: { nextTargetKeys } }: { payload: { nextTargetKeys: string[] } }) {
       return { ...state, targetKeys: nextTargetKeys }
     },
+
+    setCollegeList(state: StateType, { payload: { collegeList } }: { payload: { collegeList: SelectComponentDatasourceModel } }) {
+      return { ...state, collegeList }
+    },
+
+    setStudentClassList(state: StateType, { payload: { studentClassList } }: { payload: { studentClassList: SelectComponentDatasourceModel } }) {
+      return { ...state, studentClassList }
+    },
+
+    setCurrentSelectedCollege(state: StateType, { payload: { college } }: { payload: { college: string | number | undefined } }) {
+      return { ...state, currentSelectedCollege: college }
+    },
+
+    setCurrentSelectedStudentClass(state: StateType, { payload: { studentClass } }: { payload: { studentClass: string | number | undefined } }) {
+      return { ...state, currentSelectedStudentClass: studentClass }
+    }
   },
 
   effects: {
     /**
-     * 新增班级信息
+     * 获取所有学院信息
      */
-    *createClass({ payload }: any, { call, put }: any) {
-      yield call(classEditService.createClass, payload);
-    },
+    *fetchCollegeList(_: any, { call, put }: any) {
+      const response = yield call(classEditService.fetchCollegeList);
+      const collegeList = response.data.list;
+      yield put({
+        type: 'setCollegeList',
+        payload: { collegeList },
+      });
 
-    /**
-     * 更新班级信息
-     */
-    *updateClass({ payload }: any, { call, put }: any) {
-      yield call(classEditService.updateClass, payload);
+      if (collegeList && !!collegeList.length) {
+        yield put({
+          type: 'setCurrentSelectedCollege',
+          payload: {
+            college: collegeList[0].value
+          }
+        });
+
+        const currentStudentClassList = collegeList.find((item: collegeListItem) => item.value === collegeList[0].value)?.studentClassList;
+        yield put({
+          type: 'setStudentClassList',
+          payload: {
+            studentClassList: currentStudentClassList
+          }
+        });
+        if (currentStudentClassList && !!currentStudentClassList.length) {
+          yield put({
+            type: 'setCurrentSelectedStudentClass',
+            payload: {
+              studentClass: currentStudentClassList[0].value
+            }
+          });
+        }
+      }
     },
 
     /**
@@ -80,24 +144,28 @@ const Model = {
         },
       })
     },
+
+    /**
+    * 新增班级信息
+    */
+    *createClass({ payload }: any, { call }: any) {
+      yield call(classEditService.createClass, payload);
+    },
+
+    /**
+     * 更新班级信息
+     */
+    *updateClass({ payload }: any, { call }: any) {
+      yield call(classEditService.updateClass, payload);
+    },
   },
 
   subscriptions: {
-    setup({ dispatch, history }: { dispatch: Dispatch<any>, history: History }) {
-      // return history.listen(({ pathname }: { pathname: string }) => {
-      //   if (pathname !== '/login') {
-      //     const currentUser: CurrentUserModels = userUtils.getUserInfo();
-      //     dispatch({ type: 'save', payload: { currentUser } });
-      //   }
-      // });
-      const payload = { studentClass: '通信一班', college: '信息科学与工程学院' }
+    setup({ dispatch }: { dispatch: Dispatch<any> }) {
       dispatch({
-        type: 'fetchStudentDetail',
-        payload,
+        type: 'fetchCollegeList',
       })
     },
   },
 }
-
-
 export default Model;

@@ -1,7 +1,7 @@
 /**
  * 班级信息查看、新增和编辑共用页面
  */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ColumnProps } from 'antd/es/table';
@@ -12,6 +12,7 @@ import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
 import { StudentDetailModel } from '@/interfaces/class';
+import TableFilter from './components/TableFilter';
 
 const mockData: any[] = [];
 for (let i = 0; i < 20; i++) {
@@ -44,33 +45,33 @@ const rightTableColumns: ColumnProps<any>[] = [
     title: '学院',
     // specify the condition of filtering result
     // here is that finding the name started with `value`
-    filters: [
-      {
-        text: 'Joe',
-        value: 'Joe',
-      },
-      {
-        text: 'Jim',
-        value: 'Jim',
-      },
-      // {
-      //   text: 'Submenu',
-      //   value: 'Submenu',
-      //   children: [
-      //     {
-      //       text: 'Green',
-      //       value: 'Green',
-      //     },
-      //     {
-      //       text: 'Black',
-      //       value: 'Black',
-      //     },
-      //   ],
-      // },
-    ],
-    onFilter: (value, record) => record.college.indexOf(value) === 0,
-    // sorter: (a, b) => a.name.length - b.name.length,
-    sortDirections: ['descend'],
+    // filters: [
+    //   {
+    //     text: 'Joe',
+    //     value: 'Joe',
+    //   },
+    //   {
+    //     text: 'Jim',
+    //     value: 'Jim',
+    //   },
+    //   // {
+    //   //   text: 'Submenu',
+    //   //   value: 'Submenu',
+    //   //   children: [
+    //   //     {
+    //   //       text: 'Green',
+    //   //       value: 'Green',
+    //   //     },
+    //   //     {
+    //   //       text: 'Black',
+    //   //       value: 'Black',
+    //   //     },
+    //   //   ],
+    //   // },
+    // ],
+    // onFilter: (value, record) => record.college.indexOf(value) === 0,
+    // // sorter: (a, b) => a.name.length - b.name.length,
+    // sortDirections: ['descend'],
   },
   {
     dataIndex: 'studentClass',
@@ -93,15 +94,9 @@ interface ClassEditProps {
 }
 
 const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) => {
-  // const originTargetKeys: any[] = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
-
   const { classDetail, when, studentList, targetKeys } = classEdit;
 
   const handleChange = (nextTargetKeys: string[]) => {
-    // console.log(nextTargetKeys);
-    // console.log(direction);
-    // console.log(moveKeys);
-    // changeTargetKeys(nextTargetKeys);
     dispatch({
       type: 'classEdit/changeTargetKeys',
       payload: { nextTargetKeys },
@@ -110,7 +105,6 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
-    console.log(allFields);
     if (isCreate) {
       dispatch({
         type: 'classEdit/createClass',
@@ -152,6 +146,7 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
           rightColumns={rightTableColumns}
         >
           {/* {TODO: add filter form } */}
+          <TableFilter />
         </TableTransfer>
       </CustomForm>
     </div>

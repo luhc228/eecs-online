@@ -10,6 +10,9 @@ module.exports = {
     {
       "jsx-a11y/label-has-associated-control": "off",
       "jsx-a11y/anchor-has-content": "off",
-      "jsx-no-multiline-js": false
-    })
+      "jsx-no-multiline-js": false,
+      "prettier/prettier": "error"
+    }),
+  plugins: ["prettier"],
+  extends: ["prettier"],
 };
