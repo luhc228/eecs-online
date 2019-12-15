@@ -3,26 +3,16 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Button, Icon } from 'antd';
 import { Dispatch } from 'redux';
 import { ColumnProps } from 'antd/es/table';
-import TableTransfer from '@/components/TableTransfer';
 import RouterPrompt from '@/components/RouterPrompt';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
-import { StudentDetailModel } from '@/interfaces/class';
-import TableFilter from './components/TableFilter';
+import CustomTable from '@/components/CustomTable';
 
-const mockData: any[] = [];
-for (let i = 0; i < 20; i++) {
-  mockData.push({
-    key: i.toString(),
-    title: `content${i + 1}`,
-    description: `description of content${i + 1}`,
-    disabled: i % 4 === 0,
-  });
-}
 
 const formConfig: FormItemComponentProps[] = [
   {
@@ -34,44 +24,8 @@ const formConfig: FormItemComponentProps[] = [
 ]
 const leftTableColumns: ColumnProps<any>[] = [
   {
-    dataIndex: 'studentName',
-    title: '学生姓名',
-  },
-];
-
-const rightTableColumns: ColumnProps<any>[] = [
-  {
     dataIndex: 'college',
     title: '学院',
-    // specify the condition of filtering result
-    // here is that finding the name started with `value`
-    // filters: [
-    //   {
-    //     text: 'Joe',
-    //     value: 'Joe',
-    //   },
-    //   {
-    //     text: 'Jim',
-    //     value: 'Jim',
-    //   },
-    //   // {
-    //   //   text: 'Submenu',
-    //   //   value: 'Submenu',
-    //   //   children: [
-    //   //     {
-    //   //       text: 'Green',
-    //   //       value: 'Green',
-    //   //     },
-    //   //     {
-    //   //       text: 'Black',
-    //   //       value: 'Black',
-    //   //     },
-    //   //   ],
-    //   // },
-    // ],
-    // onFilter: (value, record) => record.college.indexOf(value) === 0,
-    // // sorter: (a, b) => a.name.length - b.name.length,
-    // sortDirections: ['descend'],
   },
   {
     dataIndex: 'studentClass',
@@ -85,6 +39,32 @@ const rightTableColumns: ColumnProps<any>[] = [
     dataIndex: 'studentId',
     title: '学号',
   },
+];
+
+const columns: ColumnProps<any>[] = [
+  {
+    dataIndex: 'college',
+    title: '学院',
+  },
+  {
+    dataIndex: 'studentClass',
+    title: '班级',
+  },
+  {
+    dataIndex: 'studentName',
+    title: '学生姓名',
+  },
+  {
+    dataIndex: 'studentId',
+    title: '学号',
+  },
+  {
+    dataIndex: 'operation',
+    title: '操作',
+    // render: () => {
+
+    // }
+  }
 ];
 
 interface ClassEditProps {
@@ -134,7 +114,7 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
         formConfig={formConfig}
         onSubmit={handleSubmit}
       >
-        <TableTransfer
+        {/* <TableTransfer
           rowKey={(record: StudentDetailModel) => record.studentId}
           dataSource={studentList}
           targetKeys={targetKeys}
@@ -145,9 +125,20 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
           leftColumns={leftTableColumns}
           rightColumns={rightTableColumns}
         >
-          {/* {TODO: add filter form } */}
           <TableFilter />
-        </TableTransfer>
+        </TableTransfer> */}
+        <CustomTable
+          loading={false}
+          columns={columns}
+          dataSource={[]}
+          rowKey={record => record.studentId}
+          onPagination={(current: number) => {
+            console.log(current);
+          }}
+        />
+        <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
+          <Icon type="plus" /> Add field
+          </Button>
       </CustomForm>
     </div>
   )

@@ -49,7 +49,7 @@ export default {
             {
               value: '1',
               label: '信息科学与工程学院',
-              studentClassList: [
+              children: [
                 {
                   value: '1',
                   label: '18通信1班',
@@ -63,7 +63,7 @@ export default {
             {
               value: '2',
               label: '环境学院',
-              studentClassList: [
+              children: [
                 {
                   value: '9',
                   label: '18环境1',

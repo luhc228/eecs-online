@@ -6,7 +6,7 @@ import { StudentDetailModel } from '@/interfaces/class';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
 
 export interface collegeListItem extends SelectComponentDatasourceModel {
-  studentClassList: SelectComponentDatasourceModel[]
+  children: SelectComponentDatasourceModel[]
 }
 
 export interface StateType {
@@ -14,10 +14,8 @@ export interface StateType {
   when: boolean;
   studentList: StudentDetailModel[];
   targetKeys: string[];
-  studentClassList: SelectComponentDatasourceModel[];
   collegeList: collegeListItem[];
-  currentSelectedCollege?: string;
-  currentSelectedStudentClass?: string;
+  tableFilterValue: [string, string];
 }
 
 export interface ModelType {
@@ -34,7 +32,6 @@ export interface ModelType {
     updateClass: Effect<StateType>,
     fetchStudentDetail: Effect<StateType>,
     fetchCollegeList: Effect<StateType>,
-    // fetchStudentClassList: Effect<StateType>,
   };
 
   subscriptions: {
@@ -51,9 +48,7 @@ const Model: ModelType = {
     studentList: [],
     targetKeys: [],
     collegeList: [],
-    studentClassList: [],
-    currentSelectedCollege: undefined,
-    currentSelectedStudentClass: undefined,
+    tableFilterValue: ['', ''],
   },
 
   reducers: {
@@ -62,8 +57,9 @@ const Model: ModelType = {
     },
 
     changeOriginTargetKeys(state: StateType, { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
+      // TODO:
       const originTargetKeys: string[] = studentList.map((item: StudentDetailModel) => item.studentId);
-      return { ...state, targetKeys: originTargetKeys }
+      return { ...state, targetKeys: [] }
     },
 
     changeTargetKeys(state: StateType, { payload: { nextTargetKeys } }: { payload: { nextTargetKeys: string[] } }) {
@@ -74,16 +70,8 @@ const Model: ModelType = {
       return { ...state, collegeList }
     },
 
-    setStudentClassList(state: StateType, { payload: { studentClassList } }: { payload: { studentClassList: SelectComponentDatasourceModel } }) {
-      return { ...state, studentClassList }
-    },
-
-    setCurrentSelectedCollege(state: StateType, { payload: { college } }: { payload: { college: string | number | undefined } }) {
-      return { ...state, currentSelectedCollege: college }
-    },
-
-    setCurrentSelectedStudentClass(state: StateType, { payload: { studentClass } }: { payload: { studentClass: string | number | undefined } }) {
-      return { ...state, currentSelectedStudentClass: studentClass }
+    setTableFilterValue(state: StateType, { payload: { tableFilterValue } }: { payload: { tableFilterValue: [string, string] } }) {
+      return { ...state, tableFilterValue }
     }
   },
 
@@ -93,56 +81,45 @@ const Model: ModelType = {
      */
     *fetchCollegeList(_: any, { call, put }: any) {
       const response = yield call(classEditService.fetchCollegeList);
-      const collegeList = response.data.list;
+      const collegeList: collegeListItem[] = response.data.list;
       yield put({
         type: 'setCollegeList',
         payload: { collegeList },
       });
 
-      if (collegeList && !!collegeList.length) {
-        yield put({
-          type: 'setCurrentSelectedCollege',
-          payload: {
-            college: collegeList[0].value
-          }
-        });
+      let tableFilterValue: [string, string] = ['', ''];
 
-        const currentStudentClassList = collegeList.find((item: collegeListItem) => item.value === collegeList[0].value)?.studentClassList;
-        yield put({
-          type: 'setStudentClassList',
-          payload: {
-            studentClassList: currentStudentClassList
-          }
-        });
-        if (currentStudentClassList && !!currentStudentClassList.length) {
-          yield put({
-            type: 'setCurrentSelectedStudentClass',
-            payload: {
-              studentClass: currentStudentClassList[0].value
-            }
-          });
-        }
+      if (collegeList && !!collegeList.length) {
+        tableFilterValue = [collegeList[0].value, collegeList[0].children[0].value]
       }
+
+      yield put({
+        type: 'setTableFilterValue',
+        payload: {
+          tableFilterValue
+        }
+      });
     },
 
     /**
-     * 获取学生详情
+     * 获取所有学生详情
      */
     *fetchStudentDetail({ payload }: any, { call, put }: any) {
       const response = yield call(classEditService.fetchStudentDetail, payload);
       const studentList = response.data.list;
+      console.log(studentList);
       yield put({
         type: 'changeStudentList',
         payload: {
           studentList,
         },
       });
-      yield put({
-        type: 'changeOriginTargetKeys',
-        payload: {
-          studentList,
-        },
-      })
+      // yield put({
+      //   type: 'changeOriginTargetKeys',
+      //   payload: {
+      //     studentList,
+      //   },
+      // })
     },
 
     /**
