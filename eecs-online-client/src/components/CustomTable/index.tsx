@@ -41,7 +41,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
   onRow,
   size,
 }) => (
-    <React.Fragment>
+    <div style={{ minHeight: '400px' }}>
       <Table
         loading={loading}
         columns={columns}
@@ -68,7 +68,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
           onChange={onPagination}
         />
       )}
-    </React.Fragment>
+    </div>
   )
 
 CustomTable.defaultProps = {

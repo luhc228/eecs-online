@@ -18,16 +18,19 @@ const filterFormConfig: FormItemComponentProps[] = [
     label: '课程名称',
     name: 'courseName',
     component: FORM_COMPONENT.Input,
+    required: false,
   },
   {
     label: '上课地点',
     name: 'location',
     component: FORM_COMPONENT.Input,
+    required: false,
   },
   {
     label: '上课班级',
     name: 'classNames',
     component: FORM_COMPONENT.Input,
+    required: false,
   },
 ]
 

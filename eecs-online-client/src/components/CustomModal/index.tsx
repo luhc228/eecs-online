@@ -20,11 +20,13 @@ const CustomModal: React.SFC<CustomModalProps> = ({
   onCancel,
   visible,
   onOk,
+  width
 }) => (
     <Modal
       title={title}
       visible={visible}
       centered
+      width={width}
       destroyOnClose
       onOk={onOk}
       onCancel={onCancel}

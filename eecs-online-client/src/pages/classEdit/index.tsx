@@ -12,7 +12,8 @@ import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
 import CustomTable from '@/components/CustomTable';
-
+import StudentListModal from './components/StudentTableModal';
+import StudentTable from './components/StudentTable';
 
 const formConfig: FormItemComponentProps[] = [
   {
@@ -22,24 +23,6 @@ const formConfig: FormItemComponentProps[] = [
     required: true,
   },
 ]
-const leftTableColumns: ColumnProps<any>[] = [
-  {
-    dataIndex: 'college',
-    title: '学院',
-  },
-  {
-    dataIndex: 'studentClass',
-    title: '班级',
-  },
-  {
-    dataIndex: 'studentName',
-    title: '学生姓名',
-  },
-  {
-    dataIndex: 'studentId',
-    title: '学号',
-  },
-];
 
 const columns: ColumnProps<any>[] = [
   {
@@ -127,6 +110,7 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
         >
           <TableFilter />
         </TableTransfer> */}
+        {/* 
         <CustomTable
           loading={false}
           columns={columns}
@@ -135,10 +119,13 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
           onPagination={(current: number) => {
             console.log(current);
           }}
-        />
-        <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
-          <Icon type="plus" /> Add field
+        /> */}
+        <StudentTable />
+        <StudentListModal record={{}}>
+          <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
+            <Icon type="plus" /> 添加学生
           </Button>
+        </StudentListModal>
       </CustomForm>
     </div>
   )
