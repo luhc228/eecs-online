@@ -1,24 +1,24 @@
-from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
-from login.models import *
 import json
+from student.models import Student
+from teacher.models import Teacher
+from login.models import User
 
 
 # Create your views here.
-
-
 def teacher(request):
     if request.method == "POST":
-        userId = request.POST.get('userId')
+        user_id = request.POST.get('teacherId')
         password = request.POST.get('password')
         try:
-            user = Teacher.objects.get(id=str(userId))
+            teacher = Teacher.objects.get(id=user_id)
+            user = User.objects.get(user_id=user_id)
         except:
             con = {
                 'success': False,
                 'message': '教师用户不存在',
                 'data': {
-                    'teacherId': 'userId',
+                    'teacherId': user_id,
                 },
             }
             return HttpResponse(content=json.dumps(con, ensure_ascii=False),
@@ -28,10 +28,10 @@ def teacher(request):
                 'success': True,
                 'message': '登陆成功',
                 'data': {
-                    'teacher_name': user.teacher_name,
-                    'teacher_id': user.id,
-                    'teacher_gender': user.gender,
-                    'teacher_college': user.teacher_college,
+                    'teacherName': teacher.teacher_name,
+                    'teacherId': teacher.id,
+                    'teacherGender': teacher.teacher_gender,
+                    'teacherCollege': teacher.teacher_college,
                 },
             }
             return HttpResponse(content=json.dumps(con, ensure_ascii=False),
@@ -41,7 +41,7 @@ def teacher(request):
                 'success': False,
                 'message': '密码不正确',
                 'data': {
-                    'teacherId': 'userId',
+                    'teacherId': user_id,
                 },
             }
             return HttpResponse(content=json.dumps(con, ensure_ascii=False),
@@ -55,16 +55,17 @@ def teacher(request):
 
 def student(request):
     if request.method == "POST":
-        userId = request.POST.get('userId')
+        user_id = request.POST.get('studentId')
         password = request.POST.get('password')
         try:
-            user = Student.objects.get(id=str(userId))
+            student = Student.objects.get(id=user_id)
+            user = User.objects.get(user_id=user_id)
         except:
             con = {
                 'success': False,
                 'message': '用户不存在',
                 'data': {
-                    'studentId': 'userId',
+                    'studentId': user_id,
                 },
             }
             return HttpResponse(content=json.dumps(con, ensure_ascii=False),
@@ -74,11 +75,11 @@ def student(request):
                 'success': True,
                 'message': '登陆成功',
                 'data': {
-                    'student_name': user.student_name,
-                    'student_id': user.id,
-                    'student_gender': user.gender,
-                    'student_college': user.student_college,
-                    'student_class': user.student_class,
+                    'studentName': student.student_name,
+                    'studentId': student.id,
+                    'studentGender': student.student_gender,
+                    'studentCollege': student.student_college,
+                    'studentClass': student.student_class,
                 },
             }
             return HttpResponse(content=json.dumps(con, ensure_ascii=False),
@@ -88,7 +89,7 @@ def student(request):
                 'success': False,
                 'message': '密码不正确',
                 'data': {
-                    'studentId': 'userId',
+                    'studentId': user_id,
                 },
             }
             return HttpResponse(content=json.dumps(con, ensure_ascii=False),

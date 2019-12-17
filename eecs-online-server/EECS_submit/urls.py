@@ -16,12 +16,20 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf import settings
+from django.conf.urls.static import static
 from login import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url('api/login', include('login.urls')),
-    url('api/course', include('course.urls')),
-
-]
+                  path('admin/', admin.site.urls),
+                  url('api/login/', include('login.urls')),
+                  url('api/register/', include('register.urls')),
+                  url('api/course/', include('course.urls')),
+                  url('api/vir_class/', include('vir_class.urls')),
+                  url('api/student/', include('student.urls')),
+                  url('api/teacher/', include('teacher.urls')),
+                  url('api/homework/', include('homework.urls')),
+                  url('api/homework_condition/', include('homework_condition.urls')),
+                  url('api/question_lib/', include('question_lib.urls')),
+                  url('api/image', include('image.urls')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
