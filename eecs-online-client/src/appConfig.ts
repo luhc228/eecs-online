@@ -1,3 +1,3 @@
 export default {
-  apiUrl: 'http://remote.wesdu.cn:8080',
+  apiUrl: 'http://localhost:8000',
 }

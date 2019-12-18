@@ -53,11 +53,15 @@ const Model: ModelType = {
   },
 
   reducers: {
-    changeStudentList(state: StateType, { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
+    changeStudentList(
+      state: StateType,
+      { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
       return { ...state, studentList }
     },
 
-    changeOriginTargetKeys(state: StateType, { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
+    changeOriginTargetKeys(
+      state: StateType,
+      { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
       // TODO:
       const originTargetKeys: string[] = studentList.map((item: StudentDetailModel) => item.studentId);
       return { ...state, targetKeys: [] }
