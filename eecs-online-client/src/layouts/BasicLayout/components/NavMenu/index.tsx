@@ -30,7 +30,7 @@ const NavMenu: React.SFC<NavMenuProps> = props => {
 
   return (
     <Menu
-      theme="dark"
+      theme="light"
       mode="inline"
       selectedKeys={selectedKeys}
       onSelect={({ key }: { key: string }) => {

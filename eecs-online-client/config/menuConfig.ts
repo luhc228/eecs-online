@@ -25,6 +25,24 @@ const menuConfig: MenuListItemModel[] = [
     link: '/teacher/homework',
     icon: 'icon-shouye1',
   },
+  {
+    key: 'teacher-homework-completion',
+    name: '作业完成情况',
+    link: '/teacher/homework-completion',
+    icon: 'icon-shouye1',
+  },
+  {
+    key: 'student-homework',
+    name: '作业信息',
+    link: '/student/homework',
+    icon: 'icon-shouye1',
+  },
+  {
+    key: 'student-homework-completion',
+    name: '作业完成情况',
+    link: '/student/homework-completion',
+    icon: 'icon-shouye1',
+  },
   // {
   //   key: 'subMenu',
   //   name: '子菜单',

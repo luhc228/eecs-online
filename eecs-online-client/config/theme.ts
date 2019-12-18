@@ -1,10 +1,8 @@
 export default {
-  '@menu-dark-bg': '#001529',
+  // '@menu-dark-bg': '#001529',
   '@menu-dark-submenu-bg': 'transparent',
   '@layout-header-background': '#ffffff',
-  '@layout-sider-background': '#001529',
-  // '@btn-height-base': '38px',
+  '@layout-sider-background': '#ffffff',
   '@padding-md': '20px',
-  // '@input-height-base': '38px',
   '@pagination-item-size': '38px',
 };
