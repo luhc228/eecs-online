@@ -73,3 +73,8 @@ export interface MenuItem {
 export interface MenuListItemModel extends MenuItem {
   children?: MenuItem[]
 }
+
+export interface TabsContentProps {
+  tab: string,
+  key: number,
+}

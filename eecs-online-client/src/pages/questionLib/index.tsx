@@ -1,19 +1,11 @@
 import React from 'react';
 import { Tabs } from 'antd';
 import { QUESTION_TYPE } from '@/enums';
+import { TabsContentProps } from '@/interfaces/components';
 
 const { TabPane } = Tabs;
 
-interface QuestionEditProps {
-
-}
-
-interface TabsContentProps {
-  tab: string,
-  key: number,
-}
-
-const QuestionEdit: React.FC<QuestionEditProps> = props => {
+const QuestionEdit: React.FC<{}> = props => {
   function callback(key) {
     console.log(key);
   }
@@ -35,9 +27,9 @@ const QuestionEdit: React.FC<QuestionEditProps> = props => {
       key: QUESTION_TYPE.Program,
     },
   ]
-  const { } = props;
+
   return (
-    <Tabs defaultActiveKey="0" onChange={callback}>
+    <Tabs defaultActiveKey={QUESTION_TYPE.Single.toString()} onChange={callback}>
       {tabsContent.map((item: TabsContentProps) => (
         <TabPane tab={item.tab} key={item.key.toString()}>
 

@@ -29,5 +29,4 @@ export enum QUESTION_TYPE {
   Multiple,
   Judge,
   Program,
-
 }

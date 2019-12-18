@@ -1,17 +1,12 @@
-import { AnyAction, Reducer } from 'redux';
-import { EffectsCommandMap } from 'dva';
+import { Reducer } from 'redux';
 import { ClassTableData, ClassFieldsModel } from '@/interfaces/class';
 import * as classService from '../services';
+import { Effect } from '@/interfaces/reduxState';
 
 export interface StateType {
   data: ClassTableData;
   filterFields: ClassFieldsModel;
 }
-
-export type Effect = (
-  action: AnyAction,
-  effects: EffectsCommandMap & { select: <T>(func: (state: StateType) => T) => T },
-) => void;
 
 export interface ModelType {
   namespace: string;
@@ -21,8 +16,8 @@ export interface ModelType {
     changeFilterFields: Reducer<StateType>;
   };
   effects: {
-    fetchClassPagination: Effect,
-    removeClass: Effect,
+    fetchClassPagination: Effect<StateType>,
+    removeClass: Effect<StateType>,
   };
 }
 
@@ -31,7 +26,7 @@ const Model: ModelType = {
 
   state: {
     data: {
-      classList: [],
+      list: [],
       total: 0,
       pageSize: 8,
       page: 1,
@@ -39,7 +34,6 @@ const Model: ModelType = {
     filterFields: {
       className: undefined,
       studentNum: undefined,
-      list: [],
     },
   },
 

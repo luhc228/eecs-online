@@ -18,6 +18,7 @@ const filterFormConfig: FormItemComponentProps[] = [
     label: '班级名称',
     name: 'courseClassName',
     component: FORM_COMPONENT.Input,
+    required: false,
   },
 ]
 
