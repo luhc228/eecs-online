@@ -1,8 +1,5 @@
-import userUtils from '@/utils/user-utils';
-
 const BasicLayout = '../layouts/BasicLayout';
 const UserLayout = '../layouts/UserLayout';
-
 
 export default [
   {
