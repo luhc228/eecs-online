@@ -1,9 +1,15 @@
 import React from 'react';
 import { Dispatch } from 'redux';
-import FilterForm from '@/components/CustomForm';
 import { connect } from 'dva';
-import { FORM_COMPONENT } from '@/enums';
-import { FormItemComponentProps } from '@/interfaces/components';
+import FilterForm from '@/components/CustomForm';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
+import { FilterFieldsModel } from '@/interfaces/questionLib';
+import { StateType } from '../../models';
+
+interface LibFilterProps {
+  dispatch: Dispatch<any>;
+}
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -14,17 +20,42 @@ const filterFormConfig: FormItemComponentProps[] = [
   },
 ]
 
-const LibFilter: React.FC<{}> = () => {
-  console.log(123123123);
+
+interface LibFilterProps extends UmiComponentProps {
+  questionLib: StateType
+}
+
+const LibFilter: React.FC<LibFilterProps> = ({ questionLib, dispatch }) => {
+  const { filterFields } = questionLib;
+
+  const handleFieldsChange = (allFields: FilterFieldsModel) => {
+    dispatch({
+
+    })
+  }
+
+  const handleSubmit = (values: FilterFieldsModel) => {
+
+  }
+
   return (
-    
+    <FilterForm
+      values={filterFields}
+      loading={false}
+      formTypes={CUSTOM_FORM_TYPES.Filter}
+      onFieldsChange={handleFieldsChange}
+      formConfig={filterFormConfig}
+      onSubmit={handleSubmit}
+    />
   )
 }
 
 const mapStateToProps = ({
-
+  questionLib
+}: {
+  questionLib: StateType
 }) => ({
-
+  questionLib
 });
 
 export default connect(mapStateToProps)(LibFilter);

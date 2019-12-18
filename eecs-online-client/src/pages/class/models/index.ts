@@ -10,11 +10,14 @@ export interface StateType {
 
 export interface ModelType {
   namespace: string;
+
   state: StateType;
+
   reducers: {
     save: Reducer<StateType>;
     changeFilterFields: Reducer<StateType>;
   };
+
   effects: {
     fetchClassPagination: Effect<StateType>,
     removeClass: Effect<StateType>,
@@ -55,7 +58,6 @@ const Model: ModelType = {
     *fetchClassPagination({ payload }: any, { call, put }: any) {
       const response = yield call(classService.fetchClassPagination, payload);
       const { data } = response;
-      console.log(data);
       yield put({
         type: 'save',
         payload: {

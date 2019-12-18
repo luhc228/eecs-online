@@ -1,4 +1,5 @@
 import React from 'react';
+import { Dispatch } from 'dva';
 import { FORM_COMPONENT, USER_TYPE } from '@/enums';
 
 export interface PageMatchModel {
@@ -77,4 +78,9 @@ export interface MenuListItemModel extends MenuItem {
 export interface TabsContentProps {
   tab: string,
   key: number,
+}
+
+export interface UmiComponentProps {
+  history: History;
+  dispatch: Dispatch<any>;
 }

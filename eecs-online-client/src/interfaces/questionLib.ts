@@ -22,3 +22,11 @@ export interface TableData extends TableListPaginationProps {
   // 班级列表
   list: questionListItem[];
 }
+
+// 分页查询参数
+export interface TablePaginationModel {
+  // 题目类型
+  questionType: number;
+  // 题目内容
+  content?: string;
+}

@@ -14,8 +14,8 @@ export function fetchQuestionLibPagination(data: any) {
  * 删除题目
  * @param data
  */
-export function removeClass(id: string) {
-  return request.post('/vir_class/delete', {
+export function removeQuestion(id: string) {
+  return request.post('/question_lib/question/teacher/delete', {
     data: {
       id
     },
