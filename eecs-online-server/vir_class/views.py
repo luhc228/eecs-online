@@ -38,7 +38,7 @@ def paginator_class(request):
             vir_class_dict['studentNum'] = ClassStudent.objects.filter(class_id=vir_class_dict['classId'],
                                                                        deleted=0).count()
             vir_classes.append(vir_class_dict)
-        con = {
+        content = {
             'success': True,
             'message': '班级分页获取成功',
             'data': {
@@ -47,14 +47,14 @@ def paginator_class(request):
                 'list': vir_classes,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -66,7 +66,7 @@ def add(request):
         student_id_list = request.POST.get('studentIdList')
         try:
             vir_class = VirClass.class_manage.get(class_name=class_name)
-            con = {
+            content = {
                 'success': False,
                 'message': '班级已经存在',
                 'data': {
@@ -77,7 +77,7 @@ def add(request):
         except:
             # 创建新班级
             vir_class = VirClass.class_manage.creat_class(class_name, student_id_list)
-            con = {
+            content = {
                 'success': True,
                 'message': '新增班级成功',
                 'data': {
@@ -85,14 +85,14 @@ def add(request):
                     'className': vir_class.class_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -105,7 +105,7 @@ def get(request):
             VirClass.class_manage.get(id=class_id, deleted=0)
             # 获取所有班级
             student_list = VirClass.class_manage.get_students(class_id=class_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '获取班级信息成功',
                 'data': {
@@ -114,21 +114,21 @@ def get(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '不存在该班级',
                 'data': {
                     'classId': class_id,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -140,7 +140,7 @@ def edit(request):
         try:
             VirClass.class_manage.get(id=class_id, deleted=0)
             VirClass.class_manage.edit_class(class_id, student_id_list)
-            con = {
+            content = {
                 'success': True,
                 'message': '班级信息修改成功',
                 'data': {
@@ -148,21 +148,21 @@ def edit(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '不存在该班级',
                 'data': {
                     'classId': class_id,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -172,7 +172,7 @@ def delete(request):
         class_id = request.POST.get('classId')
         try:
             vir_class = VirClass.class_manage.delete(class_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '课程删除成功',
                 'data': {
@@ -181,21 +181,21 @@ def delete(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '不存在该班级',
                 'data': {
                     'classId': class_id,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -211,19 +211,19 @@ def list(request):
             vir_class['className'] = class_list[i]['class_name']
             classes.append(vir_class)
         # 返回的课程id和对应的课程名称是按照对应列表存储的
-        con = {
+        content = {
             'success': True,
             'message': '课程获取成功',
             'data': {
                 'list': classes,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')

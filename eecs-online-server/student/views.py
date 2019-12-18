@@ -35,21 +35,21 @@ def detail(request):
             student_dict['studentCollege'] = student_list[i]['student_college']
             student_dict['studentClass'] = student_list[i]['student_class']
             students.append(student_dict)
-        con = {
+        content = {
             'success': True,
             'message': '学生信息获取成功',
             'data': {
                 'list': students,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -85,7 +85,7 @@ def paginator_student(request):
             student_dict['studentCollege'] = student.object_list[i]['student_college']
             student_dict['studentClass'] = student.object_list[i]['student_class']
             students.append(student_dict)
-        con = {
+        content = {
             'success': True,
             'message': '学生分页获取成功',
             'data': {
@@ -94,14 +94,14 @@ def paginator_student(request):
                 'list': students,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -117,7 +117,7 @@ def edit(request):
             # 不允许修改id，也就是账号名
             student = Student.student_manage.student_edit(student_id, student_name, student_college, student_class,
                                                           student_gender, password)
-            con = {
+            content = {
                 'success': True,
                 'message': '学生信息修改成功',
                 'data': {
@@ -126,7 +126,7 @@ def edit(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '学生用户不存在',
                 'data': {
@@ -134,11 +134,11 @@ def edit(request):
                     'studentName': student_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误',
         }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')

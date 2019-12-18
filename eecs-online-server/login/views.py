@@ -14,17 +14,17 @@ def teacher(request):
             teacher = Teacher.objects.get(id=user_id)
             user = User.objects.get(user_id=user_id)
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '教师用户不存在',
                 'data': {
                     'teacherId': user_id,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         if user.password == str(password):  # 测试用的条件，实际中是模拟爬虫返回一个登陆成功的信息
-            con = {
+            content = {
                 'success': True,
                 'message': '登陆成功',
                 'data': {
@@ -34,23 +34,23 @@ def teacher(request):
                     'teacherCollege': teacher.teacher_college,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         else:
-            con = {
+            content = {
                 'success': False,
                 'message': '密码不正确',
                 'data': {
                     'teacherId': user_id,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
-    con = {
+    content = {
         'success': False,
         'message': '请求错误',
     }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')
 
 
 def student(request):
@@ -61,17 +61,17 @@ def student(request):
             student = Student.objects.get(id=user_id)
             user = User.objects.get(user_id=user_id)
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '用户不存在',
                 'data': {
                     'studentId': user_id,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         if user.password == str(password):
-            con = {
+            content = {
                 'success': True,
                 'message': '登陆成功',
                 'data': {
@@ -82,20 +82,20 @@ def student(request):
                     'studentClass': student.student_class,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         else:
-            con = {
+            content = {
                 'success': False,
                 'message': '密码不正确',
                 'data': {
                     'studentId': user_id,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
-    con = {
+    content = {
         'success': False,
         'message': '请求错误',
     }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')

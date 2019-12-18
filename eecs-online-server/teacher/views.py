@@ -16,7 +16,7 @@ def edit(request):
             # 不允许修改id，也就是账号名
             teacher = Teacher.teacher_manage.teacher_edit(teacher_id, teacher_name, teacher_college, teacher_gender,
                                                           password)
-            con = {
+            content = {
                 'success': True,
                 'message': '教师信息修改成功',
                 'data': {
@@ -25,7 +25,7 @@ def edit(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '教师用户不存在',
                 'data': {
@@ -33,11 +33,11 @@ def edit(request):
                     'teacherName': teacher_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误',
         }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')

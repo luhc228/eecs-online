@@ -14,7 +14,7 @@ def teacher(request):
         password = request.POST.get('password')
         try:
             User.objects.get(user_id=teacher_id)
-            con = {
+            content = {
                 'success': False,
                 'message': '用户已存在',
                 'data': {
@@ -33,7 +33,7 @@ def teacher(request):
             user.user_id = teacher_id
             user.password = password
             user.save()
-            con = {
+            content = {
                 'success': True,
                 'message': '教师注册成功',
                 'data': {
@@ -41,14 +41,14 @@ def teacher(request):
                     'teacherName': teacher_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误',
         }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')
 
 
 def student(request):
@@ -58,7 +58,7 @@ def student(request):
         password = request.POST.get('password')
         try:
             User.objects.get(user_id=student_id)
-            con = {
+            content = {
                 'success': False,
                 'message': '用户已存在',
                 'data': {
@@ -76,7 +76,7 @@ def student(request):
             user.user_id = student_id
             user.password = password
             user.save()
-            con = {
+            content = {
                 'success': True,
                 'message': '学生注册成功',
                 'data': {
@@ -84,11 +84,11 @@ def student(request):
                     'studentName': student_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误',
         }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')

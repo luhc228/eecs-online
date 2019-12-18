@@ -45,7 +45,7 @@ def paginator_teacher(request):
             homework_dict['startAt'] = homework.object_list[i]['start_at'].strftime("%Y-%m-%d %H:%M:%S")
             homework_dict['endAt'] = homework.object_list[i]['end_at'].strftime("%Y-%m-%d %H:%M:%S")
             homeworks.append(homework_dict)
-        con = {
+        content = {
             'success': True,
             'message': '作业分页显示成功',
             'data': {
@@ -54,14 +54,14 @@ def paginator_teacher(request):
                 'list': homeworks,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -104,7 +104,7 @@ def paginator_student(request):
             homework_dict['startAt'] = homework.object_list[i]['start_at'].strftime("%Y-%m-%d %H:%M:%S")
             homework_dict['endAt'] = homework.object_list[i]['end_at'].strftime("%Y-%m-%d %H:%M:%S")
             homeworks.append(homework_dict)
-        con = {
+        content = {
             'success': True,
             'message': '作业分页显示成功',
             'data': {
@@ -113,14 +113,14 @@ def paginator_student(request):
                 'list': homeworks,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -139,7 +139,7 @@ def add(request):
             homework = Homework.homework_manage.creat_homework(course_id, homework_name, homework_start_at,
                                                                homework_end_at, homework_description, homework_score,
                                                                homework_question_list)
-            con = {
+            content = {
                 'success': True,
                 'message': '作业添加成功',
                 'data': {
@@ -148,21 +148,21 @@ def add(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '作业添加失败',
                 'data': {
                     'courseName': homework_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -172,7 +172,7 @@ def get_homework(request):
         homework_id = request.POST.get('homeworkId')
         try:
             homework = Homework.homework_manage.get_homework(homework_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '课程获取成功',
                 'data': {
@@ -180,18 +180,18 @@ def get_homework(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '课程获取失败',
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -209,7 +209,7 @@ def update(request):
             homework = Homework.homework_manage.update_homework(homework_id, homework_name, homework_start_at,
                                                                 homework_end_at, homework_description, homework_score,
                                                                 homework_question_list)
-            con = {
+            content = {
                 'success': True,
                 'message': '课程修改成功',
                 'data': {
@@ -218,7 +218,7 @@ def update(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '课程修改失败',
                 'data': {
@@ -226,14 +226,14 @@ def update(request):
                     'courseId': homework_id,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -241,32 +241,32 @@ def update(request):
 def delete(request):
     if request.method == 'POST':
         homework_id = request.POST.get('homeworkId')  # 获取course_id进行get到对应的课程进行修改课程信息
-        # try:
-        homework = Homework.homework_manage.delete_homework(homework_id)
-        con = {
-            'success': True,
-            'message': '作业删除成功',
-            'data': {
-                'courseId': homework.id,
-                'courseName': homework.homework_name,
-            },
-        }
-        # except:
-        #     con = {
-        #         'success': True,
-        #         'message': '不存在该作业',
-        #         'data': {
-        #             'classId': homework_id,
-        #         },
-        #     }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        try:
+            homework = Homework.homework_manage.delete_homework(homework_id)
+            content = {
+                'success': True,
+                'message': '作业删除成功',
+                'data': {
+                    'courseId': homework.id,
+                    'courseName': homework.homework_name,
+                },
+            }
+        except:
+            content = {
+                'success': True,
+                'message': '不存在该作业',
+                'data': {
+                    'classId': homework_id,
+                },
+            }
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -282,19 +282,19 @@ def list_course(request):
             course['courseId'] = course_list[i]['id']
             courses.append(course)
         # 返回的课程id和对应的课程名称是按照对应列表存储的
-        con = {
+        content = {
             'success': True,
             'message': '课程获取成功',
             'data': {
                 'list': courses,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')

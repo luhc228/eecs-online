@@ -40,7 +40,7 @@ def paginator_view(request):
             course_dict['class'] = VirClass.class_manage.get(id=course.object_list[i]['class_id_id']).class_name
             course_dict['teacherName'] = Teacher.teacher_manage.get(id=course.object_list[i]['teacher_id']).teacher_name
             courses.append(course_dict)
-        con = {
+        content = {
             'success': True,
             'message': '分页显示成功',
             'data': {
@@ -49,14 +49,14 @@ def paginator_view(request):
                 'list': courses,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -70,7 +70,7 @@ def add(request):
         teacher_id = request.POST.get('teacherId')
         # 创建新课程，一定要先有老师，班级在建立课程
         course = Course.course_manage.creat_course(course_name, course_location, course_time, class_id, teacher_id)
-        con = {
+        content = {
             'success': True,
             'message': '课程添加成功',
             'data': {
@@ -78,14 +78,14 @@ def add(request):
                 'courseId': course.id,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -101,7 +101,7 @@ def update(request):
         try:
             course = Course.course_manage.update_course(course_id, course_name, course_location, course_time, class_id,
                                                         teacher_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '课程修改成功',
                 'data': {
@@ -110,7 +110,7 @@ def update(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '课程不存在',
                 'data': {
@@ -118,14 +118,14 @@ def update(request):
                     'courseId': course_id,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -135,7 +135,7 @@ def delete(request):
         course_id = request.POST.get('courseId')  # 获取course_id进行get到对应的课程进行修改课程信息
         try:
             course = Course.course_manage.delete_course(course_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '课程删除成功',
                 'data': {
@@ -144,21 +144,21 @@ def delete(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '不存在该课程',
                 'data': {
                     'classId': course_id,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -174,19 +174,19 @@ def list_course(request):
             course['courseId'] = course_list[i]['id']
             courses.append(course)
         # 返回的课程id和对应的课程名称是按照对应列表存储的
-        con = {
+        content = {
             'success': True,
             'message': '课程获取成功',
             'data': {
                 'list': courses,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')

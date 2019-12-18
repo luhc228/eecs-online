@@ -38,7 +38,7 @@ def pagination(request):
                 # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
                 questions = paginator.page(paginator.num_pages)
             questions = questions.object_list
-            con = {
+            content = {
                 'success': True,
                 'message': '题目分页获取成功',
                 'data': {
@@ -47,10 +47,10 @@ def pagination(request):
                     'list': questions,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '题目分页获取失败',
                 'data': {
@@ -59,14 +59,14 @@ def pagination(request):
                     'list': None,
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -77,7 +77,7 @@ def detail(request):
         question_id = request.POST.get('questionId')
         try:
             detail_question = QuestionLib.question_lib_manage.get_question_detail(question_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '查询成功',
                 'questionId': question_id,
@@ -85,10 +85,10 @@ def detail(request):
                     'detail': detail_question
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '查询失败',
                 'questionId': question_id,
@@ -96,14 +96,14 @@ def detail(request):
                     'detail': None
                 },
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -122,26 +122,26 @@ def add(request):
             dic['answer'] = request.POST.get('answer')
             dic['question_score'] = request.POST.get('questionScore')
             i = QuestionLib.question_lib_manage.add_question(dic)
-            con = {
+            content = {
                 'success': True,
                 'message': '添加成功',
                 'questionId': i
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '添加失败',
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -161,27 +161,27 @@ def update(request):
         dic['question_score'] = request.POST.get('questionScore')
         try:
             QuestionLib.question_lib_manage.updata_question(dic)
-            con = {
+            content = {
                 'success': True,
                 'message': '更新成功',
                 'questionId': dic['id'],
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '更新失败',
                 'questionId': dic['id'],
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -192,25 +192,25 @@ def delete(request):
         question_id = request.POST.get('questionId')
         try:
             QuestionLib.question_lib_manage.delete_question(question_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '删除成功',
                 'questionId': question_id,
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '删除失败',
                 'questionId': question_id,
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')

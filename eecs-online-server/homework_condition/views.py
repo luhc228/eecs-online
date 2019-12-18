@@ -44,14 +44,14 @@ def question_list(request):
         if QuestionCondition.question_condition_manage.filter(homework_id_id=homework_id, student_id=student_id):
             homework = QuestionCondition.question_condition_manage.question_condition_list(student_id, question_id)
         else:
-            con = {
+            content = {
                 'success': False,
                 'message': '请求错误'
             }
-            return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                                 content_type='application/json;charset = utf-8')
 
-        con = {
+        content = {
             'success': True,
             'message': '题目显示成功',
             'data': {
@@ -60,14 +60,14 @@ def question_list(request):
                 'list': homework,
             },
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -79,12 +79,12 @@ def answer_save(request):
             homework_id = data['homeworkId']
             answer_list = data['list']
             QuestionCondition.question_condition_manage.answer_save(student_id, homework_id, answer_list)
-            con = {
+            content = {
                 'success': True,
                 'message': '答案提交成功',
             }
         except:
-            con = {
+            content = {
                 'success': True,
                 'message': '答案提交失败',
                 'data': {
@@ -92,14 +92,14 @@ def answer_save(request):
                     'courseId': 'default',
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -113,7 +113,7 @@ def answer_submit(request):
             score_dict, homework_score = QuestionCondition.question_condition_manage.answer_submit(student_id,
                                                                                                    homework_id,
                                                                                                    answer_list)
-            con = {
+            content = {
                 'success': True,
                 'message': '答案提交成功',
                 'date': {
@@ -122,18 +122,18 @@ def answer_submit(request):
                 }
             }
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '答案提交失败',
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -168,7 +168,7 @@ def paginator(request):
             Course.course_manage.get(id=course_id)
             students_homework_condition = QuestionCondition.question_condition_manage.students_homework_condition(
                 course_id, class_id, homework_id, student_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '题目显示成功',
                 'data': {
@@ -178,18 +178,18 @@ def paginator(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '班级或者课程不存在'
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -221,7 +221,7 @@ def detail(request):
             question_id = paginator_1.page(paginator_1.num_pages)
         try:
             homework = QuestionCondition.question_condition_manage.question_condition_list(student_id, question_id)
-            con = {
+            content = {
                 'success': True,
                 'message': '题目显示成功',
                 'data': {
@@ -231,18 +231,18 @@ def detail(request):
                 },
             }
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '获取失败'
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
 
 
@@ -255,7 +255,7 @@ def score_edit(request):
         question_id = request.POST.get('questionId')
         try:
             QuestionCondition.question_condition_manage.question_score_edit(student_id, homework_id, question_id, score)
-            con = {
+            content = {
                 'success': True,
                 'message': '题目分数修改成功',
                 'date': {
@@ -263,16 +263,16 @@ def score_edit(request):
                 }
             }
         except:
-            con = {
+            content = {
                 'success': False,
                 'message': '题目分数修改失败',
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误'
         }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
