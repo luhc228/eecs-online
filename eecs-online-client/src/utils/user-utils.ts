@@ -1,4 +1,5 @@
 import { CurrentUserModels } from '@/models/user';
+import { USER_TYPE } from '@/enums';
 
 export default {
   /**
@@ -50,4 +51,14 @@ export default {
   },
 
   clearAll: () => localStorage.clear(),
+
+  getCurrentUserTypeName() {
+    const userInfo = this.getUserInfo();
+    const { userType } = userInfo;
+    const userTypeName = USER_TYPE[userType];
+    if (userTypeName) {
+      return userTypeName;
+    }
+    return null;
+  }
 }

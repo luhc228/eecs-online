@@ -1,4 +1,4 @@
-import { routerRedux } from 'dva/router';
+import router from 'umi/router';
 import { stringify } from 'qs';
 import * as service from '../services';
 import { USER_TYPE } from '@/enums';
@@ -68,7 +68,7 @@ export default {
       // 如果没有指定redirect 则默认跳转到登录用户类型的默认路由
       const pathnamePrefix = userTypeName;
 
-      yield put(routerRedux.replace(redirect || `/${pathnamePrefix}`));
+      yield put(router.replace(redirect || `/${pathnamePrefix}`));
     },
 
     *logout(_: any, { put }: any) {
@@ -77,7 +77,7 @@ export default {
       // redirect
       if (window.location.pathname !== '/login' && !redirect) {
         yield put(
-          routerRedux.replace({
+          router.replace({
             pathname: '/login',
             search: stringify({
               redirect: window.location.href,

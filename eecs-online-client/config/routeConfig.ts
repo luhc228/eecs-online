@@ -1,5 +1,8 @@
+import userUtils from '@/utils/user-utils';
+
 const BasicLayout = '../layouts/BasicLayout';
 const UserLayout = '../layouts/UserLayout';
+
 
 export default [
   {
@@ -40,14 +43,14 @@ export default [
     routes: [
       { path: '/login', component: './login' },
     ],
+    exact: true,
   },
+
   {
     path: '/',
     component: BasicLayout,
     Routes: ['src/components/Authorized'], // 所有的子路径都会被这个拦截
-    routes: [
-      { path: '/', redirect: '/teacher/course' },
-    ],
+    exact: true,
   },
   {
     component: '404',

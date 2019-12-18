@@ -21,12 +21,9 @@ const LoginForm: React.SFC<LoginFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
-      console.log(err);
       if (err) {
-        console.log(err);
         return;
       }
-      console.log(userType, values);
       dispatch({
         type: 'login/userLogin',
         payload: { userType, values },
