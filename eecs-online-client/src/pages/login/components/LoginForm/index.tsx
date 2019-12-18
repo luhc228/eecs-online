@@ -20,10 +20,13 @@ const LoginForm: React.SFC<LoginFormProps> = ({
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    form.validateFields((err: any, values: StudentLoginForm | TeacherLoginForm) => {
+    form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
+      console.log(err);
       if (err) {
+        console.log(err);
         return;
       }
+      console.log(userType, values);
       dispatch({
         type: 'login/userLogin',
         payload: { userType, values },
@@ -47,7 +50,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
       </Form.Item>
       <Form.Item>
         {getFieldDecorator('password', {
-          rules: [{ required: true, message: 'Please input your Password!' }],
+          rules: [{ required: true, message: '请输入' }],
         })(
           <Input
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}

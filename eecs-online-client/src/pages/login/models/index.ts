@@ -22,8 +22,12 @@ export default {
   },
 
   effects: {
-    *userLogin({ payload: { userType, value } }: any, { call, put }: any) {
+    *userLogin({ payload: { userType, values } }: any, { call, put }: any) {
       let userLogin;
+      if (typeof userType === 'string') {
+        userType = Number(userType)
+      }
+
       switch (userType) {
         case USER_TYPE.Student:
           userLogin = service.studentLogin;
@@ -35,18 +39,23 @@ export default {
           return;
       }
 
-      const response = yield call(userLogin, value);
+      const response = yield call(userLogin, values);
       const { accessToken, ...userInfo } = response.data;
       userUtils.saveToken(accessToken);
       userUtils.saveUserInfo(userInfo);
 
       const urlParams = new URL(window.location.href);
       const params = getPageQuery();
+      const userTypeName: string = USER_TYPE[userType].toLocaleLowerCase();
       let { redirect } = params as { redirect: string };
       if (redirect) {
         const redirectUrlParams = new URL(redirect);
         if (redirectUrlParams.origin === urlParams.origin) {
           redirect = redirect.substr(urlParams.origin.length);
+          // 如果切换用户登录，则需要置换pathname 自动跳转至对应用户的默认路由
+          if (redirectUrlParams.pathname.split('/')[1] !== userTypeName) {
+            redirect = `/${userTypeName}`
+          }
           if (redirect.match(/^\/.*#/)) {
             redirect = redirect.substr(redirect.indexOf('#') + 1);
           }
@@ -56,8 +65,10 @@ export default {
         }
       }
 
-      const pathnamePrefix = userType;
-      yield put(routerRedux.replace(redirect || `${pathnamePrefix}`));
+      // 如果没有指定redirect 则默认跳转到登录用户类型的默认路由
+      const pathnamePrefix = userTypeName;
+
+      yield put(routerRedux.replace(redirect || `/${pathnamePrefix}`));
     },
 
     *logout(_: any, { put }: any) {
@@ -75,9 +86,5 @@ export default {
         );
       }
     },
-  },
-
-  subscriptions: {
-
   },
 }

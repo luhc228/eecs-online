@@ -1,5 +1,5 @@
 import React from 'react';
-import { FORM_COMPONENT } from '@/enums';
+import { FORM_COMPONENT, USER_TYPE } from '@/enums';
 
 export interface PageMatchModel {
   isExact: boolean,
@@ -63,10 +63,11 @@ export interface FormItemComponentProps {
 }
 
 export interface MenuItem {
-  key: string,
-  name: string,
-  link?: string,
-  icon?: string,
+  key: string;
+  name: string;
+  link?: string;
+  icon?: string;
+  userType?: USER_TYPE.Student | USER_TYPE.Teacher;
 }
 
 export interface MenuListItemModel extends MenuItem {

@@ -4,8 +4,11 @@ import _ from 'lodash';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import CustomIcon from '@/components/CustomIcon';
-import menuConfig from '../../../../../config/menuConfig';
 import { MenuListItemModel } from '@/interfaces/components';
+import userUtils from '@/utils/user-utils';
+import { CurrentUserModels } from '@/models/user';
+import menuConfig from '../../../../../config/menuConfig';
+
 
 interface NavMenuProps extends RoutingType {
 }
@@ -23,6 +26,10 @@ const MenuTitle: React.SFC<MenuTitleProps> = ({ icon, name }) => (
 )
 
 const NavMenu: React.SFC<NavMenuProps> = props => {
+  const currentUser: CurrentUserModels = userUtils.getUserInfo();
+  const { userType } = currentUser;
+  const currentUserType = userType;
+
   const [selectedKeys, setSelectedKeys] = useState(() => {
     const { pathname } = props.location;
     return [pathname.split('/').slice(1, 3).join('-')];
@@ -38,40 +45,43 @@ const NavMenu: React.SFC<NavMenuProps> = props => {
       }}
     >
       {menuConfig.map((item: MenuListItemModel) => {
-        if (item.children && !_.isEmpty(item.children)) {
+        if (item.userType === currentUserType) {
+          if (item.children && !_.isEmpty(item.children)) {
+            return (
+              <Menu.SubMenu
+                key={item.key}
+                title={
+                  <MenuTitle icon={item.icon} name={item.name} />
+                }
+              >
+                {item.children.map(ele => (
+                  <Menu.Item key={ele.key}>
+                    {ele.link ? (
+                      <Link to={ele.link}>
+                        <MenuTitle icon={ele.icon} name={ele.name} />
+                      </Link>
+                    ) : (
+                        <MenuTitle icon={ele.icon} name={ele.name} />
+                      )}
+                  </Menu.Item>
+                ))}
+              </Menu.SubMenu>
+            )
+          }
+
           return (
-            <Menu.SubMenu
-              key={item.key}
-              title={
-                <MenuTitle icon={item.icon} name={item.name} />
-              }
-            >
-              {item.children.map(ele => (
-                <Menu.Item key={ele.key}>
-                  {ele.link ? (
-                    <Link to={ele.link}>
-                      <MenuTitle icon={ele.icon} name={ele.name} />
-                    </Link>
-                  ) : (
-                      <MenuTitle icon={ele.icon} name={ele.name} />
-                    )}
-                </Menu.Item>
-              ))}
-            </Menu.SubMenu>
+            <Menu.Item key={item.key}>
+              {item.link ? (
+                <Link to={item.link}>
+                  <MenuTitle icon={item.icon} name={item.name} />
+                </Link>
+              ) : (
+                  <MenuTitle icon={item.icon} name={item.name} />
+                )}
+            </Menu.Item>
           )
         }
-
-        return (
-          <Menu.Item key={item.key}>
-            {item.link ? (
-              <Link to={item.link}>
-                <MenuTitle icon={item.icon} name={item.name} />
-              </Link>
-            ) : (
-                <MenuTitle icon={item.icon} name={item.name} />
-              )}
-          </Menu.Item>
-        )
+        return null
       })}
     </Menu>
   )
