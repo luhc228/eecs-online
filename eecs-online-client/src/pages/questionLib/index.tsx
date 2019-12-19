@@ -1,11 +1,13 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Button } from 'antd';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { QUESTION_TYPE } from '@/enums';
 import { TabsContentProps, UmiComponentProps } from '@/interfaces/components';
 import LibFilter from './components/LibFilter';
 import LibTable from './components/LibTable';
 import { StateType } from './models';
+import styles from './index.less';
 
 const { TabPane } = Tabs;
 
@@ -29,6 +31,10 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
         currentTabKey: Number(key),
       }
     })
+  }
+
+  function handleCreate() {
+    router.push('/teacher/question-lib/create')
   }
 
   const tabsContent: TabsContentProps[] = [
@@ -58,6 +64,9 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
       {tabsContent.map((item: TabsContentProps) => (
         <TabPane tab={item.tab} key={item.key.toString()}>
           <LibFilter />
+          <div className={styles.buttons}>
+            <Button type="primary" onClick={handleCreate}>新增题目</Button>
+          </div>
           <LibTable />
         </TabPane>
       ))}

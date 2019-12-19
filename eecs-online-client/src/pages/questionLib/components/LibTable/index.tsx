@@ -15,6 +15,15 @@ interface LibTableProps extends UmiComponentProps {
   loading: boolean,
 }
 
+const dataSource = [
+  {
+    id: 1,
+    courseName: 'eecsee',
+    questionType: 1,
+    questionScore: '90',
+    content: 'fjdlkjfajljlkfajlkfjjklf',
+  }
+]
 const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
   const handleEdit = (record: questionListItem) => {
     umiRouter.push({
@@ -72,7 +81,7 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
       loading={loading}
       rowKey="id"
       columns={columns}
-      dataSource={[]}
+      dataSource={dataSource}
       onPagination={(current: number) => {
         dispatch({
           type: 'questionLib/fetchQuestionLibPagination',

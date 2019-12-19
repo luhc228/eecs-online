@@ -1,9 +1,10 @@
 import React from 'react';
 import { TableComponents, TableEventListeners } from 'antd/es/table';
-import { Table, Pagination } from 'antd';
+import { Table, Pagination, Button } from 'antd';
 import { ButtonProps } from '@/interfaces/components';
 import { PAGINATION_CONFIGS } from '@/constants';
-
+import styles from './index.less';
+import CustomIcon from '../CustomIcon';
 
 interface CustomTableProps {
   loading: boolean;
@@ -40,6 +41,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
   rowSelection,
   onRow,
   size,
+  buttons
 }) => (
     <div style={{ minHeight: '400px' }}>
       <Table
@@ -57,6 +59,21 @@ const CustomTable: React.SFC<CustomTableProps> = ({
         onRow={onRow}
         scroll={{ x: true }}
       />
+      {buttons !== undefined && (
+        <div className={styles.btnWrap}>
+          {buttons.map(button => (
+            <Button
+              key={button.text}
+              type={button.type}
+              onClick={button.onClick}
+              className={`${styles.btn} ${button.type !== 'primary' && styles.secondary}`}
+            >
+              <CustomIcon name={button.icon} />
+              <span>{button.text}</span>
+            </Button>
+          ))}
+        </div>
+      )}
       {onPagination !== undefined && (
         <Pagination
           className="ant-table-pagination"
