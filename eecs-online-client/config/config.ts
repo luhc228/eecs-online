@@ -6,6 +6,7 @@ import routeConfig from './routeConfig';
 const config: IConfig = {
   treeShaking: true,
   routes: routeConfig,
+  history: 'hash',
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [

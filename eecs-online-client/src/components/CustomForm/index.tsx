@@ -118,26 +118,37 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   )
 
   return (
-    <div className={styles.tableListForm}>
+    <div className={formTypes === CUSTOM_FORM_TYPES.Filter ? styles.tableListForm : undefined}>
       <Form onSubmit={submitHandler} layout={layout}>
-        <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
-            <Col {...formItemLayout} key={formItem.name}>
-              <Form.Item label={formItem.label}>
-                {renderForm(formItem)}
-              </Form.Item>
-            </Col>
-          ))}
-          {formConfig &&
-            formTypes === CUSTOM_FORM_TYPES.Filter &&
-            formConfig.length % (24 / INLINE_FORM_LAYOUT.md) !== 0 && (
-              <Col {...formItemLayout}>
-                <Form.Item>
-                  {filterFormButtons()}
+        {/* 筛选表单时使用Row组件 */}
+        {formTypes === CUSTOM_FORM_TYPES.Filter &&
+          <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
+            {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
+              <Col {...formItemLayout} key={formItem.name}>
+                <Form.Item label={formItem.label}>
+                  {renderForm(formItem)}
                 </Form.Item>
               </Col>
-            )}
-        </Row>
+            ))}
+            {formConfig &&
+              formTypes === CUSTOM_FORM_TYPES.Filter &&
+              formConfig.length % (24 / INLINE_FORM_LAYOUT.md) !== 0 && (
+                <Col {...formItemLayout}>
+                  <Form.Item>
+                    {filterFormButtons()}
+                  </Form.Item>
+                </Col>
+              )}
+          </Row>
+        }
+        {/* 普通表单 */}
+        {(formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) &&
+          formConfig && formConfig.map((formItem: FormItemComponentProps) => (
+            <Form.Item label={formItem.label} key={formItem.name} {...formItemLayout}>
+              {renderForm(formItem)}
+            </Form.Item>
+          ))
+        }
         {children}
         <Form.Item>
           {(formTypes === CUSTOM_FORM_TYPES.OneColumn ||

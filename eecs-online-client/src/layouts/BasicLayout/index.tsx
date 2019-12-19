@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout } from 'antd';
+import { Layout, Card } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import NavMenu from './components/NavMenu';
@@ -28,13 +28,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location
       <Content
         style={{
           margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 1000,
+          padding: '5px 20px',
           overflow: 'initial',
+          // background: '#fff',
+          // minHeight: 1000,
         }}
       >
-        {children}
+        <Card>
+          {children}
+        </Card>
       </Content>
       <Footer />
     </Layout>

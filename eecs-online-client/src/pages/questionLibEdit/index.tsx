@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'dva';
 
 const QuestionLibEdit: React.FC<{}> = () => (
-    <div></div>
-  )
-
+  <div></div>
+)
 // const mapStateToProps = ({
 //   questionLib
 // }: {
