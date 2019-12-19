@@ -10,6 +10,7 @@ export enum FORM_COMPONENT {
   Input = 'Input',
   Select = 'Select',
   InputNumber = 'InputNumber',
+  TextArea = 'TextArea',
 }
 
 export enum FORM_LAYOUTS {

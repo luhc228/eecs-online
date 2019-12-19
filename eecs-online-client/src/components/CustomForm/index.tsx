@@ -11,7 +11,7 @@ import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } f
 import styles from './index.less';
 
 const { Option } = Select;
-
+const { TextArea } = Input;
 interface CustomFormProps extends FormComponentProps {
   formTypes: CUSTOM_FORM_TYPES;
   layout?: 'horizontal' | 'inline' | 'vertical';
@@ -45,7 +45,10 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           <>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
-              rules: [{ required: formItem.required, message: formItem.message ? formItem.message : '请输入' }],
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
             })(<Input placeholder="请输入" style={{ width: '100%' }} />)}
           </>
         )
@@ -71,6 +74,21 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               initialValue: formItem.initialValue,
             },
             )(<InputNumber style={{ width: '100%' }} />)}
+          </>
+        )
+      case FORM_COMPONENT.TextArea:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+            },
+            )(
+              <TextArea
+                style={{ minHeight: 32 }}
+                placeholder="请输入"
+                rows={4}
+              />
+            )}
           </>
         )
       default:
