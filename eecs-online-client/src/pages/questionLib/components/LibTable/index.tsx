@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Popconfirm } from 'antd';
 import { ColumnProps } from 'antd/es/table';
+import umiRouter from 'umi/router';
 import CustomTable from '@/components/CustomTable';
 import { UmiComponentProps } from '@/interfaces/components';
 import { questionListItem } from '@/interfaces/questionLib';
 import { questionTypeMap } from '@/pages/questionLib';
+import { PAGINATION_CONFIGS } from '@/constants';
 import styles from './index.less';
 import { StateType } from '../../models';
 
 interface LibTableProps extends UmiComponentProps {
+  loading: boolean,
 }
 
-const LibTable: React.FC<LibTableProps> = ({ dispatch }) => {
+const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
   const handleEdit = (record: questionListItem) => {
-
+    umiRouter.push({
+      pathname: '/teacher/question-lib/edit',
+      query: {
+        id: record.id
+      }
+    })
   };
 
   const handleDelete = (id: string) => {
-
+    dispatch({
+      type: 'questionLib/removeQuestion',
+      payload: { id },
+    })
   };
 
   const columns: ColumnProps<questionListItem>[] = [
@@ -41,9 +52,8 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch }) => {
           </span>
           <Popconfirm
             title="确定删除该班级"
-            onConfirm={() => {
-              handleDelete(record.id)
-            }}>
+            onConfirm={() => handleDelete(record.id)}
+          >
             <a href="">删除</a>
           </Popconfirm>
         </span>
@@ -51,22 +61,41 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch }) => {
     },
   ];
 
+  useEffect(() => {
+    dispatch({
+      type: 'questionLib/fetchQuestionLibPagination',
+      payload: { ...PAGINATION_CONFIGS, },
+    })
+  }, []);
   return (
     <CustomTable
-      loading={false}
+      loading={loading}
       rowKey="id"
-      columns={[]}
+      columns={columns}
       dataSource={[]}
+      onPagination={(current: number) => {
+        dispatch({
+          type: 'questionLib/fetchQuestionLibPagination',
+          payload: { ...PAGINATION_CONFIGS, page: current },
+        })
+      }}
     />
   )
 }
 
 const mapStateToProps = ({
-  questionLib
+  questionLib,
+  loading,
 }: {
-  questionLib: StateType
+  questionLib: StateType,
+  loading: {
+    effects: {
+      [key: string]: boolean;
+    };
+  };
 }) => ({
-  questionLib
+  questionLib,
+  loading: loading.effects['questionLib/fetchQuestionLibPagination'],
 });
 
 export default connect(mapStateToProps)(LibTable);
