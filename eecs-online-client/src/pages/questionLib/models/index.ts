@@ -6,7 +6,7 @@ import { QUESTION_TYPE } from '@/enums';
 export interface StateType {
   data: TableData;
   filterFields: FilterFieldsModel;
-  curQuestionType: QUESTION_TYPE;
+  currentTabKey: QUESTION_TYPE;
 }
 
 const questionLibModel = {
@@ -22,7 +22,7 @@ const questionLibModel = {
     filterFields: {
       content: undefined
     },
-    curQuestionType: QUESTION_TYPE.Judge
+    currentTabKey: QUESTION_TYPE.Single
   },
 
   reducers: {
@@ -40,11 +40,11 @@ const questionLibModel = {
       return { ...state, filterFields: payload.filterFields }
     },
 
-    changeCurQuestionType(
+    changecurrentTabKey(
       state: StateType,
-      { payload }: { payload: { type: string, curQuestionType: QUESTION_TYPE } }
+      { payload }: { payload: { type: string, currentTabKey: QUESTION_TYPE } }
     ) {
-      return { ...state, curQuestionType: payload.curQuestionType }
+      return { ...state, currentTabKey: payload.currentTabKey }
     },
   },
 
