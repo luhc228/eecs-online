@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd';
+import { connect } from 'dva';
 import { QUESTION_TYPE } from '@/enums';
 import { TabsContentProps } from '@/interfaces/components';
 import LibFilter from './components/LibFilter';
@@ -41,4 +42,4 @@ const QuestionEdit: React.FC<{}> = props => {
 }
 
 
-export default QuestionEdit;
+export default connect()(QuestionEdit);

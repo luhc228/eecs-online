@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'dva';
 import CustomTable from '@/components/CustomTable';
 import { QUESTION_TYPE } from '@/enums';
 
 interface LibTableProps {
-  questionType: QUESTION_TYPE.Single | QUESTION_TYPE.Multiple | QUESTION_TYPE.Program | QUESTION_TYPE.Judge;
+  questionType: QUESTION_TYPE;
 }
 
 const LibTable: React.FC<LibTableProps> = ({ questionType }) => {
@@ -18,4 +19,6 @@ const LibTable: React.FC<LibTableProps> = ({ questionType }) => {
   )
 }
 
-export default LibTable;
+const mapStateToProps = () => ({});
+
+export default connect(mapStateToProps)(LibTable);

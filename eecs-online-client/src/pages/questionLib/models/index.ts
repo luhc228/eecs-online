@@ -1,13 +1,15 @@
 import { Model, EffectsCommandMap } from 'dva';
 import { TableData, FilterFieldsModel, TablePaginationModel } from '@/interfaces/questionLib';
 import * as questionLibService from '../services';
+import { QUESTION_TYPE } from '@/enums';
 
 export interface StateType {
   data: TableData;
   filterFields: FilterFieldsModel;
+  curQuestionType: QUESTION_TYPE;
 }
 
-const QuestionLibModel: Model = {
+const questionLibModel = {
   namespace: 'questionLib',
 
   state: {
@@ -20,65 +22,73 @@ const QuestionLibModel: Model = {
     filterFields: {
       content: undefined
     },
+    curQuestionType: QUESTION_TYPE.Judge
+  },
 
-    reducers: {
-      save(
-        state: StateType,
-        { payload }: { type: string; payload: { data: TableData } }
-      ) {
-        return { ...state, data: payload.data }
-      },
-
-      changeFilterFields(
-        state: StateType,
-        { payload }: { type: string; payload: { filterFields: FilterFieldsModel } }
-      ) {
-        return { ...state, filterFields: payload.filterFields }
-      }
+  reducers: {
+    save(
+      state: StateType,
+      { payload }: { type: string; payload: { data: TableData } }
+    ) {
+      return { ...state, data: payload.data }
     },
 
-    effects: {
-      /**
-      * 获取题库信息分页
-      * 包括信息筛选
-      */
-      *fetchQuestionLibPagination(
-        { payload }: { type: string; payload: { data: TablePaginationModel } },
-        { put, call }: EffectsCommandMap
-      ) {
-        const response = yield call(questionLibService.fetchQuestionLibPagination, payload);
-        const { data } = response;
-        yield put({
-          type: 'save',
-          payload: {
-            data,
-          },
-        })
-      },
+    changeFilterFields(
+      state: StateType,
+      { payload }: { payload: { type: string, filterFields: FilterFieldsModel } }
+    ) {
+      return { ...state, filterFields: payload.filterFields }
+    },
 
-      /**
-       * 删除某条题目
-       */
-      *removeQuestion(
-        { payload }: { type: string; payload: { id: string } },
-        { put, call, select }: EffectsCommandMap
-      ) {
-        yield call(questionLibService.removeQuestion, payload.id);
+    changeCurQuestionType(
+      state: StateType,
+      { payload }: { payload: { type: string, curQuestionType: QUESTION_TYPE } }
+    ) {
+      return { ...state, curQuestionType: payload.curQuestionType }
+    },
+  },
 
-        const page = yield select((state: any) => {
-          const { questionLib: { data } } = state;
-          return data.page
-        });
+  effects: {
+    /**
+    * 获取题库信息分页
+    * 包括信息筛选
+    */
+    *fetchQuestionLibPagination(
+      { payload }: { type: string; payload: { data: TablePaginationModel } },
+      { put, call }: EffectsCommandMap
+    ) {
+      const response = yield call(questionLibService.fetchQuestionLibPagination, payload.data);
+      const { data } = response;
+      yield put({
+        type: 'save',
+        payload: {
+          data,
+        },
+      })
+    },
 
-        yield put({
-          type: 'fetchQuestionLibPagination',
-          payload: {
-            data: { page }
-          },
-        })
-      }
+    /**
+     * 删除某条题目
+     */
+    *removeQuestion(
+      { payload }: { type: string; payload: { id: string } },
+      { put, call, select }: EffectsCommandMap
+    ) {
+      yield call(questionLibService.removeQuestion, payload.id);
+
+      const page = yield select((state: any) => {
+        const { questionLib: { data } } = state;
+        return data.page
+      });
+
+      yield put({
+        type: 'fetchQuestionLibPagination',
+        payload: {
+          data: { page }
+        },
+      })
     }
   }
 }
 
-export default QuestionLibModel;
+export default questionLibModel;

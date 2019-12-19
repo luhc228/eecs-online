@@ -1,5 +1,4 @@
 import React from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import FilterForm from '@/components/CustomForm';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
@@ -7,10 +6,6 @@ import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/componen
 import { FilterFieldsModel } from '@/interfaces/questionLib';
 import { StateType } from '../../models';
 import { PAGINATION_CONFIGS } from '@/constants';
-
-interface LibFilterProps {
-  dispatch: Dispatch<any>;
-}
 
 const filterFormConfig: FormItemComponentProps[] = [
   {

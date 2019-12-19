@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dispatch } from 'dva';
+import { AnyAction } from 'redux';
 import { FORM_COMPONENT, USER_TYPE } from '@/enums';
 
 export interface PageMatchModel {
@@ -79,5 +80,5 @@ export interface TabsContentProps {
 
 export interface UmiComponentProps {
   history?: History;
-  dispatch?: Dispatch<any>;
+  dispatch: Dispatch<AnyAction>;
 }
