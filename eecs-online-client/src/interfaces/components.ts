@@ -53,10 +53,7 @@ export interface FormItemComponentProps {
   name: string,
   required: boolean;
   message?: string;
-  component:
-  FORM_COMPONENT.Input |
-  FORM_COMPONENT.Select |
-  FORM_COMPONENT.InputNumber,
+  component: FORM_COMPONENT,
   datasource?: SelectComponentDatasourceModel[],
   props?: { [key: string]: any },
   initialValue?: string,
@@ -68,7 +65,7 @@ export interface MenuItem {
   name: string;
   link?: string;
   icon?: string;
-  userType?: USER_TYPE.Student | USER_TYPE.Teacher;
+  userType?: USER_TYPE;
 }
 
 export interface MenuListItemModel extends MenuItem {
@@ -81,6 +78,6 @@ export interface TabsContentProps {
 }
 
 export interface UmiComponentProps {
-  history: History;
-  dispatch: Dispatch<any>;
+  history?: History;
+  dispatch?: Dispatch<any>;
 }

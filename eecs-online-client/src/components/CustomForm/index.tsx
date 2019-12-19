@@ -13,7 +13,7 @@ import styles from './index.less';
 const { Option } = Select;
 
 interface CustomFormProps extends FormComponentProps {
-  formTypes: CUSTOM_FORM_TYPES.TwoColumn | CUSTOM_FORM_TYPES.Filter | CUSTOM_FORM_TYPES.OneColumn;
+  formTypes: CUSTOM_FORM_TYPES;
   layout?: 'horizontal' | 'inline' | 'vertical';
   formConfig: FormItemComponentProps[];
   values: object;

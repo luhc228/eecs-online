@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import { QUESTION_TYPE } from '@/enums';
 import { TabsContentProps } from '@/interfaces/components';
+import LibFilter from './components/LibFilter';
 
 const { TabPane } = Tabs;
 
@@ -32,7 +33,7 @@ const QuestionEdit: React.FC<{}> = props => {
     <Tabs defaultActiveKey={QUESTION_TYPE.Single.toString()} onChange={callback}>
       {tabsContent.map((item: TabsContentProps) => (
         <TabPane tab={item.tab} key={item.key.toString()}>
-
+          <LibFilter />
         </TabPane>
       ))}
     </Tabs>
