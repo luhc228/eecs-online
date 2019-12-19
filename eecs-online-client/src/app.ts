@@ -5,8 +5,11 @@ import { Reducer } from 'redux';
 const persistConfig = {
   key: 'root',
   storage,
-  // 放置
-  blacklist: ['router'],
+  // 不存储于localStorage的Redux状态
+  blacklist: [
+    'router',
+    'questionLib'
+  ],
 };
 
 const persistEnhancer = () => (createStore: any) => (reducer: Reducer, initialState: any, enhancer: any) => {

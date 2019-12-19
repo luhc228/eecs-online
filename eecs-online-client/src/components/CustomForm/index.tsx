@@ -95,6 +95,28 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     props.onSubmit({});
   }
 
+  const filterFormButtons = (buttonsStyles?: string) => (
+    <span className={buttonsStyles && styles[buttonsStyles]}>
+      <Button type="primary" htmlType="submit" loading={loading}>
+        查询
+      </Button>
+      <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
+        重置
+      </Button>
+    </span>
+  )
+
+  const commonFormButtons = (
+    <span className={styles.commonButtons}>
+      <Button type="primary" htmlType="submit" loading={loading}>
+        保存
+     </Button>
+      <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
+        取消
+    </Button>
+    </span>
+  )
+
   return (
     <div className={styles.tableListForm}>
       <Form onSubmit={submitHandler} layout={layout}>
@@ -106,28 +128,26 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               </Form.Item>
             </Col>
           ))}
+          {formConfig &&
+            formTypes === CUSTOM_FORM_TYPES.Filter &&
+            formConfig.length % (24 / INLINE_FORM_LAYOUT.md) !== 0 && (
+              <Col {...formItemLayout}>
+                <Form.Item>
+                  {filterFormButtons()}
+                </Form.Item>
+              </Col>
+            )}
         </Row>
         {children}
         <Form.Item>
-          {(formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) && (
-            <span className={styles.commonButtons}>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                保存
-          </Button>
-              <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
-                取消
-          </Button>
-            </span>)}
-          {(formTypes === CUSTOM_FORM_TYPES.Filter) && (
-            <span className={styles.filterButtons}>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                查询
-          </Button>
-              <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
-                重置
-          </Button>
-            </span>
-          )}
+          {(formTypes === CUSTOM_FORM_TYPES.OneColumn ||
+            formTypes === CUSTOM_FORM_TYPES.TwoColumn) && (
+              <>{commonFormButtons}</>
+            )}
+          {(formTypes === CUSTOM_FORM_TYPES.Filter) &&
+            formConfig.length % (24 / INLINE_FORM_LAYOUT.md) === 0 && (
+              <>{filterFormButtons('filterFloatRightButtons')}</>
+            )}
         </Form.Item>
       </Form>
     </div>
@@ -140,6 +160,7 @@ CustomForm.defaultProps = {
 }
 
 export default Form.create<CustomFormProps>({
+
   // ref: http://react-component.github.io/form/examples/redux.html
   mapPropsToFields(props: CustomFormProps) {
     const result: { [key: string]: { value: string | number | string[], [key: string]: any } } = {};

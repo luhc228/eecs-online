@@ -1,4 +1,4 @@
-import { Model, EffectsCommandMap } from 'dva';
+import { EffectsCommandMap } from 'dva';
 import { TableData, FilterFieldsModel, TablePaginationModel } from '@/interfaces/questionLib';
 import * as questionLibService from '../services';
 import { QUESTION_TYPE } from '@/enums';
