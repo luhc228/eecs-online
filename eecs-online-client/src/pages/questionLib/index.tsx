@@ -2,12 +2,14 @@ import React from 'react';
 import { Tabs, Button } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
+import { CardTabListType } from 'antd/es/card';
 import { QUESTION_TYPE } from '@/enums';
-import { TabsContentProps, UmiComponentProps } from '@/interfaces/components';
+import { UmiComponentProps } from '@/interfaces/components';
 import LibFilter from './components/LibFilter';
 import LibTable from './components/LibTable';
 import { StateType } from './models';
 import styles from './index.less';
+import CustomCard from '@/components/CustomCard';
 
 const { TabPane } = Tabs;
 
@@ -30,47 +32,67 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
       payload: {
         currentTabKey: Number(key),
       }
-    })
+    });
+    // TODO: add fetch pagination
+    // dispatch({
+    //   type: 'questionLib/fetchQuestionLibPagination',
+    //   payload: {
+    //     currentTabKey: Number(key),
+    //   }
+    // })
   }
 
   function handleCreate() {
     router.push('/teacher/question-lib/create')
   }
 
-  const tabsContent: TabsContentProps[] = [
+  const tabsContent: CardTabListType[] = [
     {
       tab: questionTypeMap[QUESTION_TYPE.Single],
-      key: QUESTION_TYPE.Single,
+      key: QUESTION_TYPE.Single.toString(),
     },
     {
       tab: questionTypeMap[QUESTION_TYPE.Multiple],
-      key: QUESTION_TYPE.Multiple,
+      key: QUESTION_TYPE.Multiple.toString(),
     },
     {
       tab: questionTypeMap[QUESTION_TYPE.Judge],
-      key: QUESTION_TYPE.Judge,
+      key: QUESTION_TYPE.Judge.toString(),
     },
     {
       tab: questionTypeMap[QUESTION_TYPE.Program],
-      key: QUESTION_TYPE.Program,
+      key: QUESTION_TYPE.Program.toString(),
     },
   ];
 
   return (
-    <Tabs
-      activeKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
-      onChange={callback}
+    // <Tabs
+    //   activeKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
+    //   onChange={callback}
+    // >
+    //   {tabsContent.map((item: TabsContentProps) => (
+    //     <TabPane tab={item.tab} key={item.key.toString()}>
+    //       <LibFilter />
+
+    //       <CustomCard
+    //         extra={
+    //           <Button type="primary" onClick={handleCreate}>新增题目</Button>}
+    //       >
+    //         <LibTable />
+    //       </CustomCard>
+
+    //     </TabPane>
+    //   ))}
+    // </Tabs>
+    <CustomCard
+      tabList={tabsContent}
+      tabBarExtraContent={<Button type="primary" onClick={handleCreate}>新增题目</Button>}
+      activeTabKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
+      onTabChange={callback}
     >
-      {tabsContent.map((item: TabsContentProps) => (
-        <TabPane tab={item.tab} key={item.key.toString()}>
-          <LibFilter />
-          <div className={styles.buttons}>
-            <Button type="primary" onClick={handleCreate}>新增题目</Button>
-          </div>
-          <LibTable />
-        </TabPane>
-      ))}
-    </Tabs>
+      <LibFilter />
+      <LibTable />
+    </CustomCard>
   )
 }
 

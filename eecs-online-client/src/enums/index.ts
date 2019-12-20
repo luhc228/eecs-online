@@ -33,3 +33,8 @@ export enum QUESTION_TYPE {
   Judge,
   Program,
 }
+
+export enum HOMEWORK_STATUS {
+  Done,
+  Undone,
+}
