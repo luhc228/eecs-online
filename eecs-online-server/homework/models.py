@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from course.models import Course
+from homework_condition.models import QuestionCondition
 from question_lib.models import QuestionLib
 from utils import str_to_list
 
@@ -91,7 +92,7 @@ class HomeworkManage(models.Manager):
 
     def delete_homework(self, id):
         homework = Homework.homework_manage.get(id=id, deleted=0)
-        homework.deleted=1
+        homework.deleted = 1
         for i in homework.homeworkquestion_set.all():
             i.deleted = 1
             i.save()
@@ -100,6 +101,51 @@ class HomeworkManage(models.Manager):
             i.save()
         homework.save()
         return homework
+
+    def homework_condition_teacher(self, homework):
+        homeworks = []
+        for i in range(len(homework.object_list)):
+            homework_dict = {}
+            homework_dict['courseId'] = homework.object_list[i]['course_id_id']
+            homework_dict['courseName'] = Course.course_manage.get(id=homework_dict['courseId']).course_name
+            homework_dict['homeworkName'] = homework.object_list[i]['homework_name']
+            homework_dict['homeworkId'] = homework.object_list[i]['id']
+            homework_dict['description'] = homework.object_list[i]['description']
+            homework_dict['homeworkScore'] = homework.object_list[i]['homework_score']
+            homework_dict['startAt'] = homework.object_list[i]['start_at'].strftime("%Y-%m-%d %H:%M:%S")
+            homework_dict['endAt'] = homework.object_list[i]['end_at'].strftime("%Y-%m-%d %H:%M:%S")
+            if homework.object_list[i]['end_at'] < datetime.datetime.now():
+                homework_dict['status'] = 1
+            else:
+                homework_dict['status'] = 0
+            homeworks.append(homework_dict)
+        return homeworks
+
+    def homework_condition_student(self, homework, get_homework_status):
+        homeworks = []
+        for i in range(len(homework.object_list)):
+            homework_dict = {}
+            homework_dict['courseId'] = homework.object_list[i]['course_id_id']
+            homework_dict['courseName'] = Course.course_manage.get(id=homework_dict['courseId']).course_name
+            homework_dict['homeworkName'] = homework.object_list[i]['homework_name']
+            homework_dict['homeworkId'] = homework.object_list[i]['id']
+            homework_dict['description'] = homework.object_list[i]['description']
+            homework_dict['homeworkScore'] = homework.object_list[i]['homework_score']
+            homework_dict['startAt'] = homework.object_list[i]['start_at'].strftime("%Y-%m-%d %H:%M:%S")
+            homework_dict['endAt'] = homework.object_list[i]['end_at'].strftime("%Y-%m-%d %H:%M:%S")
+            # 如果到达截止日期或者题目完成情况下（即status=0为空），homwork的状态是1（已完成）
+            if homework.object_list[i][
+                'end_at'] < datetime.datetime.now() or QuestionCondition.question_condition_manage.filter(
+                homework_id=homework_dict['homeworkId'], status=0):
+                homework_dict['status'] = 1
+            else:
+                homework_dict['status'] = 0
+            # 保留学生想要获取某个状态的作业信息
+            if homework_dict['status'] == get_homework_status:
+                homeworks.append(homework_dict)
+            else:
+                pass
+        return homeworks
 
 
 # homework数据库仅与course关联
@@ -121,4 +167,4 @@ class Homework(models.Model):
         db_table = 'homework'
 
     def __str__(self):
-        return str(self.course_id)+self.homework_name
+        return str(self.course_id) + self.homework_name

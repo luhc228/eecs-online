@@ -3,10 +3,12 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, Invali
 from django.http import HttpResponse
 from homework.models import *
 from course.models import *
-
-
+import time
 # Create your views here.
 # 调试成功
+from homework_condition.models import QuestionCondition
+
+
 def paginator_teacher(request):
     if request.method == "POST":
         # 获取 url 后面的 page 参数的值, 首页不显示 page 参数, 默认值是 1
@@ -33,18 +35,15 @@ def paginator_teacher(request):
         except EmptyPage:
             # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
             homework = paginator.page(paginator.num_pages)
-        homeworks = []
-        for i in range(len(homework.object_list)):
-            homework_dict = {}
-            homework_dict['courseId'] = homework.object_list[i]['course_id_id']
-            homework_dict['courseName'] = Course.course_manage.get(id=homework_dict['courseId']).course_name
-            homework_dict['homeworkName'] = homework.object_list[i]['homework_name']
-            homework_dict['homeworkId'] = homework.object_list[i]['id']
-            homework_dict['description'] = homework.object_list[i]['description']
-            homework_dict['homeworkScore'] = homework.object_list[i]['homework_score']
-            homework_dict['startAt'] = homework.object_list[i]['start_at'].strftime("%Y-%m-%d %H:%M:%S")
-            homework_dict['endAt'] = homework.object_list[i]['end_at'].strftime("%Y-%m-%d %H:%M:%S")
-            homeworks.append(homework_dict)
+        try:
+            homeworks = Homework.homework_manage.homework_condition_teacher(homework)
+        except:
+            content = {
+                'success': False,
+                'message': '作业分页显示失败',
+            }
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
         content = {
             'success': True,
             'message': '作业分页显示成功',
@@ -72,6 +71,7 @@ def paginator_student(request):
         page = request.POST.get('page')
         pagesize = request.POST.get('pageSize')
         course_id = request.POST.get('courseId')
+        get_homework_status = request.POST.get('status')
         if course_id:
             homework_queryset = Homework.homework_manage.filter(course_id=course_id)
         else:
@@ -92,18 +92,15 @@ def paginator_student(request):
         except EmptyPage:
             # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
             homework = paginator.page(paginator.num_pages)
-        homeworks = []
-        for i in range(len(homework.object_list)):
-            homework_dict = {}
-            homework_dict['courseId'] = homework.object_list[i]['course_id_id']
-            homework_dict['courseName'] = Course.course_manage.get(id=homework_dict['courseId']).course_name
-            homework_dict['homeworkName'] = homework.object_list[i]['homework_name']
-            homework_dict['homeworkId'] = homework.object_list[i]['id']
-            homework_dict['description'] = homework.object_list[i]['description']
-            homework_dict['homeworkScore'] = homework.object_list[i]['homework_score']
-            homework_dict['startAt'] = homework.object_list[i]['start_at'].strftime("%Y-%m-%d %H:%M:%S")
-            homework_dict['endAt'] = homework.object_list[i]['end_at'].strftime("%Y-%m-%d %H:%M:%S")
-            homeworks.append(homework_dict)
+        try:
+            homeworks = Homework.homework_manage.homework_condition_student(homework, get_homework_status)
+        except:
+            content = {
+                'success': False,
+                'message': '作业分页显示失败',
+            }
+            return HttpResponse(content=json.dumps(content, ensure_ascii=False),
+                                content_type='application/json;charset = utf-8')
         content = {
             'success': True,
             'message': '作业分页显示成功',
