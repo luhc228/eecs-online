@@ -24,7 +24,9 @@ class Student(models.Model):
     student_name = models.CharField(max_length=128)
     student_gender = models.CharField(max_length=128, default="男")
     student_class = models.CharField(max_length=128)
-    student_college = models.CharField(max_length=128)
+    student_college = models.IntegerField(
+        choices=((0, '信息科学与工程学院'), (1, '法学院'), (2, '政治学与公共管理学院'), (3, '计算机科学与技术学院'), (4, '生命科学学院'), (5, '环境科学与工程学院')),
+        default=0)
 
     creat_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

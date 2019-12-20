@@ -14,14 +14,12 @@ def pagination(request):
         page = int(request.POST.get('page'))
         pagesize = request.POST.get('pageSize')
         try:
-            questions_list = []
-            homework_id = request.POST.get('homeworkId')
-            homework = Homework.homework_manage.get(id=homework_id, deleted=0)
-            homework_questions = homework.homeworkquestion_set.all()
-            homework_questions = homework_questions.values()
-            for homework_question in homework_questions:
-                questions_list.append(
-                    QuestionLib.question_lib_manage.get_question_detail(homework_question['question_lib_id_id']))
+            question_type = request.POST.get('questionType')
+            course_id = request.POST.get('courseId')
+            course = Course.course_manage.get(id=course_id, deleted=0)
+            questions_queryset = course.questionlib_set.all()
+            questions_queryset = questions_queryset.filter(question_type  = question_type)
+            questions_list = questions_queryset.values()
             paginator = Paginator(questions_list, int(pagesize))
             try:
                 # 获取page，第几个页面
@@ -37,14 +35,23 @@ def pagination(request):
             except EmptyPage:
                 # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
                 questions = paginator.page(paginator.num_pages)
-            questions = questions.object_list
+            res = []
+            for i in range(len(questions.object_list)):
+                res_dic = {}
+                res_dic['questionId'] = questions.object_list[i]['id']
+                res_dic['courseName'] = course.course_name
+                res_dic['questionType'] = questions.object_list[i]['question_type']
+                res_dic['questionScore'] = questions.object_list[i]['question_score']
+                res_dic['content'] = questions.object_list[i]['content']
+                res_dic['contentImage'] = questions.object_list[i]['content_image']
+                res.append(res_dic)
             content = {
                 'success': True,
                 'message': '题目分页获取成功',
                 'data': {
                     'page': page,
                     'pageSize': pagesize,
-                    'list': questions,
+                    'list': res,
                 },
             }
             return HttpResponse(content=json.dumps(content, ensure_ascii=False),

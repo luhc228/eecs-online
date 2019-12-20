@@ -7,5 +7,6 @@ from student import views
 urlpatterns = [
     url('detail/pagination', views.paginator_student),
     url('edit', views.edit),
-    url('detail', views.detail)
+    url('detail', views.detail),
+    url('college', views.list_college)
 ]
