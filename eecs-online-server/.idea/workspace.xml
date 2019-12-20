@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1dd1344b-d92f-4170-a0d9-79c48551b3ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/course/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/homework/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework_condition/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/homework_condition/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/image/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/image/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/login/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/question_lib/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/question_lib/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/register/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/register/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/student/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/student/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teacher/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/teacher/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vir_class/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/vir_class/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="1dd1344b-d92f-4170-a0d9-79c48551b3ed" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +167,7 @@
       <workItem from="1576512890120" duration="263000" />
       <workItem from="1576544316085" duration="8587000" />
       <workItem from="1576561585597" duration="28246000" />
-      <workItem from="1576675948327" duration="1110000" />
+      <workItem from="1576675948327" duration="1258000" />
     </task>
     <servers />
   </component>
