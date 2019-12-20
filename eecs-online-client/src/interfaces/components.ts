@@ -52,13 +52,13 @@ export interface SelectComponentDatasourceModel {
 export interface FormItemComponentProps {
   label?: string,
   name: string,
+  initialValue?: string,
   required: boolean;
   message?: string;
   component: FORM_COMPONENT,
   datasource?: SelectComponentDatasourceModel[],
+  // 组件属性
   props?: { [key: string]: any },
-  initialValue?: string,
-  selectMode?: 'multiple' | 'tags',
 }
 
 export interface MenuItem {

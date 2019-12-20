@@ -3,12 +3,13 @@
  * Filter component usually in the header of the table or the page.
  */
 import React from 'react';
-import { Form, Row, Col, Input, Select, InputNumber, Button } from 'antd';
+import { Form, Row, Col, Input, Select, Button, Icon } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
 import styles from './index.less';
+import InputNumberWithUnit from '../InputNumberWithUnit';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -22,6 +23,8 @@ interface CustomFormProps extends FormComponentProps {
   onFieldsChange: (allFields: object) => void;
   onSubmit: (value: object) => void;
 }
+
+const fieldSetId = 1;
 
 const CustomForm: React.FC<CustomFormProps> = props => {
   const { formTypes, form, formConfig, onSubmit, loading, layout, children } = props;
@@ -38,6 +41,97 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
 
+  const handleDynamicFieldSetRemove = (k: string) => {
+    const keys = form.getFieldValue('keys');
+    // need at least one input
+    if (keys.length === 1) {
+      return;
+    }
+    form.setFieldsValue({
+      keys: keys.filter((key: string) => key !== k),
+    });
+  }
+
+  /**
+   * 动态增加表单项
+   * @param fieldName 字段名称
+   */
+  const handleDynamicFieldSetAdd = (fieldName: string) => {
+    const keys = form.getFieldValue(fieldName);
+    const id = fieldSetId + 1;
+    const nextKeys = keys.concat(id);
+
+    form.setFieldsValue({
+      keys: nextKeys,
+    });
+  }
+
+  const renderDynamicFieldSetFormItems = (fieldName: string) => {
+    const keys = getFieldDecorator(fieldName);
+
+    const DynamicFieldSetFormItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+
+    const formItemLayoutWithOutLabel = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 20, offset: 4 },
+      },
+    };
+
+    const formItems = keys.map((k: string, index: number) => (
+      <Form.Item
+        {...(index === 0 ? DynamicFieldSetFormItemLayout : formItemLayoutWithOutLabel)}
+        label={index === 0 ? 'Passengers' : ''}
+        required={false}
+        key={k}
+      >
+        {getFieldDecorator(`names[${k}]`, {
+          validateTrigger: ['onChange', 'onBlur'],
+          rules: [
+            {
+              required: false,
+              whitespace: true,
+              message: '请输入',
+            },
+          ],
+        })(<Input placeholder="请输入" style={{ width: '60%', marginRight: 8 }} />)}
+        {keys.length > 1 ? (
+          <Icon
+            className="dynamic-delete-button"
+            type="minus-circle-o"
+            onClick={() => handleDynamicFieldSetRemove(k)}
+          />
+        ) : null}
+      </Form.Item>
+    ))
+
+    return formItems;
+  }
+
+  const renderDynamicFieldSet = () => (
+    <>
+      {renderDynamicFieldSetFormItems('1')}
+      <Form.Item>
+        <Button
+          type="dashed"
+          onClick={() => handleDynamicFieldSetAdd('11')}
+          style={{ width: '60%' }}>
+          <Icon type="plus" />添加
+        </Button>
+      </Form.Item>
+    </>
+
+  )
+
   const renderForm = (formItem: FormItemComponentProps) => {
     switch (formItem.component) {
       case FORM_COMPONENT.Input:
@@ -49,7 +143,12 @@ const CustomForm: React.FC<CustomFormProps> = props => {
                 required: formItem.required,
                 message: formItem.message ? formItem.message : '请输入'
               }],
-            })(<Input placeholder="请输入" style={{ width: '100%' }} />)}
+            })(
+              <Input
+                placeholder="请输入"
+                style={{ width: '100%' }}
+                {...formItem.props}
+              />)}
           </>
         )
       case FORM_COMPONENT.Select:
@@ -57,8 +156,16 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           <>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请选择'
+              }],
             })(
-              <Select placeholder="请选择" style={{ width: '100%' }} mode={formItem.selectMode} {...formItem.props}>
+              <Select
+                placeholder="请选择"
+                style={{ width: '100%' }}
+                {...formItem.props}
+              >
                 {formItem.datasource &&
                   formItem.datasource.map((item: SelectComponentDatasourceModel) => (
                     <Option value={item.value} key={item.label}>{item.label}</Option>
@@ -67,13 +174,38 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )}
           </>
         )
+      case FORM_COMPONENT.DynamicFieldSet:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
+            },
+            )(
+              <InputNumberWithUnit {...formItem.props} />
+            )}
+          </>
+        )
+      // style={{
+      //   margin: '8px 0',
+      //   display: getFieldValue('public') === '2' ? 'block' : 'none',
+      // }}
       case FORM_COMPONENT.InputNumber:
         return (
           <>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
             },
-            )(<InputNumber style={{ width: '100%' }} />)}
+            )(
+              <InputNumberWithUnit {...formItem.props} />
+            )}
           </>
         )
       case FORM_COMPONENT.TextArea:
@@ -81,12 +213,17 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           <>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
             },
             )(
               <TextArea
                 style={{ minHeight: 32 }}
                 placeholder="请输入"
                 rows={4}
+                {...formItem.props}
               />
             )}
           </>

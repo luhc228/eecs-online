@@ -11,6 +11,8 @@ export enum FORM_COMPONENT {
   Select = 'Select',
   InputNumber = 'InputNumber',
   TextArea = 'TextArea',
+  Upload = 'Upload',
+  DynamicFieldSet = 'DynamicFieldSet'
 }
 
 export enum FORM_LAYOUTS {

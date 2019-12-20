@@ -16,24 +16,28 @@ interface CourseEditProps {
   location: Location
 }
 
-
 const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location }) => {
   const formConfig: FormItemComponentProps[] = [
     {
       label: '课程名称',
       name: 'courseName',
       component: FORM_COMPONENT.Input,
+      required: true,
     },
     {
       label: '上课地点',
       name: 'location',
       component: FORM_COMPONENT.Input,
+      required: true,
     },
     {
       label: '上课班级',
       name: 'classNames',
       component: FORM_COMPONENT.Select,
-      selectMode: 'multiple',
+      required: true,
+      props: {
+        selectMode: 'multiple',
+      },
       // TODO: from backend api
       datasource: [
         {
