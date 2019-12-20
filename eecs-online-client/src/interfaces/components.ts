@@ -37,10 +37,12 @@ export interface ButtonProps {
   onClick: () => void;
 }
 
-export interface TableListPaginationProps {
-  total: number;
+export interface PaginationProps {
   pageSize: number;
   page: number;
+}
+export interface TableListPaginationProps extends PaginationProps {
+  total: number;
 }
 
 export interface SelectComponentDatasourceModel {

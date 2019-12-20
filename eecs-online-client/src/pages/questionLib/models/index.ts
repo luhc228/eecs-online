@@ -2,6 +2,7 @@ import { EffectsCommandMap } from 'dva';
 import { TableData, FilterFieldsModel, TablePaginationModel } from '@/interfaces/questionLib';
 import * as questionLibService from '../services';
 import { QUESTION_TYPE } from '@/enums';
+import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
 
 export interface StateType {
   data: TableData;
@@ -13,12 +14,7 @@ const questionLibModel = {
   namespace: 'questionLib',
 
   state: {
-    data: {
-      list: [],
-      total: 0,
-      page: 1,
-      pageSize: 8,
-    },
+    data: DEFAULT_TABLE_PAGINATION_STATE,
     filterFields: {
       content: undefined
     },

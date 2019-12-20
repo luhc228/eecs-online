@@ -1,4 +1,4 @@
-import { TableListPaginationProps } from './components';
+import { TableListPaginationProps, PaginationProps } from './components';
 import { QUESTION_TYPE } from '@/enums';
 
 export interface FilterFieldsModel {
@@ -27,9 +27,7 @@ export interface TableData extends TableListPaginationProps {
 }
 
 // 分页查询参数
-export interface TablePaginationModel {
+export interface TablePaginationModel extends FilterFieldsModel, PaginationProps {
   // 题目类型
   questionType: number;
-  // 题目内容
-  content?: string;
 }

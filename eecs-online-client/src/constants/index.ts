@@ -55,3 +55,9 @@ export const INLINE_FORM_LAYOUT = Object.freeze({
   md: 8,
   sm: 24,
 });
+
+export const DEFAULT_TABLE_PAGINATION_STATE = Object.freeze({
+  list: [],
+  total: 0,
+  ...PAGINATION_CONFIGS,
+})

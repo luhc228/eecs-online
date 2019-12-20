@@ -139,7 +139,7 @@ const Course: React.FC<CourseProps> = props => {
   )
 }
 
-const mapStaetToProps = ({
+const mapStateToProps = ({
   course,
   loading,
 }: {
@@ -154,4 +154,4 @@ const mapStaetToProps = ({
   fetchCoursePaginationLoading: loading.effects['course/fetchCoursePagination'],
 })
 
-export default connect(mapStaetToProps)(Course);
+export default connect(mapStateToProps)(Course);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Button } from 'antd';
+import { Button } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { CardTabListType } from 'antd/es/card';
@@ -8,10 +8,7 @@ import { UmiComponentProps } from '@/interfaces/components';
 import LibFilter from './components/LibFilter';
 import LibTable from './components/LibTable';
 import { StateType } from './models';
-import styles from './index.less';
 import CustomCard from '@/components/CustomCard';
-
-const { TabPane } = Tabs;
 
 interface QuestionEditProps extends UmiComponentProps {
   questionLib: StateType

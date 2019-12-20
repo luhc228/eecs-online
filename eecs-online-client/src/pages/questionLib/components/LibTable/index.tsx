@@ -79,7 +79,7 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
   return (
     <CustomTable
       loading={loading}
-      rowKey="id"
+      rowKey={(record: questionListItem) => record.id}
       columns={columns}
       dataSource={dataSource}
       onPagination={(current: number) => {
