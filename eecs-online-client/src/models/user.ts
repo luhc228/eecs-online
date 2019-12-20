@@ -15,7 +15,7 @@ export interface CurrentUserModels {
   // 学院
   college?: string,
   // 用户类型
-  userType?: USER_TYPE.Student | USER_TYPE.Teacher,
+  userType: USER_TYPE,
 }
 
 export type Effect = (
