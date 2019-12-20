@@ -41,8 +41,8 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
 
-  const handleDynamicFieldSetRemove = (k: string) => {
-    const keys = form.getFieldValue('keys');
+  const handleDynamicFieldSetRemove = (k: string, fieldName: string) => {
+    const keys = form.getFieldValue(fieldName);
     // need at least one input
     if (keys.length === 1) {
       return;
@@ -237,10 +237,10 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+      if (err) {
+        return;
       }
-
+      console.log('Received values of form: ', values);
       onSubmit(values);
     });
   }
