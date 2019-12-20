@@ -7,10 +7,9 @@ export interface DraggerUploadProps {
   name: string;
   multiple: boolean;
   action: string;
-  onChange: Function;
 }
 
-const DraggerUpload: React.FC<{}> = (props) => {
+const DraggerUpload: React.FC<DraggerUploadProps> = (props) => {
   const [loading, setLoading] = useState(false);
   const onChange = (info: any) => {
     const { status } = info.file;

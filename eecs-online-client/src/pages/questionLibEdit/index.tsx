@@ -4,6 +4,7 @@ import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { questionTypeMap } from '../questionLib';
+import appConfig from '@/appConfig';
 
 const QuestionLibEdit: React.FC<{}> = () => {
   const handleQuestionTypeChange = () => {
@@ -78,6 +79,11 @@ const QuestionLibEdit: React.FC<{}> = () => {
       name: 'contentImage',
       component: FORM_COMPONENT.Upload,
       required: false,
+      props: {
+        name: 'file',
+        multiple: true,
+        action: appConfig.uploadUrl,
+      }
     },
     {
       label: '题目分值',

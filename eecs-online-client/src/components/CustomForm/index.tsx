@@ -10,6 +10,7 @@ import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interf
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
 import styles from './index.less';
 import InputNumberWithUnit from '../InputNumberWithUnit';
+import ImageUpload from '../upload/ImageUpload';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -189,10 +190,21 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )}
           </>
         )
-      // style={{
-      //   margin: '8px 0',
-      //   display: getFieldValue('public') === '2' ? 'block' : 'none',
-      // }}
+      case FORM_COMPONENT.Upload:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请上传'
+              }],
+            },
+            )(
+              <ImageUpload {...formItem.props} />
+            )}
+          </>
+        )
       case FORM_COMPONENT.InputNumber:
         return (
           <>

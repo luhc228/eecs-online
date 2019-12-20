@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Upload, Icon, message, Spin, Button } from 'antd';
 
-export interface DraggerUploadProps {
+export interface ImageUploadProps {
   name: string;
   multiple: boolean;
   action: string;
-  onChange: Function;
 }
 
-const ImageUpload: React.FC<{}> = (props) => {
+const ImageUpload: React.FC<ImageUploadProps> = (props) => {
   const [loading, setLoading] = useState(false);
   const onChange = (info: any) => {
     const { status } = info.file;
