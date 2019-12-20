@@ -1,45 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
-import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
+import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { questionTypeMap } from '../questionLib';
 import appConfig from '@/appConfig';
 
 const QuestionLibEdit: React.FC<{}> = () => {
-  const handleQuestionTypeChange = () => {
-    console.log('ff');
-  };
+  const [isOptionsDisplay, setIsOptionsDisplay] = useState(false);
 
-  const optFormConfig: FormItemComponentProps[] = [
-    {
-      label: '选项A',
-      name: 'optionA',
-      component: FORM_COMPONENT.Input,
-      required: false,
-    },
-    {
-      label: '选项B',
-      name: 'optionB',
-      component: FORM_COMPONENT.Input,
-      required: false,
-    },
-    {
-      label: '选项C',
-      name: 'optionC',
-      component: FORM_COMPONENT.Input,
-      required: false,
-    },
-    {
-      label: '选项D',
-      name: 'optionD',
-      component: FORM_COMPONENT.Input,
-      required: false,
-    }
-  ];
-
-  const formConfig: FormItemComponentProps[] = [
-    {
+  const getFormConfig = (optionsDisplay: boolean): FormItemComponentProps[] => {
+    const basicFormConfig = [{
       label: '所属课程',
       name: 'courseId',
       component: FORM_COMPONENT.Select,
@@ -70,9 +41,13 @@ const QuestionLibEdit: React.FC<{}> = () => {
           label,
         }
       }),
-      props: {
-        onChange: handleQuestionTypeChange,
-      }
+    },
+    {
+      label: '选项',
+      name: 'options',
+      component: FORM_COMPONENT.DynamicFieldSet,
+      required: true,
+      initialValue: [],
     },
     {
       label: '题目图片',
@@ -93,17 +68,27 @@ const QuestionLibEdit: React.FC<{}> = () => {
       props: {
         unit: '分'
       }
-    },
-  ]
+    }];
+    if (optionsDisplay) {
+      return basicFormConfig;
+    }
+    basicFormConfig.splice(3, 1);
+    return basicFormConfig;
+  };
 
-  const handleFieldsChange = () => {
-
+  const handleFieldsChange = (values: any) => {
+    const { questionType } = values;
+    if (+questionType === QUESTION_TYPE.Single || +questionType === QUESTION_TYPE.Multiple) {
+      setIsOptionsDisplay(true);
+    } else {
+      setIsOptionsDisplay(false);
+    }
   }
 
   const handleSubmit = () => {
 
   }
-
+  console.log(isOptionsDisplay);
   return (
     <CustomForm
       layout="horizontal"
@@ -111,7 +96,7 @@ const QuestionLibEdit: React.FC<{}> = () => {
       formTypes={CUSTOM_FORM_TYPES.OneColumn}
       loading={false}
       onFieldsChange={handleFieldsChange}
-      formConfig={formConfig}
+      formConfig={getFormConfig(isOptionsDisplay)}
       onSubmit={handleSubmit}
     />
   )

@@ -52,7 +52,7 @@ export interface SelectComponentDatasourceModel {
 export interface FormItemComponentProps {
   label?: string,
   name: string,
-  initialValue?: string,
+  initialValue?: any,
   required: boolean;
   message?: string;
   component: FORM_COMPONENT,

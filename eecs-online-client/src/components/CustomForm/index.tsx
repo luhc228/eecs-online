@@ -2,7 +2,7 @@
  * CustomForm component including filter/common form
  * Filter component usually in the header of the table or the page.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Row, Col, Input, Select, Button, Icon } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
@@ -25,11 +25,30 @@ interface CustomFormProps extends FormComponentProps {
   onSubmit: (value: object) => void;
 }
 
-const fieldSetId = 1;
+const DynamicFieldSetFormItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 },
+  },
+};
+
+const formItemLayoutWithOutLabel = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 20, offset: 4 },
+  },
+};
+
 
 const CustomForm: React.FC<CustomFormProps> = props => {
   const { formTypes, form, formConfig, onSubmit, loading, layout, children } = props;
   const { getFieldDecorator, getFieldValue } = form;
+
+  const [fieldSetId, changeFieldSetId] = useState(1);
 
   let formItemLayout: any = null;
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
@@ -42,8 +61,8 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
 
-  const handleDynamicFieldSetRemove = (k: string, fieldName: string) => {
-    const keys = form.getFieldValue(fieldName);
+  const handleDynamicFieldSetRemove = (k: string) => {
+    const keys = form.getFieldValue('keys');
     // need at least one input
     if (keys.length === 1) {
       return;
@@ -57,45 +76,29 @@ const CustomForm: React.FC<CustomFormProps> = props => {
    * 动态增加表单项
    * @param fieldName 字段名称
    */
-  const handleDynamicFieldSetAdd = (fieldName: string) => {
-    const keys = form.getFieldValue(fieldName);
-    const id = fieldSetId + 1;
-    const nextKeys = keys.concat(id);
+  const handleDynamicFieldSetAdd = () => {
+    const keys = form.getFieldValue('keys');
+    const newFieldSetId = fieldSetId + 1;
+    changeFieldSetId(newFieldSetId)
+    const nextKeys = keys.concat(fieldSetId);
 
     form.setFieldsValue({
       keys: nextKeys,
     });
   }
 
-  const renderDynamicFieldSetFormItems = (fieldName: string) => {
-    const keys = getFieldDecorator(fieldName);
-
-    const DynamicFieldSetFormItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 20 },
-      },
-    };
-
-    const formItemLayoutWithOutLabel = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 20, offset: 4 },
-      },
-    };
+  const renderDynamicFieldSetFormItems = () => {
+    getFieldDecorator('keys', { initialValue: [{}] });
+    const keys = getFieldValue('keys');
 
     const formItems = keys.map((k: string, index: number) => (
       <Form.Item
-        {...(index === 0 ? DynamicFieldSetFormItemLayout : formItemLayoutWithOutLabel)}
-        label={index === 0 ? 'Passengers' : ''}
+        {...formItemLayoutWithOutLabel}
+        label=""
         required={false}
         key={k}
       >
-        {getFieldDecorator(`names[${k}]`, {
+        {getFieldDecorator(`field[${k}]`, {
           validateTrigger: ['onChange', 'onBlur'],
           rules: [
             {
@@ -120,17 +123,16 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 
   const renderDynamicFieldSet = () => (
     <>
-      {renderDynamicFieldSetFormItems('1')}
+      {renderDynamicFieldSetFormItems()}
       <Form.Item>
         <Button
           type="dashed"
-          onClick={() => handleDynamicFieldSetAdd('11')}
-          style={{ width: '60%' }}>
+          onClick={() => handleDynamicFieldSetAdd()}
+          style={{ width: '100%' }}>
           <Icon type="plus" />添加
         </Button>
       </Form.Item>
     </>
-
   )
 
   const renderForm = (formItem: FormItemComponentProps) => {
@@ -164,7 +166,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             })(
               <Select
                 placeholder="请选择"
-                style={{ width: '100%' }}
                 {...formItem.props}
               >
                 {formItem.datasource &&
@@ -186,7 +187,9 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <InputNumberWithUnit {...formItem.props} />
+              <>
+                {renderDynamicFieldSet()}
+              </>
             )}
           </>
         )
@@ -195,9 +198,10 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           <>
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
+              valuePropName: 'fileList',
               rules: [{
                 required: formItem.required,
-                message: formItem.message ? formItem.message : '请上传'
+                message: formItem.message ? formItem.message : '请上传',
               }],
             },
             )(

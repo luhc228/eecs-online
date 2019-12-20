@@ -1,5 +1,9 @@
 import { EffectsCommandMap } from 'dva';
 
+export interface StateType {
+
+}
+
 const questionLibEdit = {
   namespace: 'questionLibEdit',
 
