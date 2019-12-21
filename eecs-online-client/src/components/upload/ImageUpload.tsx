@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Upload, Icon, message, Spin, Button } from 'antd';
+import appConfig from '@/appConfig';
 
 export interface ImageUploadProps {
-  name: string;
-  multiple: boolean;
-  action: string;
+  name?: string;
+  multiple?: boolean;
+  action?: string;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = (props) => {
@@ -32,6 +33,12 @@ const ImageUpload: React.FC<ImageUploadProps> = (props) => {
       </Upload>
     </Spin>
   )
+}
+
+ImageUpload.defaultProps = {
+  name: 'file',
+  multiple: false,
+  action: appConfig.uploadUrl,
 }
 
 export default ImageUpload;

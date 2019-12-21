@@ -61,3 +61,14 @@ export const DEFAULT_TABLE_PAGINATION_STATE = Object.freeze({
   total: 0,
   ...PAGINATION_CONFIGS,
 })
+
+export const DynamicFieldSetFormItemLayout = Object.freeze({
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 },
+  },
+});

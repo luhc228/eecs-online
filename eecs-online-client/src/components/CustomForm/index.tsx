@@ -25,17 +25,6 @@ interface CustomFormProps extends FormComponentProps {
   onSubmit: (value: object) => void;
 }
 
-const DynamicFieldSetFormItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 4 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 20 },
-  },
-};
-
 const formItemLayoutWithOutLabel = {
   wrapperCol: {
     xs: { span: 24, offset: 0 },
@@ -91,7 +80,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     getFieldDecorator('keys', { initialValue: [{}] });
     const keys = getFieldValue('keys');
 
-    const formItems = keys.map((k: string, index: number) => (
+    const formItems = keys.map((k: string) => (
       <Form.Item
         {...formItemLayoutWithOutLabel}
         label=""
