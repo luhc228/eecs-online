@@ -3,13 +3,18 @@ import { Avatar, Icon, Menu } from 'antd';
 import { connect } from 'dva';
 import { ClickParam } from 'antd/es/menu';
 import { Dispatch } from 'redux';
+import router from 'umi/router';
 import HeaderDropdown from '@/components/CustomDropdown';
 import styles from './index.less';
 import { ConnectState } from '@/models/connect';
+<<<<<<< HEAD
 import { CurrentUserModels, usernameToFormFieldName } from '@/models/user';
 import studentAvatar from '@/assets/student.png';
 import teacherAvatar from '@/assets/teacher.png';
 import userAvatar from '@/assets/user.png';
+=======
+import { CurrentUserModels } from '@/models/user';
+>>>>>>> mistakes about register and accountsetting
 import { USER_TYPE } from '@/enums';
 
 const avatar = {
@@ -33,6 +38,25 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
         });
       }
     }
+
+    if (key === 'userInfo') {
+      const { dispatch, currentUser } = props;
+      if (dispatch) {
+        if (currentUser) {
+          if (currentUser.userType === USER_TYPE.Student) {
+            dispatch({
+              type: 'student/userInfo',
+            });
+            router.push('/student/userInfo');
+          } else {
+            dispatch({
+              type: 'teacher/userInfo',
+            })
+            router.push('/teacher/userInfo');
+          }
+      }
+      }
+    }
   };
 
   const menuHeaderDropdown = (
@@ -40,6 +64,10 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
       <Menu.Item key="logout">
         <Icon type="logout" />
         <span>退出登录</span>
+      </Menu.Item>
+      <Menu.Item key="userInfo">
+        <Icon type="userInfo"/>
+        <span>个人信息</span>
       </Menu.Item>
     </Menu>
   );

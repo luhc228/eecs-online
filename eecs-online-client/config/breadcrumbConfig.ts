@@ -1,5 +1,5 @@
 interface breadcrumbConfigProps {
-  [k: string]: string
+  [k: string]: string;
 }
 
 const teacherBreadcrumbConfig: breadcrumbConfigProps = {
@@ -16,17 +16,19 @@ const teacherBreadcrumbConfig: breadcrumbConfigProps = {
   '/teacher/homework/create': '创建作业',
   '/teacher/homework/edit': '编辑作业',
   '/teacher/homework-completion': '作业完成情况',
-}
+  '/teacher/userInfo': '个人信息',
+};
 
 const studentBreadcrumbConfig: breadcrumbConfigProps = {
   '/student/homework': '作业信息',
   '/student/homework/edit': '作业编辑',
   '/student/homework/detail': '作业完成情况',
-}
+  '/student/userInfo': '个人信息',
+};
 
 const breadcrumbConfig = {
   ...teacherBreadcrumbConfig,
-  ...studentBreadcrumbConfig
+  ...studentBreadcrumbConfig,
 };
 
 export default breadcrumbConfig;
@@ -34,4 +36,4 @@ export default breadcrumbConfig;
 /**
  * 不可点击的面包屑
  */
-export const excludePaths = ['/teacher', '/student']
+export const excludePaths = ['/teacher', '/student'];

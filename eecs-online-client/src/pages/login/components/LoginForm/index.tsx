@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
+import router from 'umi/router';
 import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 import { USER_TYPE } from '@/enums';
@@ -14,25 +15,44 @@ interface LoginFormProps extends FormComponentProps {
   loading: boolean;
 }
 
-const LoginForm: React.SFC<LoginFormProps> = ({
-  form,
-  userType,
-  loading,
-  dispatch,
-}) => {
+const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatch }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
       if (err) {
-        return;
+
+      } else {
+        dispatch({
+          type: 'login/userLogin',
+          payload: { userType, values },
+        });
       }
+<<<<<<< HEAD
       delete values.remember
 
       dispatch({
         type: 'login/userLogin',
         payload: { userType, values },
       })
+=======
+>>>>>>> mistakes about register and accountsetting
     });
+  };
+
+  const handleRegister = () => {
+    dispatch({
+      type: 'login/userRegister',
+      payload: {},
+    });
+    router.push('/login/register');
+  };
+
+  const handleFogotPassword = () => {
+    dispatch({
+      type: 'login/userFogotPassword',
+      payload: {},
+    });
+    router.push('/login/forgotPassword');
   };
 
   const { getFieldDecorator } = form;
@@ -65,20 +85,26 @@ const LoginForm: React.SFC<LoginFormProps> = ({
           valuePropName: 'checked',
           initialValue: true,
         })(<Checkbox>Remember me</Checkbox>)}
+        <a className={styles.fogotPassword} onClick={handleFogotPassword}>
+          忘记密码
+        </a>
         <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
           登录
         </Button>
+        <a className={styles.register} onClick={handleRegister}>
+          用户注册
+        </a>
       </Form.Item>
     </Form>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state: any) => {
   const { userType } = state.login;
   return {
     userType,
     loading: state.loading.models.login,
-  }
-}
+  };
+};
 
 export default Form.create({ name: 'normal_login' })(connect(mapStateToProps)(LoginForm));
