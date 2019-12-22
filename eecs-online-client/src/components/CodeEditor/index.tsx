@@ -21,7 +21,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
     }
   }
   return (
-    <div style={{ display: 'block' }}>
+    <div style={{ display: 'block',  }}>
       <AceEditor
         mode="python"
         theme="github"
