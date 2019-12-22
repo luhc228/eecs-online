@@ -3,7 +3,7 @@
  * Filter component usually in the header of the table or the page.
  */
 import React, { useState } from 'react';
-import { Form, Row, Col, Input, Select, Button, Icon } from 'antd';
+import { Form, Row, Col, Input, Select, Button, Icon, Radio, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -19,7 +19,7 @@ interface CustomFormProps extends FormComponentProps {
   layout?: 'horizontal' | 'inline' | 'vertical';
   formConfig: FormItemComponentProps[];
   values: object;
-  loading: boolean;
+  loading?: boolean;
   children?: React.ReactNode;
   onFieldsChange: (allFields: object) => void;
   onSubmit: (value: object) => void;
@@ -43,10 +43,10 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
     formItemLayout = INLINE_FORM_LAYOUT;
   }
-  if (formTypes === CUSTOM_FORM_TYPES.OneColumn) {
+  if (formTypes === CUSTOM_FORM_TYPES.OneColumn && layout !== 'vertical') {
     formItemLayout = ONE_COLUMN_FORM_LAYOUT;
   }
-  if (formTypes === CUSTOM_FORM_TYPES.TwoColumn) {
+  if (formTypes === CUSTOM_FORM_TYPES.TwoColumn && layout !== 'vertical') {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
 
@@ -63,7 +63,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 
   /**
    * 动态增加表单项
-   * @param fieldName 字段名称
    */
   const handleDynamicFieldSetAdd = () => {
     const keys = form.getFieldValue('keys');
@@ -233,6 +232,30 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )}
           </>
         )
+      case FORM_COMPONENT.Radio:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
+            },
+            )(
+              <Radio.Group {...formItem.props}>
+                {formItem.datasource &&
+                  formItem.datasource.map((item: SelectComponentDatasourceModel) => (
+                    <Radio style={{
+                      display: 'block',
+                      height: '30px',
+                      lineHeight: '30px',
+                    }} value={item.value} key={item.label}>{item.label}</Radio>
+                  ))}
+              </Radio.Group>
+            )}
+          </>
+        )
       default:
         return null;
     }
@@ -268,12 +291,17 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 
   const commonFormButtons = (
     <span className={styles.commonButtons}>
-      <Button type="primary" htmlType="submit" loading={loading}>
-        保存
-     </Button>
-      <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
+      <Button onClick={handleFormReset}>
         取消
     </Button>
+      <Button
+        style={{ marginLeft: 15 }}
+        type="primary"
+        htmlType="submit"
+        loading={loading}>
+        保存
+     </Button>
+
     </span>
   )
 
@@ -328,6 +356,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 
 CustomForm.defaultProps = {
   layout: 'inline',
+  loading: false,
 }
 
 export default Form.create<CustomFormProps>({

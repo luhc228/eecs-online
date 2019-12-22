@@ -88,7 +88,7 @@ const QuestionLibEdit: React.FC<{}> = () => {
   const handleSubmit = () => {
 
   }
-  console.log(isOptionsDisplay);
+
   return (
     <CustomForm
       layout="horizontal"
