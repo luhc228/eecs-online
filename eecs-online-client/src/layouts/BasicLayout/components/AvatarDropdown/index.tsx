@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import HeaderDropdown from '@/components/CustomDropdown';
 import styles from './index.less';
 import { ConnectState } from '@/models/connect';
-import { CurrentUserModels } from '@/models/user';
+import { CurrentUserModels, usernameToFormFieldName } from '@/models/user';
 import studentAvatar from '@/assets/student.png';
 import teacherAvatar from '@/assets/teacher.png';
 import userAvatar from '@/assets/user.png';
@@ -44,6 +44,9 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
     </Menu>
   );
   const { currentUser } = props;
+
+  const userIdName: any = currentUser ? usernameToFormFieldName[USER_TYPE[currentUser.userType]] : 'id';
+
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
@@ -56,12 +59,19 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
         >
           {currentUser && currentUser.name && (typeof currentUser.name) === 'string' && currentUser.name[0]}
         </Avatar>
-        <span className={styles.name}>{currentUser && currentUser.id}</span>
+        <span className={styles.name}>{currentUser && currentUser[userIdName]}</span>
       </span>
     </HeaderDropdown>
   )
 }
 
-export default connect(({ user }: ConnectState) => ({
-  currentUser: user.currentUser,
-}))(AvatarDropdown);
+const mapStateToProps = ({
+  user
+}: ConnectState) => {
+  console.log(user);
+  return {
+    currentUser: user.currentUser,
+  }
+};
+
+export default connect(mapStateToProps)(AvatarDropdown);

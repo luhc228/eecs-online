@@ -6,16 +6,12 @@ import { FormComponentProps } from 'antd/es/form';
 import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 import { USER_TYPE } from '@/enums';
+import { usernameToFormFieldName } from '@/models/user';
 
 interface LoginFormProps extends FormComponentProps {
   userType: number;
   dispatch: Dispatch<any>;
   loading: boolean;
-}
-
-export const usernameToFormFieldName: { [key: string]: string } = {
-  Student: 'studentId',
-  Teacher: 'teacherId',
 }
 
 const LoginForm: React.SFC<LoginFormProps> = ({

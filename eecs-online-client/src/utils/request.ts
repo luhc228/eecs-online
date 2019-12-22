@@ -4,7 +4,7 @@ import appConfig from '@/appConfig';
 import userUtils from '@/utils/user-utils';
 import showNotification from './showNotification';
 import { NOTIFICATION_TYPE, USER_TYPE } from '@/enums';
-import { usernameToFormFieldName } from '@/pages/login/components/LoginForm';
+import { usernameToFormFieldName } from '@/models/user';
 
 const codeMessage: { [key: string]: string } = {
   200: '服务器成功返回请求的数据。',
@@ -78,10 +78,11 @@ request.use(async (ctx, next) => {
   const { req } = ctx;
   const { options } = req;
 
+  const userInfo = userUtils.getUserInfo();
+
   if (userUtils.isLogin) {
     if (options.method === 'post') {
       if (options.data) {
-        const userInfo = userUtils.getUserInfo();
         if (userInfo.userType) {
           const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
           const newData = { ...options.data, [userIdName]: userInfo[userIdName] }
@@ -97,7 +98,6 @@ request.use(async (ctx, next) => {
 
     if (options.method === 'get') {
       if (options.params) {
-        const userInfo = userUtils.getUserInfo();
         if (userInfo.userType) {
           const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
           const newParams = { ...options.params, [userIdName]: userInfo[userIdName] }

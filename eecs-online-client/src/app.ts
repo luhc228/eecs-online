@@ -7,9 +7,12 @@ const persistConfig = {
   storage,
   // 不存储于localStorage的Redux状态
   blacklist: [
-    'router',
-    'questionLib'
+    // 'router',
+    // 'questionLib'
   ],
+  whitelist: [
+    
+  ]
 };
 
 const persistEnhancer = () => (createStore: any) => (reducer: Reducer, initialState: any, enhancer: any) => {
