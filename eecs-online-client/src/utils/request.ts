@@ -3,7 +3,8 @@ import { notification } from 'antd';
 import appConfig from '@/appConfig';
 import userUtils from '@/utils/user-utils';
 import showNotification from './showNotification';
-import { NOTIFICATION_TYPE } from '@/enums';
+import { NOTIFICATION_TYPE, USER_TYPE } from '@/enums';
+import { usernameToFormFieldName } from '@/pages/login/components/LoginForm';
 
 const codeMessage: { [key: string]: string } = {
   200: '服务器成功返回请求的数据。',
@@ -66,8 +67,57 @@ request.interceptors.request.use((url: string, options: any) => {
 
 // response 拦截器
 request.interceptors.response.use((response) => {
-  showNotification(response.status, codeMessage[response.status], NOTIFICATION_TYPE.error);
+  if (response.status !== 200) {
+    showNotification(response.status, codeMessage[response.status], NOTIFICATION_TYPE.error);
+  }
   return response;
 });
+
+// 使用中间件对请求前后做处理
+request.use(async (ctx, next) => {
+  const { req } = ctx;
+  const { options } = req;
+
+  if (userUtils.isLogin) {
+    if (options.method === 'post') {
+      if (options.data) {
+        const userInfo = userUtils.getUserInfo();
+        if (userInfo.userType) {
+          const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
+          const newData = { ...options.data, [userIdName]: userInfo[userIdName] }
+          const newOptions = { ...options, data: newData }
+
+          ctx.req.options = {
+            ...newOptions,
+          };
+        }
+      }
+    }
+
+
+    if (options.method === 'get') {
+      if (options.params) {
+        const userInfo = userUtils.getUserInfo();
+        if (userInfo.userType) {
+          const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
+          const newParams = { ...options.params, [userIdName]: userInfo[userIdName] }
+          const newOptions = { ...options, params: newParams }
+
+          ctx.req.options = {
+            ...newOptions,
+          };
+        }
+      }
+    }
+  }
+
+  await next();
+
+  const { res } = ctx;
+  const { success = false, message = '请求失败' } = res;
+  if (!success) {
+    showNotification('请求错误', message, NOTIFICATION_TYPE.error);
+  }
+}, { global: true })
 
 export default request;

@@ -12,7 +12,8 @@ interface LoginFormProps extends FormComponentProps {
   dispatch: Dispatch<any>;
   loading: boolean;
 }
-const usernameToFormFieldName: { [key: string]: string } = {
+
+export const usernameToFormFieldName: { [key: string]: string } = {
   Student: 'studentId',
   Teacher: 'teacherId',
 }

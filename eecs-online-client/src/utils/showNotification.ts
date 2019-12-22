@@ -29,8 +29,6 @@ const showNotification = (message: any, description: string, type: NOTIFICATION_
     default:
       notification.info(config);
   }
-
-  notification.error(config);
 }
 
 export default showNotification;
