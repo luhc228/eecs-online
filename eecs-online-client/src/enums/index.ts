@@ -23,6 +23,8 @@ export enum FORM_COMPONENT {
   Radio = 'Radio',
   // 多选框
   Checkbox = 'Checkbox',
+  // 代码组件
+  CodeEditor = 'CodeEditor',
 }
 
 export enum FORM_LAYOUTS {

@@ -11,6 +11,7 @@ import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } f
 import styles from './index.less';
 import InputNumberWithUnit from '../InputNumberWithUnit';
 import ImageUpload from '../upload/ImageUpload';
+import CodeEditor from '../CodeEditor';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -256,6 +257,39 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )}
           </>
         )
+      case FORM_COMPONENT.Checkbox:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
+            },
+            )(
+              <Checkbox.Group
+                className={styles.checkboxInRow}
+                options={formItem.datasource}
+              />
+            )}
+          </>
+        )
+      case FORM_COMPONENT.CodeEditor:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请输入'
+              }],
+            },
+            )(
+              <CodeEditor />
+            )}
+          </>
+        )
       default:
         return null;
     }
@@ -301,7 +335,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
         loading={loading}>
         保存
      </Button>
-
     </span>
   )
 
