@@ -1,4 +1,5 @@
 import { Reducer } from 'redux';
+import router from 'umi/router';
 import { USER_TYPE } from '@/enums';
 import { Effect } from '@/interfaces/reduxState';
 import * as service from '../services';
@@ -95,6 +96,8 @@ const Model: ModelType = {
           window.location.href = redirect;
         }
       }
+      const pathnamePrefix = userTypeName;
+      yield put(router.replace(redirect || `/${pathnamePrefix}`));
     },
   },
 };
