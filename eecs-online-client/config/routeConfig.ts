@@ -30,7 +30,7 @@ export default [
     routes: [
       { path: '/student/homework', component: './studentHomework' },
       { path: '/student/homework/edit', component: './studentHomeworkEdit' },
-      { path: '/student/homework-completion', component: './studentHomeworkCompletion' },
+      { path: '/student/homework/detail', component: './studentHomeworkDetail' },
       { path: '/student', redirect: '/student/homework' },
     ],
   },

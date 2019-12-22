@@ -3,7 +3,7 @@ import { HOMEWORK_STATUS } from '@/enums';
 
 export interface FilterFieldsModel {
   // 作业状态
-  status?: HOMEWORK_STATUS;
+  status: HOMEWORK_STATUS;
   // 课程id
   courseId?: string;
 }

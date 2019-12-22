@@ -16,7 +16,7 @@ const studentHomeworkModel = {
     data: DEFAULT_TABLE_PAGINATION_STATE,
     filterFields: {
       // 作业状态
-      status: '1',
+      status: HOMEWORK_STATUS.Undone,
       // 课程id
       courseId: undefined,
     },

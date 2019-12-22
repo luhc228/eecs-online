@@ -46,7 +46,7 @@ export interface TableListPaginationProps extends PaginationProps {
 }
 
 export interface SelectComponentDatasourceModel {
-  value: string,
+  value: string | number,
   label: string,
 }
 

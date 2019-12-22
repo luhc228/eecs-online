@@ -21,7 +21,7 @@ const teacherBreadcrumbConfig: breadcrumbConfigProps = {
 const studentBreadcrumbConfig: breadcrumbConfigProps = {
   '/student/homework': '作业信息',
   '/student/homework/edit': '作业编辑',
-  '/student/homework-completion': '作业完成情况',
+  '/student/homework/detail': '作业完成情况',
 }
 
 const breadcrumbConfig = {
