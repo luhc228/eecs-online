@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Icon, Radio, Button } from 'antd';
+import { Form, Input, Icon, Button } from 'antd';
 import { connect } from 'dva';
 import { FormComponentProps } from 'antd/es/form';
 import { Dispatch } from 'redux';
@@ -28,7 +28,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
     });
   };
 
-  const handleConfirmBlur = e => {
+  const handleConfirmBlur = (e) => {
     const { value } = e.target;
     setconfirmDirty(confirmDirty || !!value);
   };
