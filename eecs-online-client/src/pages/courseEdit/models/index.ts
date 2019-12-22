@@ -9,7 +9,6 @@ export interface StateType {
   when: boolean,
 }
 
-
 export interface ModelType {
   namespace: string;
   state: StateType;
