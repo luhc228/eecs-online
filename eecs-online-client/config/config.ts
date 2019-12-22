@@ -1,5 +1,6 @@
 import { IConfig } from 'umi-types';
 import theme from './theme';
+
 // ref: https://umijs.org/config/
 import routeConfig from './routeConfig';
 
@@ -31,6 +32,16 @@ const config: IConfig = {
   ],
   // antd basic styles configs
   theme,
+  // build outputpath
   outputPath: './build',
+  // proxy
+  proxy: {
+    '/api': {
+      target: 'http://47.97.215.154:8000/',
+      changeOrigin: true,
+      enable: true,
+    }
+  }
 };
+
 export default config;

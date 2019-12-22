@@ -5,11 +5,16 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
+import { USER_TYPE } from '@/enums';
 
 interface LoginFormProps extends FormComponentProps {
   userType: number;
   dispatch: Dispatch<any>;
   loading: boolean;
+}
+const usernameToFormFieldName: { [key: string]: string } = {
+  Student: 'studentId',
+  Teacher: 'teacherId',
 }
 
 const LoginForm: React.SFC<LoginFormProps> = ({
@@ -24,6 +29,8 @@ const LoginForm: React.SFC<LoginFormProps> = ({
       if (err) {
         return;
       }
+      delete values.remember
+
       dispatch({
         type: 'login/userLogin',
         payload: { userType, values },
@@ -36,7 +43,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
   return (
     <Form onSubmit={handleSubmit} className={styles.loginForm}>
       <Form.Item>
-        {getFieldDecorator('username', {
+        {getFieldDecorator(usernameToFormFieldName[USER_TYPE[userType]], {
           rules: [{ required: true, message: '请输入' }],
         })(
           <Input
@@ -62,7 +69,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
           initialValue: true,
         })(<Checkbox>Remember me</Checkbox>)}
         <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
-          登　录
+          登录
         </Button>
       </Form.Item>
     </Form>

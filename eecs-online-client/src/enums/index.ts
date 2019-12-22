@@ -50,3 +50,13 @@ export enum HOMEWORK_STATUS {
   Done,
   Undone,
 }
+
+// 通知提示框 Notification API 类型
+export enum NOTIFICATION_TYPE {
+  error,
+  success,
+  info,
+  warning,
+  warn,
+  loading
+}

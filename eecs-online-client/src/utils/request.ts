@@ -2,8 +2,10 @@ import { extend } from 'umi-request';
 import { notification } from 'antd';
 import appConfig from '@/appConfig';
 import userUtils from '@/utils/user-utils';
+import showNotification from './showNotification';
+import { NOTIFICATION_TYPE } from '@/enums';
 
-const codeMessage: { [key: string]: any } = {
+const codeMessage: { [key: string]: string } = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
@@ -41,6 +43,7 @@ const errorHandler = (error: { response: Response }): Response => {
 };
 
 const host = process.env.NODE_ENV === 'production' ? appConfig.apiUrl : '';
+// const host = appConfig.apiUrl;
 
 // authorization
 // ref: https://github.com/umijs/umi-request/blob/master/README.md
@@ -62,9 +65,9 @@ request.interceptors.request.use((url: string, options: any) => {
 });
 
 // response 拦截器
-// request.interceptors.response.use((response: any, options: any) => {
-//   const contentType = response.headers.get('Content-Type');
-//   return response;
-// });
+request.interceptors.response.use((response) => {
+  showNotification(response.status, codeMessage[response.status], NOTIFICATION_TYPE.error);
+  return response;
+});
 
 export default request;

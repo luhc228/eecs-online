@@ -40,9 +40,10 @@ export default {
       }
 
       const response = yield call(userLogin, values);
+      console.log(response);
       const { accessToken, ...userInfo } = response.data;
-      userUtils.saveToken(accessToken);
-      userUtils.saveUserInfo(userInfo);
+      // userUtils.saveToken(accessToken);
+      // userUtils.saveUserInfo(userInfo);
 
       const urlParams = new URL(window.location.href);
       const params = getPageQuery();

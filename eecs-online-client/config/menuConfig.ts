@@ -69,13 +69,6 @@ const menuConfig: MenuListItemModel[] = [
     icon: 'icon-shouye1',
     userType: USER_TYPE.Student,
   },
-  {
-    key: 'student-homework-completion',
-    name: '作业完成情况',
-    link: '/student/homework-completion',
-    icon: 'icon-shouye1',
-    userType: USER_TYPE.Student,
-  },
 ]
 
 export default menuConfig;

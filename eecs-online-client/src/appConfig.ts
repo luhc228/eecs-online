@@ -1,4 +1,4 @@
 export default {
-  apiUrl: 'http://localhost:8000',
-  uploadUrl: 'http://localhost:8000/image/upload',
+  apiUrl: 'http://47.97.215.154:8000',
+  uploadUrl: 'http://47.97.215.154:8000/image/upload',
 }
