@@ -6,6 +6,13 @@ import { FormItemComponentProps } from '@/interfaces/components';
 const QuestionForm: React.FC<{}> = () => {
   const getFormConfig = (): FormItemComponentProps[] => [
     {
+      label: '【编程题】使用python实现反转二叉树',
+      name: 'program',
+      component: FORM_COMPONENT.CodeEditor,
+      // initialValue: '',
+      required: false,
+    },
+    {
       label: '【单选题】以下哪个是正确的选项',
       name: 'single',
       component: FORM_COMPONENT.Radio,
@@ -69,13 +76,7 @@ const QuestionForm: React.FC<{}> = () => {
         },
       ],
     },
-    {
-      label: '【编程题】使用python实现反转二叉树',
-      name: 'program',
-      component: FORM_COMPONENT.CodeEditor,
-      // initialValue: '',
-      required: false,
-    },
+
   ]
   const handleFieldsChange = () => {
 
