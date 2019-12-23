@@ -1,7 +1,9 @@
 import { Reducer } from 'redux';
+import { EffectsCommandMap } from 'dva';
 import { ClassTableData, ClassFieldsModel } from '@/interfaces/class';
 import * as classService from '../services';
 import { Effect } from '@/interfaces/reduxState';
+import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
 
 export interface StateType {
   data: ClassTableData;
@@ -24,16 +26,11 @@ export interface ModelType {
   };
 }
 
-const Model: ModelType = {
+const Model = {
   namespace: 'courseClass',
 
   state: {
-    data: {
-      list: [],
-      total: 0,
-      pageSize: 8,
-      page: 1,
-    },
+    data: DEFAULT_TABLE_PAGINATION_STATE,
     filterFields: {
       className: undefined,
       studentNum: undefined,
@@ -55,8 +52,11 @@ const Model: ModelType = {
      * 获取班级信息分页
      * 包括信息筛选
      */
-    *fetchClassPagination({ payload }: any, { call, put }: any) {
-      const response = yield call(classService.fetchClassPagination, payload);
+    *fetchClassPagination(
+      { payload }: { type: string; payload: { data: ClassTableData } },
+      { put, call }: EffectsCommandMap
+    ) {
+      const response = yield call(classService.fetchClassPagination, payload.data);
       const { data } = response;
       yield put({
         type: 'save',
@@ -69,18 +69,26 @@ const Model: ModelType = {
     /**
      * 删除某个班级
      */
-    *removeClass({ payload }: any, { call, put, select }: any) {
-      yield call(classService.removeClass, payload);
+    *removeClass(
+      { payload }: { type: string; payload: { classId: string } },
+      { put, call, select }: EffectsCommandMap
+    ) {
+      yield call(classService.removeClass, payload.classId);
 
-      const page = yield select((state: any) => {
-        const { courseClass: { data } } = state;
-        return data.page
+      const paginationData = yield select((state: any) => {
+        const { courseClass: { data, filterFields } } = state;
+        const { page, pageSize } = data;
+        return {
+          page,
+          pageSize,
+          ...filterFields,
+        }
       });
 
       yield put({
         type: 'fetchClassPagination',
         payload: {
-          page,
+          data: paginationData,
         },
       })
     },

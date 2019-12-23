@@ -9,7 +9,7 @@ export interface ClassFieldsModel {
 
 export interface ClassListItem extends ClassFieldsModel {
     // 班级ID
-    id: string;
+    classId: string;
 }
 
 export interface ClassTableData extends TableListPaginationProps {

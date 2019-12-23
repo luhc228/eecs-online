@@ -11,7 +11,7 @@ const persistConfig = {
     // 'questionLib'
   ],
   whitelist: [
-    
+
   ]
 };
 
@@ -30,5 +30,4 @@ export const dva = {
     extraEnhancers: [persistEnhancer()],
     onReducer: (reducer: Reducer) => persistReducer(persistConfig, reducer),
   },
-
 };

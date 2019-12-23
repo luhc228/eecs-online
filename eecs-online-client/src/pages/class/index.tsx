@@ -16,7 +16,7 @@ import CustomTable from '@/components/CustomTable';
 const filterFormConfig: FormItemComponentProps[] = [
   {
     label: '班级名称',
-    name: 'courseClassName',
+    name: 'className',
     component: FORM_COMPONENT.Input,
     required: false,
   },
@@ -41,7 +41,7 @@ const CourseClass: React.FC<ClassProps> = props => {
   useEffect(() => {
     dispatch({
       type: 'courseClass/fetchClassPagination',
-      payload: { ...PAGINATION_CONFIGS },
+      payload: { data: { ...PAGINATION_CONFIGS } },
     })
   }, []);
 
@@ -57,10 +57,10 @@ const CourseClass: React.FC<ClassProps> = props => {
     router.push('/teacher/class/create');
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (classId: string) => {
     dispatch({
       type: 'courseClass/removeClass',
-      payload: { id },
+      payload: { classId },
     })
   }
 
@@ -77,7 +77,7 @@ const CourseClass: React.FC<ClassProps> = props => {
           <Popconfirm
             title="确定删除该班级"
             onConfirm={() => {
-              handleDelete(record.id)
+              handleDelete(record.classId)
             }}>
             <a href="">删除</a>
           </Popconfirm>
@@ -113,7 +113,7 @@ const CourseClass: React.FC<ClassProps> = props => {
         dataSource={list}
         current={page}
         total={total}
-        rowKey={(record: ClassListItem) => record.id}
+        rowKey={(record: ClassListItem) => record.classId}
         onPagination={(current: number) => {
           dispatch({
             type: 'courseClass/fetchClassPagination',
