@@ -1,13 +1,13 @@
 import { Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { ClassTableData, ClassFieldsModel } from '@/interfaces/class';
+import { ClassTableData, ClassFilterFieldsModel, PaginationParamsModel } from '@/interfaces/class';
 import * as classService from '../services';
 import { Effect } from '@/interfaces/reduxState';
 import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
 
 export interface StateType {
   data: ClassTableData;
-  filterFields: ClassFieldsModel;
+  filterFields: ClassFilterFieldsModel;
 }
 
 export interface ModelType {
@@ -38,12 +38,18 @@ const Model = {
   },
 
   reducers: {
-    save(state: any, { payload: { data } }: any) {
-      return { ...state, data }
+    save(
+      state: StateType,
+      { payload }: { type: string; payload: { data: ClassTableData } }
+    ) {
+      return { ...state, data: payload.data }
     },
 
-    changeFilterFields(state: any, { payload: { filterFields } }: any) {
-      return { ...state, filterFields }
+    changeFilterFields(
+      state: StateType,
+      { payload }: { type: string; payload: { filterFields: ClassFilterFieldsModel } }
+    ) {
+      return { ...state, filterFields: payload.filterFields }
     },
   },
 
@@ -53,7 +59,7 @@ const Model = {
      * 包括信息筛选
      */
     *fetchClassPagination(
-      { payload }: { type: string; payload: { data: ClassTableData } },
+      { payload }: { type: string; payload: { data: PaginationParamsModel } },
       { put, call }: EffectsCommandMap
     ) {
       const response = yield call(classService.fetchClassPagination, payload.data);

@@ -12,6 +12,7 @@ import { PAGINATION_CONFIGS } from '@/constants';
 import styles from './index.less';
 import FilterForm from '@/components/CustomForm';
 import CustomTable from '@/components/CustomTable';
+import CustomCard from '@/components/CustomCard';
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -88,39 +89,57 @@ const CourseClass: React.FC<ClassProps> = props => {
 
   return (
     <>
-      <FilterForm
-        values={filterFields}
-        loading={false}
-        formTypes={CUSTOM_FORM_TYPES.Filter}
-        onFieldsChange={(allFields: object) => {
-          dispatch({
-            type: 'courseClass/changeFilterFields',
-            payload: { filterFields: allFields },
-          })
-        }}
-        formConfig={filterFormConfig}
-        onSubmit={value => dispatch({
-          type: 'courseClass/fetchClassPagination',
-          payload: { ...PAGINATION_CONFIGS, ...value },
-        })}
-      />
-      <div className={styles.buttons}>
-        <Button type="primary" onClick={handleCreate}>新增班级</Button>
-      </div>
-      <CustomTable
-        loading={fetchClassPaginationLoading}
-        columns={columns}
-        dataSource={list}
-        current={page}
-        total={total}
-        rowKey={(record: ClassListItem) => record.classId}
-        onPagination={(current: number) => {
-          dispatch({
+      <CustomCard>
+        <FilterForm
+          values={filterFields}
+          loading={false}
+          formTypes={CUSTOM_FORM_TYPES.Filter}
+          onFieldsChange={(allFields: object) => {
+            dispatch({
+              type: 'courseClass/changeFilterFields',
+              payload: { filterFields: allFields },
+            })
+          }}
+          formConfig={filterFormConfig}
+          onSubmit={value => dispatch({
             type: 'courseClass/fetchClassPagination',
-            payload: { ...PAGINATION_CONFIGS, page: current },
-          })
-        }}
-      />
+            payload: {
+              data: {
+                ...PAGINATION_CONFIGS,
+                ...value
+              }
+            },
+          })}
+        />
+      </CustomCard>
+
+      <CustomCard title="班级信息列表" extra={
+        <Button type="primary" onClick={handleCreate}>新增班级</Button>
+      }>
+        {/* <div className={styles.buttons}>
+
+        </div> */}
+        <CustomTable
+          loading={fetchClassPaginationLoading}
+          columns={columns}
+          dataSource={list}
+          current={page}
+          total={total}
+          rowKey={(record: ClassListItem) => record.classId}
+          onPagination={(current: number) => {
+            dispatch({
+              type: 'courseClass/fetchClassPagination',
+              payload: {
+                data: {
+                  ...PAGINATION_CONFIGS,
+                  page: current
+                }
+              },
+            })
+          }}
+        />
+      </CustomCard>
+
     </>
   )
 }

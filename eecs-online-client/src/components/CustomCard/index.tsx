@@ -28,6 +28,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
       onTabChange={onTabChange}
       activeTabKey={activeTabKey}
       tabList={tabList}
+      style={{ marginBottom: 20 }}
     >
       {children}
     </Card>
