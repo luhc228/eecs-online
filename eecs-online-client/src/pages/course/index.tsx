@@ -12,6 +12,7 @@ import FilterForm from '@/components/CustomForm';
 import { StateType } from './models';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import CustomCard from '@/components/CustomCard';
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -54,7 +55,7 @@ const Course: React.FC<CourseProps> = props => {
   useEffect(() => {
     dispatch({
       type: 'course/fetchCoursePagination',
-      payload: { ...PAGINATION_CONFIGS },
+      payload: { data: { ...PAGINATION_CONFIGS } },
     })
   }, []);
 
@@ -101,41 +102,59 @@ const Course: React.FC<CourseProps> = props => {
   ];
 
   return (
-    <div>
-      <FilterForm
-        values={filterFields}
-        loading={false}
-        formTypes={CUSTOM_FORM_TYPES.Filter}
-        onFieldsChange={(allFields: object) => {
-          dispatch({
-            type: 'course/changeFilterFields',
-            payload: { filterFields: allFields },
-          })
-        }}
-        formConfig={filterFormConfig}
-        onSubmit={value => dispatch({
-          type: 'course/fetchCoursePagination',
-          payload: { ...PAGINATION_CONFIGS, ...value },
-        })}
-      />
-      <div className={styles.buttons}>
-        <Button type="primary" onClick={handleCreate}>新增课程</Button>
-      </div>
-      <CustomTable
-        loading={fetchCoursePaginationLoading}
-        columns={columns}
-        dataSource={list}
-        current={page}
-        total={total}
-        rowKey={(record: CourseListItem) => record.id}
-        onPagination={(current: number) => {
-          dispatch({
+    <>
+      <CustomCard>
+        <FilterForm
+          values={filterFields}
+          loading={false}
+          formTypes={CUSTOM_FORM_TYPES.Filter}
+          onFieldsChange={(allFields: object) => {
+            dispatch({
+              type: 'course/changeFilterFields',
+              payload: { filterFields: allFields },
+            })
+          }}
+          formConfig={filterFormConfig}
+          onSubmit={value => dispatch({
             type: 'course/fetchCoursePagination',
-            payload: { ...PAGINATION_CONFIGS, page: current },
-          })
-        }}
-      />
-    </div>
+            payload: {
+              data:
+              {
+                ...PAGINATION_CONFIGS,
+                ...value
+              }
+            },
+          })}
+        />
+      </CustomCard>
+
+      <CustomCard
+        title="课程信息列表"
+        extra={
+          <Button type="primary" onClick={handleCreate}>新增课程</Button>
+        }>
+        <CustomTable
+          loading={fetchCoursePaginationLoading}
+          columns={columns}
+          dataSource={list}
+          current={page}
+          total={total}
+          rowKey={(record: CourseListItem) => record.id}
+          onPagination={(current: number) => {
+            dispatch({
+              type: 'course/fetchCoursePagination',
+              payload: {
+                data: {
+                  ...PAGINATION_CONFIGS,
+                  ...filterFields,
+                  page: current
+                }
+              },
+            })
+          }}
+        />
+      </CustomCard>
+    </>
   )
 }
 

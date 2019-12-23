@@ -2,6 +2,7 @@ import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import * as courseService from '../services';
 import { CourseTableData, filterFieldsProps } from '@/interfaces/course';
+import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
 
 export interface StateType {
   data: CourseTableData;
@@ -26,16 +27,11 @@ export interface ModelType {
   };
 }
 
-const Model: ModelType = {
+const Model = {
   namespace: 'course',
 
   state: {
-    data: {
-      list: [],
-      total: 0,
-      pageSize: 8,
-      page: 1,
-    },
+    data: DEFAULT_TABLE_PAGINATION_STATE,
     filterFields: {
       courseName: undefined,
       location: undefined,
@@ -44,12 +40,18 @@ const Model: ModelType = {
   },
 
   reducers: {
-    save(state: any, { payload: { data } }: any) {
-      return { ...state, data }
+    save(
+      state: StateType,
+      { payload }: { type: string; payload: { data: CourseTableData } }
+    ) {
+      return { ...state, data: payload.data }
     },
 
-    changeFilterFields(state: any, { payload: { filterFields } }: any) {
-      return { ...state, filterFields }
+    changeFilterFields(
+      state: StateType,
+      { payload }: { payload: { type: string, filterFields: filterFieldsProps } }
+    ) {
+      return { ...state, filterFields: payload.filterFields }
     },
   },
 
@@ -58,8 +60,11 @@ const Model: ModelType = {
      * 获取课程信息分页
      * 包括信息筛选
      */
-    *fetchCoursePagination({ payload }: any, { call, put }: any) {
-      const response = yield call(courseService.fetchCoursePagination, payload);
+    *fetchCoursePagination(
+      { payload }: { type: string; payload: { data: any } },
+      { put, call }: EffectsCommandMap
+    ) {
+      const response = yield call(courseService.fetchCoursePagination, payload.data);
       const { data } = response;
       yield put({
         type: 'save',
@@ -72,7 +77,10 @@ const Model: ModelType = {
     /**
      * 删除某个课程
      */
-    *removeCourse({ payload }: any, { call, put, select }: any) {
+    *removeCourse(
+      { payload }: { type: string; payload: { id: string } },
+      { call, put, select }: EffectsCommandMap
+    ) {
       yield call(courseService.removeCourse, payload);
 
       const page = yield select((state: any) => {
@@ -90,4 +98,4 @@ const Model: ModelType = {
   },
 }
 
-export default Model
+export default Model;
