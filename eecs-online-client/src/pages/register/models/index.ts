@@ -74,30 +74,31 @@ const Model: ModelType = {
 
       const response = yield call(userRegister, userForm);
       const { accessToken, ...userInfo } = response.data;
-      userUtils.saveToken(accessToken);
-      userUtils.saveUserInfo(userInfo);
+      yield put(router.goBack());
+      // userUtils.saveToken(accessToken);
+      // userUtils.saveUserInfo(userInfo);
 
-      const urlParams = new URL(window.location.href);
-      const params = getPageQuery();
-      const userTypeName: string = USER_TYPE[userType].toLocaleLowerCase();
-      let { redirect } = params as { redirect: string };
-      if (redirect) {
-        const redirectUrlParams = new URL(redirect);
-        if (redirectUrlParams.origin === urlParams.origin) {
-          redirect = redirect.substr(urlParams.origin.length);
-          // 如果切换用户注册，则需要置换pathname 自动跳转至对应用户的默认路由
-          if (redirectUrlParams.pathname.split('/')[1] !== userTypeName) {
-            redirect = `/${userTypeName}`;
-          }
-          if (redirect.match(/^\/.*#/)) {
-            redirect = redirect.substr(redirect.indexOf('#') + 1);
-          }
-        } else {
-          window.location.href = redirect;
-        }
-      }
-      const pathnamePrefix = userTypeName;
-      yield put(router.replace(redirect || `/${pathnamePrefix}`));
+      // const urlParams = new URL(window.location.href);
+      // const params = getPageQuery();
+      // const userTypeName: string = USER_TYPE[userType].toLocaleLowerCase();
+      // let { redirect } = params as { redirect: string };
+      // if (redirect) {
+      //   const redirectUrlParams = new URL(redirect);
+      //   if (redirectUrlParams.origin === urlParams.origin) {
+      //     redirect = redirect.substr(urlParams.origin.length);
+      //     // 如果切换用户注册，则需要置换pathname 自动跳转至对应用户的默认路由
+      //     if (redirectUrlParams.pathname.split('/')[1] !== userTypeName) {
+      //       redirect = `/${userTypeName}`;
+      //     }
+      //     if (redirect.match(/^\/.*#/)) {
+      //       redirect = redirect.substr(redirect.indexOf('#') + 1);
+      //     }
+      //   } else {
+      //     window.location.href = redirect;
+      //   }
+      // }
+      // const pathnamePrefix = userTypeName;
+      // yield put(router.replace(redirect || `/${pathnamePrefix}`));
     },
   },
 };

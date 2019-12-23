@@ -86,7 +86,7 @@ const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) =
         {getFieldDecorator('collegeClass', {
           rules: [
             { required: true, message: '请选择学院 / 班级' },
-            { validator: { validatorCollegeClass } },
+            { validator: validatorCollegeClass },
           ],
         })(<CollegeClassView />)}
       </Form.Item>
@@ -98,9 +98,9 @@ const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) =
 };
 
 const mapStateToProps = (state: any) => {
-  const { currentUser } = state.currentUser;
+  const { user } = state.user;
   return {
-    currentUser,
+    user,
     loading: state.loading.models.studentInfo,
   };
 };

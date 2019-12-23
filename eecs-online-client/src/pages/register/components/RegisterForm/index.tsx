@@ -24,6 +24,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
           type: 'register/userRegister',
           payload: { values },
         });
+        router.goBack();
       }
     });
   };
@@ -80,7 +81,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
         {getFieldDecorator('password', {
           rules: [
             { required: true, message: '请输入密码' },
-            { validator: { validateToNextPassword } },
+            { validator: validateToNextPassword },
           ],
         })(
           <Input.Password
@@ -93,7 +94,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
         {getFieldDecorator('confirm', {
           rules: [
             { required: true, message: '请再次输入确认密码' },
-            { validator: { compareToFirstPassword } },
+            { validator: compareToFirstPassword },
           ],
         })(
           <Input.Password
