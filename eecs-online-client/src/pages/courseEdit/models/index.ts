@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 import router from 'umi/router';
+import { EffectsCommandMap } from 'dva';
 import * as courseEditService from '../services';
 import { CourseFieldsModel } from '@/interfaces/course';
 import { Effect } from '@/interfaces/reduxState';
@@ -8,7 +9,6 @@ export interface StateType {
   courseFields: CourseFieldsModel,
   when: boolean,
 }
-
 
 export interface ModelType {
   namespace: string;
@@ -23,25 +23,35 @@ export interface ModelType {
   };
 }
 
-const Model: ModelType = {
+const Model = {
   namespace: 'courseEdit',
 
   state: {
     courseFields: {
       courseName: undefined,
-      location: undefined,
-      classNames: undefined,
+      courseLocation: undefined,
+      className: undefined,
     },
     when: true,
   },
 
   reducers: {
-    changeCourseFields(state: any, { payload: { data } }: any) {
-      return { ...state, courseFields: data, when: true }
+    changeCourseFields(
+      state: StateType,
+      { payload }: { type: string; payload: { data: CourseFieldsModel } }
+    ) {
+      return {
+        ...state,
+        courseFields: payload.data,
+        when: true
+      }
     },
 
-    changePromptStatus(state: any, { payload: { when } }: any) {
-      return { ...state, when }
+    changePromptStatus(
+      state: StateType,
+      { payload }: { type: string; payload: { when: boolean } }
+    ) {
+      return { ...state, when: payload.when }
     },
   },
 
@@ -49,8 +59,11 @@ const Model: ModelType = {
     /**
      * 新增课程信息
      */
-    *createCourse({ payload }: any, { call, put }: any) {
-      yield call(courseEditService.createCourse, payload);
+    *createCourse(
+      { payload }: { type: string; payload: { data: CourseFieldsModel } },
+      { call, put }: EffectsCommandMap
+    ) {
+      yield call(courseEditService.createCourse, payload.data);
       yield put({
         type: 'changePromptStatus',
         payload: {
@@ -63,8 +76,11 @@ const Model: ModelType = {
     /**
     * 更新课程信息(Edit)
     */
-    *updateCourse({ payload }: any, { call, put }: any) {
-      yield call(courseEditService.updateCourse, payload);
+    *updateCourse(
+      { payload }: { type: string; payload: { data: CourseFieldsModel } },
+      { call, put }: EffectsCommandMap
+    ) {
+      yield call(courseEditService.updateCourse, payload.data);
       yield put({
         type: 'changePromptStatus',
         payload: {

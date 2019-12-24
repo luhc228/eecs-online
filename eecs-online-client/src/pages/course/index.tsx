@@ -29,7 +29,7 @@ const filterFormConfig: FormItemComponentProps[] = [
   },
   {
     label: '上课班级',
-    name: 'classNames',
+    name: 'className',
     component: FORM_COMPONENT.Input,
     required: false,
   },
@@ -77,8 +77,9 @@ const Course: React.FC<CourseProps> = props => {
 
   const columns: ColumnProps<CourseListItem>[] = [
     { title: '课程名称', dataIndex: 'courseName' },
-    { title: '上课地点', dataIndex: 'location' },
-    { title: '上课班级', dataIndex: 'classNames' },
+    { title: '上课地点', dataIndex: 'courseLocation' },
+    { title: '上课班级', dataIndex: 'className' },
+    { title: '教师名', dataIndex: 'teacherName' },
     {
       title: '操作',
       render: (_: string, record: CourseListItem) => (
@@ -91,7 +92,7 @@ const Course: React.FC<CourseProps> = props => {
             onConfirm={() => {
               dispatch({
                 type: 'course/removeCourse',
-                payload: { id: record.id },
+                payload: { courseId: record.courseId },
               })
             }}>
             <a href="">删除</a>
@@ -139,7 +140,7 @@ const Course: React.FC<CourseProps> = props => {
           dataSource={list}
           current={page}
           total={total}
-          rowKey={(record: CourseListItem) => record.id}
+          rowKey={(record: CourseListItem) => record.courseId.toString()}
           onPagination={(current: number) => {
             dispatch({
               type: 'course/fetchCoursePagination',

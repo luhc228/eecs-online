@@ -5,10 +5,6 @@ export interface StudentDetailData {
   studentClass?: string;
 }
 
-export function fetchCollegeList() {
-  return request.get('/college/detail')
-}
-
 export function fetchStudentClassList(params: { college: string }) {
   return request.get('/student/class/detail', {
     params

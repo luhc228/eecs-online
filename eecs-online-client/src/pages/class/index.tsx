@@ -58,7 +58,7 @@ const CourseClass: React.FC<ClassProps> = props => {
     router.push('/teacher/class/create');
   }
 
-  const handleDelete = (classId: string) => {
+  const handleDelete = (classId: number) => {
     dispatch({
       type: 'courseClass/removeClass',
       payload: { classId },
@@ -113,19 +113,19 @@ const CourseClass: React.FC<ClassProps> = props => {
         />
       </CustomCard>
 
-      <CustomCard title="班级信息列表" extra={
-        <Button type="primary" onClick={handleCreate}>新增班级</Button>
-      }>
-        {/* <div className={styles.buttons}>
-
-        </div> */}
+      <CustomCard
+        title="班级信息列表"
+        extra={
+          <Button type="primary" onClick={handleCreate}>新增班级</Button>
+        }
+      >
         <CustomTable
           loading={fetchClassPaginationLoading}
           columns={columns}
           dataSource={list}
           current={page}
           total={total}
-          rowKey={(record: ClassListItem) => record.classId}
+          rowKey={(record: ClassListItem) => record.classId.toString()}
           onPagination={(current: number) => {
             dispatch({
               type: 'courseClass/fetchClassPagination',

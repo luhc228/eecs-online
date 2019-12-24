@@ -14,7 +14,7 @@ export interface PaginationParamsModel extends ClassFilterFieldsModel, Paginatio
 
 export interface ClassListItem extends ClassFilterFieldsModel {
     // 班级ID
-    classId: string;
+    classId: number;
 }
 
 /**

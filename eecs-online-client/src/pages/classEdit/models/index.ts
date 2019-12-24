@@ -4,6 +4,7 @@ import { Effect } from '@/interfaces/reduxState';
 import * as classEditService from '../services';
 import { StudentDetailModel } from '@/interfaces/class';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
+import { fetchCollegeList } from '@/services';
 
 export interface collegeListItem extends SelectComponentDatasourceModel {
   children: SelectComponentDatasourceModel[]
@@ -85,7 +86,7 @@ const Model: ModelType = {
      * 获取所有学院信息
      */
     * fetchCollegeList(_: any, { call, put }: any) {
-      const response = yield call(classEditService.fetchCollegeList);
+      const response = yield call(fetchCollegeList);
       const collegeList: collegeListItem[] = response.data.list;
       yield put({
         type: 'setCollegeList',

@@ -76,7 +76,7 @@ const Model = {
      * 删除某个班级
      */
     *removeClass(
-      { payload }: { type: string; payload: { classId: string } },
+      { payload }: { type: string; payload: { classId: number } },
       { put, call, select }: EffectsCommandMap
     ) {
       yield call(classService.removeClass, payload.classId);

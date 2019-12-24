@@ -15,7 +15,7 @@ export function fetchClassPagination(data: PaginationParamsModel) {
  * 删除班级
  * @param data
  */
-export function removeClass(classId: string) {
+export function removeClass(classId: number) {
   return request.post('/vir_class/delete', {
     data: {
       classId

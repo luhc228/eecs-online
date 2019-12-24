@@ -9,6 +9,7 @@ import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import RouterPrompt from '@/components/RouterPrompt';
 import { StateType } from './models';
+import CustomCard from '@/components/CustomCard';
 
 interface CourseEditProps {
   courseEdit: StateType,
@@ -60,30 +61,32 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
     if (isCreate) {
       dispatch({
         type: 'courseEdit/createCourse',
-        payload: { ...allFields },
+        payload: { data: allFields },
       })
     } else {
       dispatch({
         type: 'courseEdit/updateCourse',
-        payload: { ...allFields },
+        payload: { data: allFields },
       })
     }
   };
 
   const { courseFields, when } = courseEdit;
   return (
-    <div style={{ padding: '50px 0' }}>
+    <>
       <RouterPrompt when={when} />
-      <CustomForm
-        layout="horizontal"
-        values={courseFields}
-        formTypes={CUSTOM_FORM_TYPES.OneColumn}
-        loading={false}
-        onFieldsChange={handleFieldsChange}
-        formConfig={formConfig}
-        onSubmit={handleSubmit}
-      />
-    </div>
+      <CustomCard>
+        <CustomForm
+          layout="horizontal"
+          values={courseFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
+          loading={false}
+          onFieldsChange={handleFieldsChange}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        />
+      </CustomCard>
+    </>
   )
 };
 
