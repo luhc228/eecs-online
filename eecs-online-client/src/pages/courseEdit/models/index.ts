@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import router from 'umi/router';
 import { EffectsCommandMap, Dispatch } from 'dva';
 import * as courseEditService from '../services';
-import { CourseFieldsModel } from '@/interfaces/course';
+import { CourseFieldsModel } from '@/interfaces/courseEdit';
 import { Effect } from '@/interfaces/reduxState';
 import { fetchVirClassList } from '@/services';
 import userUtils from '@/utils/user-utils';
@@ -32,9 +32,10 @@ const Model = {
 
   state: {
     courseFields: {
+      courseId: undefined,
       courseName: undefined,
       courseLocation: undefined,
-      className: undefined,
+      classId: [],
     },
     when: true,
     classNameDataSource: [],

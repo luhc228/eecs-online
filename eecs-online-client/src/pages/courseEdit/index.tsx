@@ -63,7 +63,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
     } else {
       dispatch({
         type: 'courseEdit/updateCourse',
-        payload: { data: allFields },
+        payload: { data: { ...allFields, courseId: courseFields.courseId } },
       })
     }
   };
