@@ -7,20 +7,16 @@ import router from 'umi/router';
 import HeaderDropdown from '@/components/CustomDropdown';
 import styles from './index.less';
 import { ConnectState } from '@/models/connect';
-<<<<<<< HEAD
 import { CurrentUserModels, usernameToFormFieldName } from '@/models/user';
 import studentAvatar from '@/assets/student.png';
 import teacherAvatar from '@/assets/teacher.png';
 import userAvatar from '@/assets/user.png';
-=======
-import { CurrentUserModels } from '@/models/user';
->>>>>>> mistakes about register and accountsetting
 import { USER_TYPE } from '@/enums';
 
 const avatar = {
   [USER_TYPE.Student]: studentAvatar,
   [USER_TYPE.Teacher]: teacherAvatar,
-}
+};
 interface AvatarDropdownProps {
   currentUser?: CurrentUserModels;
   dispatch: Dispatch<any>;
@@ -51,10 +47,10 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
           } else {
             dispatch({
               type: 'teacher/userInfo',
-            })
+            });
             router.push('/teacher/userInfo');
           }
-      }
+        }
       }
     }
   };
@@ -66,14 +62,16 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
         <span>退出登录</span>
       </Menu.Item>
       <Menu.Item key="userInfo">
-        <Icon type="userInfo"/>
+        <Icon type="userInfo" />
         <span>个人信息</span>
       </Menu.Item>
     </Menu>
   );
   const { currentUser } = props;
 
-  const userIdName: any = currentUser ? usernameToFormFieldName[USER_TYPE[currentUser.userType]] : 'id';
+  const userIdName: any = currentUser
+    ? usernameToFormFieldName[USER_TYPE[currentUser.userType]]
+    : 'id';
 
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
@@ -85,21 +83,22 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
           alt="avatar"
           src={currentUser ? avatar[currentUser.userType] : userAvatar}
         >
-          {currentUser && currentUser.name && (typeof currentUser.name) === 'string' && currentUser.name[0]}
+          {currentUser &&
+            currentUser.name &&
+            typeof currentUser.name === 'string' &&
+            currentUser.name[0]}
         </Avatar>
         <span className={styles.name}>{currentUser && currentUser[userIdName]}</span>
       </span>
     </HeaderDropdown>
-  )
-}
+  );
+};
 
-const mapStateToProps = ({
-  user
-}: ConnectState) => {
+const mapStateToProps = ({ user }: ConnectState) => {
   console.log(user);
   return {
     currentUser: user.currentUser,
-  }
+  };
 };
 
 export default connect(mapStateToProps)(AvatarDropdown);

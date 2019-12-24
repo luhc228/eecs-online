@@ -29,7 +29,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
     });
   };
 
-  const handleConfirmBlur = (e) => {
+  const handleConfirmBlur = e => {
     const { value } = e.target;
     setconfirmDirty(confirmDirty || !!value);
   };
@@ -79,10 +79,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
       </Form.Item>
       <Form.Item>
         {getFieldDecorator('password', {
-          rules: [
-            { required: true, message: '请输入密码' },
-            { validator: validateToNextPassword },
-          ],
+          rules: [{ required: true, message: '请输入密码' }, { validator: validateToNextPassword }],
         })(
           <Input.Password
             prefix={<Icon type="password" style={{ color: 'rgba(0,0,0,.25)' }} />}

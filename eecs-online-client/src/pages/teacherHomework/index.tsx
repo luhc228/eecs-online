@@ -6,7 +6,7 @@ import { FormItemComponentProps } from '@/interfaces/components';
 import { Dispatch } from 'redux';
 import { PAGINATION_CONFIGS } from '@/constants';
 import { HomeworkListItem } from '@/interfaces/teacherHomework';
-import router from 'umi/router';
+import umiRouter from 'umi/router';
 import { StateType } from './models';
 import styles from './index.less';
 import React, { useEffect } from 'react';
@@ -16,6 +16,9 @@ import FilterForm from '@/components/CustomForm';
 import CustomTable from '@/components/CustomTable';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { connect } from 'dva';
+// import { CompletionListItem } from '@/interfaces/teacherHomeworkCompletion';
+import CustomCard from '@/components/CustomCard';
+import router from 'umi/router';
 
 const filterFormConfig: FormItemComponentProps[] = [
     {
@@ -72,6 +75,12 @@ const Homework: React.FC<HomeworkProps> = props => {
         })
     };
 
+    const handleCompletion = (record: HomeworkListItem) => {
+        umiRouter.push({
+            pathname: '/teacher/homework/completion',
+            query:{id: record.id},})
+    }
+
     const columns: ColumnProps<HomeworkListItem>[] = [
         { title: '作业名称', dataIndex: 'homeworkName' },
         { title: '截止日期', dataIndex: 'deadline'},
@@ -82,6 +91,9 @@ const Homework: React.FC<HomeworkProps> = props => {
                 <span className={styles.operation}>
                     <span>
                         <a onClick={() => handleEdit(record)}>编辑作业</a>
+                    </span>
+                    <span>
+                        <a onClick={() => handleCompletion(record)}>完成情况</a>
                     </span>
                     <Popconfirm
                         title="确定删除此作业"
@@ -96,42 +108,60 @@ const Homework: React.FC<HomeworkProps> = props => {
     ];
 
     return (
-        <>
-            <FilterForm
-                values={filterFields}
-                loading={false}
-                formTypes={CUSTOM_FORM_TYPES.Filter}
-                onFieldsChange={(allFields: object) => {
-                    dispatch({
-                        type: 'teacherHomework/changeFilterFields',
-                        payload: { filterFields: allFields },
-                    })
-                }}
-                formConfig={filterFormConfig}
-                onSubmit={value => dispatch({
-                type: 'teacherHomework/fetchHomeworkPagination',
-                payload: { ...PAGINATION_CONFIGS, ...value },
-                })}
-            />
-            <div className={styles.buttons}>
-                <Button type="primary" onClick={handleCreate}>新增作业</Button>
-            </div>
-            <CustomTable
-                loading={fetchHomeworkPaginationLoading}
-                columns={columns}
-                dataSource={list}
-                current={page}
-                total={total}
-                rowKey={(record: HomeworkListItem) => record.id}
-                onPagination={(current: number) => {
-                    dispatch({
-                        type: 'teacherHomework/fetchHomeworkPagination',
-                        payload: { ...PAGINATION_CONFIGS, page: current },
-                    })
-                }}
-            />
-        </>
-    );
+    <>
+      <CustomCard>
+        <FilterForm
+          values={filterFields}
+          loading={false}
+          formTypes={CUSTOM_FORM_TYPES.Filter}
+          onFieldsChange={(allFields: object) => {
+            dispatch({
+              type: 'teacherHomework/changeFilterFields',
+              payload: { filterFields: allFields },
+            })
+          }}
+          formConfig={filterFormConfig}
+          onSubmit={value => dispatch({
+            type: 'teacherHomework/fetchHomeworkPagination',
+            payload: {
+              data:
+              {
+                ...PAGINATION_CONFIGS,
+                ...value
+              }
+            },
+          })}
+        />
+      </CustomCard>
+
+      <CustomCard
+        title="作业信息列表"
+        extra={
+          <Button type="primary" onClick={handleCreate}>新增作业</Button>
+        }>
+        <CustomTable
+          loading={fetchHomeworkPaginationLoading}
+          columns={columns}
+          dataSource={list}
+          current={page}
+          total={total}
+          rowKey={(record: HomeworkListItem) => record.id}
+          onPagination={(current: number) => {
+            dispatch({
+              type: 'teacherHomework/fetchHomeworkPagination',
+              payload: {
+                data: {
+                  ...PAGINATION_CONFIGS,
+                  ...filterFields,
+                  page: current
+                }
+              },
+            })
+          }}
+        />
+      </CustomCard>
+    </>
+  )
 }
 
 const mapStateToProps = ({

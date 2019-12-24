@@ -19,7 +19,8 @@ export default [
       { path: '/teacher/homework', component: './teacherHomework' },
       { path: '/teacher/homework/create', component: './teacherHomeworkEdit' },
       { path: '/teacher/homework/edit', component: './teacherHomeworkEdit' },
-      { path: '/teacher/homework-completion', component: './teacherHomeworkCompletion' },
+      { path: '/teacher/homework/completion', component: './teacherHomeworkCompletion' },
+      // { path: '/teacher/homework/completion/edit', component: './teacherHomeworkDetail' },
       { path: '/teacher/userInfo', component: './teacherInfo' },
       { path: '/teacher', redirect: '/teacher/class' },
     ],
@@ -32,7 +33,7 @@ export default [
       { path: '/student/homework', component: './studentHomework' },
       { path: '/student/homework/edit', component: './studentHomeworkEdit' },
       { path: '/student/homework/detail', component: './studentHomeworkDetail' },
-      { path: '/student/homework-completion', component: './studentHomeworkCompletion' },
+      // { path: '/student/homework-completion', component: './studentHomeworkCompletion' },
       { path: '/student/userInfo', component: './studentInfo' },
       { path: '/student', redirect: '/student/homework' },
     ],
@@ -44,7 +45,7 @@ export default [
     routes: [
       { path: '/login', component: './login' },
       { path: '/login/register', component: './register' },
-      { path: '/login/forgot', component: './forgot' },
+      // { path: '/login/forgot', component: './forgot' },
     ],
   },
 
@@ -57,4 +58,4 @@ export default [
   {
     component: '404',
   },
-]
+];

@@ -1,10 +1,11 @@
 import { Reducer } from 'redux';
 import router from 'umi/router';
+import umiRouter from 'umi/router';
 import { USER_TYPE } from '@/enums';
 import { Effect } from '@/interfaces/reduxState';
 import * as service from '../services';
-import userUtils from '@/utils/user-utils';
-import { getPageQuery } from '@/utils/utils';
+// import userUtils from '@/utils/user-utils';
+// import { getPageQuery } from '@/utils/utils';
 
 export interface StateType {
   userType: USER_TYPE.Student | USER_TYPE.Teacher;
@@ -74,7 +75,14 @@ const Model: ModelType = {
 
       const response = yield call(userRegister, userForm);
       const { accessToken, ...userInfo } = response.data;
-      yield put(router.goBack());
+      yield put(
+        umiRouter.push({
+          pathname: '/login',
+          query: {
+            id: accessToken,
+          },
+        }),
+      );
       // userUtils.saveToken(accessToken);
       // userUtils.saveUserInfo(userInfo);
 

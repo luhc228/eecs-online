@@ -70,7 +70,7 @@ const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) =
       <Form.Item label="Id">
         {getFieldDecorator('id', {
           rules: [{ required: true, message: '修改账号于此处' }],
-        })(<Input />)}
+        })(<Input disabled />)}
       </Form.Item>
       <Form.Item label="gender">
         {getFieldDecorator('gender', {

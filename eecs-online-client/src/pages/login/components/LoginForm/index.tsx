@@ -20,22 +20,19 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
     e.preventDefault();
     form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
       if (err) {
-
       } else {
+        //   dispatch({
+        //     type: 'login/userLogin',
+        //     payload: { userType, values },
+        //   });
+        // }
+        delete values.remember;
+
         dispatch({
           type: 'login/userLogin',
           payload: { userType, values },
         });
       }
-<<<<<<< HEAD
-      delete values.remember
-
-      dispatch({
-        type: 'login/userLogin',
-        payload: { userType, values },
-      })
-=======
->>>>>>> mistakes about register and accountsetting
     });
   };
 
