@@ -61,9 +61,9 @@ const UserModel: UserModelType = {
       state: any,
       { payload }: { payload: { currentUser: any } }
     ) {
-      console.log(payload.currentUser)
+      // console.log(payload.currentUser)
       const newState = { currentUser: { ...payload.currentUser } }
-      console.log('currentUser', newState)
+      // console.log('currentUser', newState)
       return newState;
     },
   },
@@ -73,7 +73,7 @@ const UserModel: UserModelType = {
       return history.listen(({ pathname }: { pathname: string }) => {
         if (pathname !== '/login') {
           const currentUser: CurrentUserModels = userUtils.getUserInfo();
-          console.log('currentUser', currentUser);
+          // console.log('currentUser', currentUser);
           dispatch({ type: 'save', payload: { currentUser } });
         }
       });

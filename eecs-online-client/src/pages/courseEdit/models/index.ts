@@ -1,13 +1,17 @@
 import { Reducer } from 'redux';
 import router from 'umi/router';
-import { EffectsCommandMap } from 'dva';
+import { EffectsCommandMap, Dispatch } from 'dva';
 import * as courseEditService from '../services';
 import { CourseFieldsModel } from '@/interfaces/course';
 import { Effect } from '@/interfaces/reduxState';
+import { fetchVirClassList } from '@/services';
+import userUtils from '@/utils/user-utils';
+import { SelectComponentDatasourceModel } from '@/interfaces/components';
 
 export interface StateType {
   courseFields: CourseFieldsModel,
   when: boolean,
+  classNameDataSource: SelectComponentDatasourceModel[]
 }
 
 export interface ModelType {
@@ -33,6 +37,7 @@ const Model = {
       className: undefined,
     },
     when: true,
+    classNameDataSource: [],
   },
 
   reducers: {
@@ -53,9 +58,40 @@ const Model = {
     ) {
       return { ...state, when: payload.when }
     },
+
+    saveClassNameDataSource(
+      state: StateType,
+      { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } }
+    ) {
+      return { ...state, classNameDataSource: payload.data }
+    }
   },
 
   effects: {
+    /**
+    * 获取所有学院信息
+    */
+    *fetchvirClassList(
+      { payload }: { type: string; payload: { teacherId: string } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(fetchVirClassList, payload.teacherId);
+      if (!response) {
+        return;
+      }
+      const { data: { list } } = response;
+      const classNameDataSource = list.map((item: any) => ({
+        label: item.className,
+        value: item.classId
+      }));
+
+      yield put({
+        type: 'saveClassNameDataSource',
+        payload: {
+          data: classNameDataSource,
+        },
+      })
+    },
     /**
      * 新增课程信息
      */
@@ -88,6 +124,22 @@ const Model = {
         },
       })
       router.goBack();
+    },
+  },
+
+  subscriptions: {
+    setup(
+      { dispatch }: { dispatch: Dispatch<any> }
+    ) {
+      const userInfo = userUtils.getUserInfo();
+      if (Object.keys(userInfo).length !== 0) {
+        dispatch({
+          type: 'fetchvirClassList',
+          payload: {
+            teacherId: userInfo.teacherId
+          }
+        })
+      }
     },
   },
 }

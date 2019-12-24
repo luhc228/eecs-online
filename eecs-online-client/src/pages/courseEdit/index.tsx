@@ -14,10 +14,13 @@ import CustomCard from '@/components/CustomCard';
 interface CourseEditProps {
   courseEdit: StateType,
   dispatch: Dispatch<any>,
-  location: Location
+  location: Location,
+  loading: boolean
 }
 
-const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location }) => {
+const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location, loading }) => {
+  const { courseFields, when, classNameDataSource } = courseEdit;
+
   const formConfig: FormItemComponentProps[] = [
     {
       label: '课程名称',
@@ -27,25 +30,19 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
     },
     {
       label: '上课地点',
-      name: 'location',
+      name: 'courseLocation',
       component: FORM_COMPONENT.Input,
       required: true,
     },
     {
       label: '上课班级',
-      name: 'classNames',
+      name: 'classId',
       component: FORM_COMPONENT.Select,
       required: true,
       props: {
-        selectMode: 'multiple',
+        mode: 'multiple',
       },
-      // TODO: from backend api
-      datasource: [
-        {
-          value: '通信1班',
-          label: '通信1班',
-        },
-      ],
+      datasource: classNameDataSource
     },
   ]
 
@@ -71,7 +68,6 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
     }
   };
 
-  const { courseFields, when } = courseEdit;
   return (
     <>
       <RouterPrompt when={when} />
@@ -80,7 +76,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
           layout="horizontal"
           values={courseFields}
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
-          loading={false}
+          loading={loading}
           onFieldsChange={handleFieldsChange}
           formConfig={formConfig}
           onSubmit={handleSubmit}
@@ -93,14 +89,17 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
 const mapStateToProps = ({
   courseEdit,
   router,
+  loading,
 }: {
   courseEdit: StateType,
   router: {
     location: Location
   },
+  loading: any
 }) => ({
   courseEdit,
   location: router.location,
+  loading: loading.models.courseEdit
 });
 
 
