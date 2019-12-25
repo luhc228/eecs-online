@@ -1,6 +1,6 @@
 import React from 'react';
-import CustomTable from '@/components/CustomTable';
 import { ColumnProps } from 'antd/lib/table';
+import CustomTable from '@/components/CustomTable';
 import TableFilter from '../TableFilter';
 
 interface StudentTableProps {
@@ -36,7 +36,7 @@ const StudentTable: React.FC<StudentTableProps> = () => {
 
   return (
     <div>
-      <TableFilter />
+      {/* <TableFilter /> */}
       <CustomTable
         loading={false}
         columns={columns}

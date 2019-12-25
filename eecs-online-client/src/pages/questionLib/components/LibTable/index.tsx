@@ -13,6 +13,7 @@ import { StateType } from '../../models';
 
 interface LibTableProps extends UmiComponentProps {
   loading: boolean,
+  questionLib: StateType,
 }
 
 const dataSource = [
@@ -24,7 +25,9 @@ const dataSource = [
     content: 'fjdlkjfajljlkfajlkfjjklf',
   }
 ]
-const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
+const LibTable: React.FC<LibTableProps> = ({ dispatch, loading, questionLib }) => {
+  const { currentTabKey } = questionLib;
+
   const handleEdit = (record: questionListItem) => {
     umiRouter.push({
       pathname: '/teacher/question-lib/edit',
@@ -73,7 +76,12 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
   useEffect(() => {
     dispatch({
       type: 'questionLib/fetchQuestionLibPagination',
-      payload: { ...PAGINATION_CONFIGS, },
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          questionType: Number(currentTabKey),
+        }
+      },
     })
   }, []);
   return (

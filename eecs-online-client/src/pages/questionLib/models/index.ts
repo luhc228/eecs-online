@@ -72,15 +72,20 @@ const questionLibModel = {
     ) {
       yield call(questionLibService.removeQuestion, payload.id);
 
-      const page = yield select((state: any) => {
-        const { questionLib: { data } } = state;
-        return data.page
+      const paginationData = yield select((state: any) => {
+        const { questionLib: { data, filterFields } } = state;
+        const { page, pageSize } = data;
+        return {
+          page,
+          pageSize,
+          ...filterFields,
+        }
       });
 
       yield put({
         type: 'fetchQuestionLibPagination',
         payload: {
-          data: { page }
+          data: paginationData
         },
       })
     }

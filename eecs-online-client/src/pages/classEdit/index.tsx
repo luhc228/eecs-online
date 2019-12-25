@@ -14,6 +14,7 @@ import { StateType } from './models';
 import CustomTable from '@/components/CustomTable';
 import StudentListModal from './components/StudentTableModal';
 import StudentTable from './components/StudentTable';
+import CustomCard from '@/components/CustomCard';
 
 const formConfig: FormItemComponentProps[] = [
   {
@@ -86,48 +87,28 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
   }
 
   return (
-    <div style={{ padding: '20px 0' }}>
+    <>
       <RouterPrompt when={when} />
-      <CustomForm
-        layout="horizontal"
-        values={classDetail}
-        formTypes={CUSTOM_FORM_TYPES.TwoColumn}
-        loading={false}
-        onFieldsChange={handleFieldsChange}
-        formConfig={formConfig}
-        onSubmit={handleSubmit}
-      >
-        {/* <TableTransfer
-          rowKey={(record: StudentDetailModel) => record.studentId}
-          dataSource={studentList}
-          targetKeys={targetKeys}
-          disabled={false}
-          showSearch
-          onChange={handleChange}
-          filterOption={(inputValue, item) => item.title.indexOf(inputValue) !== -1}
-          leftColumns={leftTableColumns}
-          rightColumns={rightTableColumns}
-        >
-          <TableFilter />
-        </TableTransfer> */}
-        {/* 
-        <CustomTable
+      <CustomCard>
+        <CustomForm
+          layout="vertical"
+          values={classDetail}
+          formTypes={CUSTOM_FORM_TYPES.TwoColumn}
           loading={false}
-          columns={columns}
-          dataSource={[]}
-          rowKey={record => record.studentId}
-          onPagination={(current: number) => {
-            console.log(current);
-          }}
-        /> */}
-        <StudentTable />
-        <StudentListModal record={{}}>
-          <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
-            <Icon type="plus" /> 添加学生
+          onFieldsChange={handleFieldsChange}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        >
+          <StudentListModal record={{}}>
+            <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
+              <Icon type="plus" /> 添加学生
           </Button>
-        </StudentListModal>
-      </CustomForm>
-    </div>
+          </StudentListModal>
+          <StudentTable />
+
+        </CustomForm>
+      </CustomCard>
+    </>
   )
 }
 

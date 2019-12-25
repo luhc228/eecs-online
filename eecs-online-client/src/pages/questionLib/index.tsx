@@ -9,6 +9,7 @@ import LibFilter from './components/LibFilter';
 import LibTable from './components/LibTable';
 import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
+import { PAGINATION_CONFIGS } from '@/constants';
 
 interface QuestionEditProps extends UmiComponentProps {
   questionLib: StateType
@@ -30,13 +31,16 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
         currentTabKey: Number(key),
       }
     });
-    // TODO: add fetch pagination
-    // dispatch({
-    //   type: 'questionLib/fetchQuestionLibPagination',
-    //   payload: {
-    //     currentTabKey: Number(key),
-    //   }
-    // })
+
+    dispatch({
+      type: 'questionLib/fetchQuestionLibPagination',
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          questionType: Number(key),
+        }
+      }
+    })
   }
 
   function handleCreate() {
@@ -63,24 +67,6 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
   ];
 
   return (
-    // <Tabs
-    //   activeKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
-    //   onChange={callback}
-    // >
-    //   {tabsContent.map((item: TabsContentProps) => (
-    //     <TabPane tab={item.tab} key={item.key.toString()}>
-    //       <LibFilter />
-
-    //       <CustomCard
-    //         extra={
-    //           <Button type="primary" onClick={handleCreate}>新增题目</Button>}
-    //       >
-    //         <LibTable />
-    //       </CustomCard>
-
-    //     </TabPane>
-    //   ))}
-    // </Tabs>
     <CustomCard
       tabList={tabsContent}
       tabBarExtraContent={<Button type="primary" onClick={handleCreate}>新增题目</Button>}
