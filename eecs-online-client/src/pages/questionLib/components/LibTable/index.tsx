@@ -74,6 +74,9 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading, questionLib }) =
   ];
 
   useEffect(() => {
+    if (!filterFields.courseId) {
+      return;
+    }
     dispatch({
       type: 'questionLib/fetchQuestionLibPagination',
       payload: {
@@ -84,7 +87,7 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading, questionLib }) =
         }
       },
     })
-  }, []);
+  }, [!filterFields.courseId]);
 
   const { page, total, list } = data;
   return (

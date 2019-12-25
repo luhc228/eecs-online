@@ -4,6 +4,8 @@ import { QUESTION_TYPE } from '@/enums';
 export interface FilterFieldsModel {
   // 题目内容
   content?: string;
+  // 课程Id
+  courseId?: number;
 }
 
 export interface questionListItem {

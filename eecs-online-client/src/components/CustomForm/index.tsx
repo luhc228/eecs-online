@@ -24,6 +24,7 @@ interface CustomFormProps extends FormComponentProps {
   children?: React.ReactNode;
   onFieldsChange: (allFields: object) => void;
   onSubmit: (value: object) => void;
+  resetFieldsVisible?: boolean;
 }
 
 const formItemLayoutWithOutLabel = {
@@ -35,7 +36,7 @@ const formItemLayoutWithOutLabel = {
 
 
 const CustomForm: React.FC<CustomFormProps> = props => {
-  const { formTypes, form, formConfig, onSubmit, loading, layout, children } = props;
+  const { formTypes, form, formConfig, onSubmit, loading, layout, children, resetFieldsVisible } = props;
   const { getFieldDecorator, getFieldValue } = form;
 
   const [fieldSetId, changeFieldSetId] = useState(1);
@@ -300,9 +301,10 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (err) {
+        console.log('Received values of form: ', values);
         return;
       }
-      console.log('Received values of form: ', values);
+
       onSubmit(values);
     });
   }
@@ -312,14 +314,16 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     props.onSubmit({});
   }
 
-  const filterFormButtons = (buttonsStyles?: string) => (
+  const filterFormButtons = (buttonsStyles?: string, resetVisible: boolean = true) => (
     <span className={buttonsStyles && styles[buttonsStyles]}>
       <Button type="primary" htmlType="submit" loading={loading}>
         查询
       </Button>
-      <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
-        重置
-      </Button>
+      {resetVisible && (
+        <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
+          重置
+        </Button>
+      )}
     </span>
   )
 
@@ -356,7 +360,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               formConfig.length % (24 / INLINE_FORM_LAYOUT.md) !== 0 && (
                 <Col {...formItemLayout}>
                   <Form.Item>
-                    {filterFormButtons()}
+                    {filterFormButtons(undefined, resetFieldsVisible)}
                   </Form.Item>
                 </Col>
               )}
@@ -378,7 +382,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )}
           {(formTypes === CUSTOM_FORM_TYPES.Filter) &&
             formConfig.length % (24 / INLINE_FORM_LAYOUT.md) === 0 && (
-              <>{filterFormButtons('filterFloatRightButtons')}</>
+              <>{filterFormButtons('filterFloatRightButtons', resetFieldsVisible)}</>
             )}
         </Form.Item>
       </Form>
@@ -390,6 +394,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 CustomForm.defaultProps = {
   layout: 'inline',
   loading: false,
+  resetFieldsVisible: true,
 }
 
 export default Form.create<CustomFormProps>({

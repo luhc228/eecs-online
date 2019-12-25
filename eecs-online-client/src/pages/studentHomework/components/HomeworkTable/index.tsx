@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { ColumnProps } from 'antd/es/table';
 import router from 'umi/router';
@@ -20,35 +20,13 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
   loading,
   studentHomework,
 }) => {
-  const { data: { list, total, page } } = studentHomework;
+  const { data: { list, total, page }, filterFields } = studentHomework;
 
-  const dataSource = [
-    {
-      id: 1,
-      homeworkName: 'eecs第一次作业',
-      courseName: '课程名称',
-      description: '描述',
-      homeworkScore: '200',
-      startAt: '2019-08-09 08:10',
-      endAt: '2019-08-09 09:20',
-      status: 1
-    },
-    {
-      id: 2,
-      homeworkName: 'eecs第二次作业',
-      courseName: '课程名称',
-      description: '描述',
-      homeworkScore: '200',
-      startAt: '2019-08-10 08:10',
-      endAt: '2019-08-10 09:20',
-      status: 0
-    }
-  ]
   const handleEdit = (record: studentHomeworkListItem) => {
     router.push({
       pathname: '/student/homework/edit',
       query: {
-        id: record.id
+        homeworkId: record.homeworkId
       }
     })
   }
@@ -57,7 +35,7 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
     router.push({
       pathname: '/student/homework/detail',
       query: {
-        id: record.id
+        homeworkId: record.homeworkId
       }
     })
   }
@@ -91,18 +69,35 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
     },
   ];
 
+  useEffect(() => {
+    dispatch({
+      type: 'studentHomework/fetchStudentHomeworkPagination',
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...filterFields,
+        }
+      }
+    })
+  }, [])
   return (
     <CustomTable
       loading={loading}
       columns={columns}
-      dataSource={dataSource}
+      dataSource={list}
       current={page}
       total={total}
-      rowKey={(record: studentHomeworkListItem) => record.id}
+      rowKey={(record: studentHomeworkListItem) => record.homeworkId.toString()}
       onPagination={(current: number) => {
         dispatch({
           type: 'studentHomework/fetchStudentHomeworkPagination',
-          payload: { ...PAGINATION_CONFIGS, page: current },
+          payload: {
+            data: {
+              ...PAGINATION_CONFIGS,
+              ...filterFields,
+              page: current
+            }
+          },
         })
       }}
     />

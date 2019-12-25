@@ -12,7 +12,7 @@ export interface StateType {
   data: TableData;
   filterFields: FilterFieldsModel;
   currentTabKey: QUESTION_TYPE;
-  courseIdDataSource: SelectComponentDatasourceModel[]
+  courseIdDataSource: SelectComponentDatasourceModel[];
 }
 
 const questionLibModel = {
@@ -21,7 +21,8 @@ const questionLibModel = {
   state: {
     data: DEFAULT_TABLE_PAGINATION_STATE,
     filterFields: {
-      content: undefined
+      content: undefined,
+      courseId: undefined,
     },
     currentTabKey: QUESTION_TYPE.Single,
     courseIdDataSource: []
@@ -66,9 +67,6 @@ const questionLibModel = {
       { call, put }: EffectsCommandMap
     ) {
       const response = yield call(fetchCourseList, payload.teacherId);
-      if (!response) {
-        return;
-      }
 
       const { data: { list } } = response;
       const courseIdDataSource = list.map((item: any) => ({
@@ -152,7 +150,18 @@ const questionLibModel = {
           payload: {
             teacherId: userInfo.teacherId
           }
-        })
+        });
+
+        // dispatch({
+        //   type: 'questionLib/initQuestionLibPagination',
+        //   payload: {
+        //     data: {
+        //       ...PAGINATION_CONFIGS,
+        //       ...filterFields,
+        //       questionType: Number(currentTabKey),
+        //     }
+        //   },
+        // })
       }
     },
   }
