@@ -26,7 +26,7 @@ const dataSource = [
   }
 ]
 const LibTable: React.FC<LibTableProps> = ({ dispatch, loading, questionLib }) => {
-  const { currentTabKey } = questionLib;
+  const { currentTabKey, filterFields, data } = questionLib;
 
   const handleEdit = (record: questionListItem) => {
     umiRouter.push({
@@ -79,21 +79,33 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading, questionLib }) =
       payload: {
         data: {
           ...PAGINATION_CONFIGS,
+          ...filterFields,
           questionType: Number(currentTabKey),
         }
       },
     })
   }, []);
+
+  const { page, total, list } = data;
   return (
     <CustomTable
       loading={loading}
       rowKey={(record: questionListItem) => record.id}
       columns={columns}
-      dataSource={dataSource}
+      dataSource={list}
+      current={page}
+      total={total}
       onPagination={(current: number) => {
         dispatch({
           type: 'questionLib/fetchQuestionLibPagination',
-          payload: { ...PAGINATION_CONFIGS, page: current },
+          payload: {
+            data:
+            {
+              ...PAGINATION_CONFIGS,
+              ...filterFields,
+              page: current,
+            }
+          },
         })
       }}
     />

@@ -70,6 +70,7 @@ request.interceptors.response.use((response) => {
   if (response.status !== 200) {
     showNotification(response.status, codeMessage[response.status], NOTIFICATION_TYPE.error);
   }
+
   return response;
 });
 

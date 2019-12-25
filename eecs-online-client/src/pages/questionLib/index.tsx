@@ -23,7 +23,7 @@ export const questionTypeMap = {
 }
 
 const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => {
-  const { currentTabKey } = questionLib;
+  const { currentTabKey, filterFields } = questionLib;
   function callback(key: string) {
     dispatch({
       type: 'questionLib/changecurrentTabKey',
@@ -37,6 +37,7 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
       payload: {
         data: {
           ...PAGINATION_CONFIGS,
+          ...filterFields,
           questionType: Number(key),
         }
       }

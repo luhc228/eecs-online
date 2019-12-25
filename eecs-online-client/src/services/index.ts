@@ -21,3 +21,14 @@ export function fetchVirClassList(teacherId: string) {
     }
   })
 }
+
+/**
+ * 获取课程信息列表
+ */
+export function fetchCourseList(teacherId: string) {
+  return request.get('/course/list', {
+    params: {
+      teacherId
+    }
+  })
+}
