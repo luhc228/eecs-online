@@ -45,6 +45,13 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
   }
 
   function handleCreate() {
+    dispatch({
+      type: 'questionLibEdit/changeQuestionFields',
+      payload: {
+        data: {}
+      }
+    });
+
     router.push('/teacher/question-lib/create')
   }
 

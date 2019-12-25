@@ -19,7 +19,7 @@ interface CourseEditProps {
 }
 
 const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location, loading }) => {
-  const { courseFields, when, classNameDataSource } = courseEdit;
+  const { courseFields, when, classIdDataSource } = courseEdit;
 
   const formConfig: FormItemComponentProps[] = [
     {
@@ -42,7 +42,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
       props: {
         mode: 'multiple',
       },
-      datasource: classNameDataSource
+      datasource: classIdDataSource
     },
   ]
 

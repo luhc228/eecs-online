@@ -10,6 +10,7 @@ export interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = (props) => {
   const [loading, setLoading] = useState(false);
+
   const onChange = (info: any) => {
     const { status } = info.file;
     if (status !== 'uploading') {

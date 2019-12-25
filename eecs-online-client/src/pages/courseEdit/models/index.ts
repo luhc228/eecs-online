@@ -9,9 +9,9 @@ import userUtils from '@/utils/user-utils';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
 
 export interface StateType {
-  courseFields: CourseFieldsModel,
-  when: boolean,
-  classNameDataSource: SelectComponentDatasourceModel[]
+  courseFields: CourseFieldsModel;
+  when: boolean;
+  classIdDataSource: SelectComponentDatasourceModel[];
 }
 
 export interface ModelType {
@@ -38,7 +38,7 @@ const Model = {
       classId: [],
     },
     when: true,
-    classNameDataSource: [],
+    classIdDataSource: [],
   },
 
   reducers: {
@@ -60,12 +60,12 @@ const Model = {
       return { ...state, when: payload.when }
     },
 
-    saveClassNameDataSource(
+    saveClassIdDataSource(
       state: StateType,
       { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } }
     ) {
-      return { ...state, classNameDataSource: payload.data }
-    }
+      return { ...state, classIdDataSource: payload.data }
+    },
   },
 
   effects: {
@@ -81,18 +81,19 @@ const Model = {
         return;
       }
       const { data: { list } } = response;
-      const classNameDataSource = list.map((item: any) => ({
+      const classIdDataSource = list.map((item: any) => ({
         label: item.className,
         value: item.classId
       }));
 
       yield put({
-        type: 'saveClassNameDataSource',
+        type: 'saveClassIdDataSource',
         payload: {
-          data: classNameDataSource,
+          data: classIdDataSource,
         },
       })
     },
+
     /**
      * 新增课程信息
      */
@@ -111,7 +112,7 @@ const Model = {
     },
 
     /**
-    * 更新课程信息(Edit)
+    * 更新课程信息
     */
     *updateCourse(
       { payload }: { type: string; payload: { data: CourseFieldsModel } },
@@ -130,17 +131,21 @@ const Model = {
 
   subscriptions: {
     setup(
-      { dispatch }: { dispatch: Dispatch<any> }
+      { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
-      const userInfo = userUtils.getUserInfo();
-      if (Object.keys(userInfo).length !== 0) {
-        dispatch({
-          type: 'fetchvirClassList',
-          payload: {
-            teacherId: userInfo.teacherId
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/teacher/course/create' || pathname === '/teacher/course/edit') {
+          const userInfo = userUtils.getUserInfo();
+          if (Object.keys(userInfo).length !== 0) {
+            dispatch({
+              type: 'fetchCourseList',
+              payload: {
+                teacherId: userInfo.teacherId
+              }
+            });
           }
-        })
-      }
+        }
+      });
     },
   },
 }

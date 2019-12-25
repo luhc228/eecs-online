@@ -60,7 +60,7 @@ const questionLibModel = {
 
   effects: {
     /**
-    * 获取所有课程信息
+    * 获取所有课程信息列表
     */
     *fetchCourseList(
       { payload }: { type: string; payload: { teacherId: string } },
@@ -151,17 +151,6 @@ const questionLibModel = {
             teacherId: userInfo.teacherId
           }
         });
-
-        // dispatch({
-        //   type: 'questionLib/initQuestionLibPagination',
-        //   payload: {
-        //     data: {
-        //       ...PAGINATION_CONFIGS,
-        //       ...filterFields,
-        //       questionType: Number(currentTabKey),
-        //     }
-        //   },
-        // })
       }
     },
   }

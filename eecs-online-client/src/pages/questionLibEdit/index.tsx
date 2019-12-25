@@ -2,26 +2,36 @@ import React, { useState } from 'react';
 import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
-import { FormItemComponentProps } from '@/interfaces/components';
+import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
 import { questionTypeMap } from '../questionLib';
 import appConfig from '@/appConfig';
+import CustomCard from '@/components/CustomCard';
+import { StateType } from './models';
+import RouterPrompt from '@/components/RouterPrompt';
 
-const QuestionLibEdit: React.FC<{}> = () => {
+export interface QuestionLibEditProps extends UmiComponentProps {
+  loading: boolean;
+  questionLibEdit: StateType;
+}
+
+const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
+  history,
+  dispatch,
+  loading,
+  questionLibEdit,
+}) => {
   const [isOptionsDisplay, setIsOptionsDisplay] = useState(false);
 
+  const { courseIdDataSource, questionFields, when } = questionLibEdit;
+  const { location } = history;
+
   const getFormConfig = (optionsDisplay: boolean): FormItemComponentProps[] => {
-    const basicFormConfig = [{
+    const basicFormConfig: FormItemComponentProps[] = [{
       label: '所属课程',
       name: 'courseId',
       component: FORM_COMPONENT.Select,
       required: true,
-      // TODO: from backend api
-      datasource: [
-        {
-          value: '通信1班',
-          label: '通信1班',
-        },
-      ],
+      datasource: courseIdDataSource,
     },
     {
       label: '题目内容',
@@ -46,7 +56,7 @@ const QuestionLibEdit: React.FC<{}> = () => {
       label: '选项',
       name: 'options',
       component: FORM_COMPONENT.DynamicFieldSet,
-      required: true,
+      required: false,
       initialValue: [],
     },
     {
@@ -69,44 +79,79 @@ const QuestionLibEdit: React.FC<{}> = () => {
         unit: '分'
       }
     }];
+
     if (optionsDisplay) {
       return basicFormConfig;
     }
+
+    // 去掉选项的Form
     basicFormConfig.splice(3, 1);
     return basicFormConfig;
   };
 
-  const handleFieldsChange = (values: any) => {
-    const { questionType } = values;
+  const handleFieldsChange = (allFields: any) => {
+    console.log(allFields);
+    const { questionType } = allFields;
     if (+questionType === QUESTION_TYPE.Single || +questionType === QUESTION_TYPE.Multiple) {
       setIsOptionsDisplay(true);
     } else {
       setIsOptionsDisplay(false);
     }
+
+    dispatch({
+      type: 'questionLibEdit/changeQuestionFields',
+      payload: { data: allFields },
+    })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (allFields: object) => {
+    const isCreate = location.pathname.split('/')[3] === 'create';
 
+    console.log(allFields);
+    // if (isCreate) {
+    //   dispatch({
+    //     type: 'questionLibEdit/createQuestion',
+    //     payload: { data: allFields },
+    //   })
+    // } else {
+    //   dispatch({
+    //     type: 'questionLibEdit/updateQuestion',
+    //     payload: {
+    //       data: {
+    //         ...allFields,
+    //         questionId: questionFields.questionId
+    //       }
+    //     },
+    //   })
+    // }
   }
 
   return (
-    <CustomForm
-      layout="horizontal"
-      values={{}}
-      formTypes={CUSTOM_FORM_TYPES.OneColumn}
-      loading={false}
-      onFieldsChange={handleFieldsChange}
-      formConfig={getFormConfig(isOptionsDisplay)}
-      onSubmit={handleSubmit}
-    />
+    <>
+      <RouterPrompt when={when} />
+      <CustomCard>
+        <CustomForm
+          layout="horizontal"
+          values={questionFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
+          loading={loading}
+          onFieldsChange={handleFieldsChange}
+          formConfig={getFormConfig(isOptionsDisplay)}
+          onSubmit={handleSubmit}
+        />
+      </CustomCard>
+    </>
   )
 }
-// const mapStateToProps = ({
-//   questionLib
-// }: {
-//   questionLib: StateType
-// }) => ({
-//   questionLib
-// });
+const mapStateToProps = ({
+  questionLibEdit,
+  loading,
+}: {
+  questionLibEdit: StateType,
+  loading: any
+}) => ({
+  questionLibEdit,
+  loading: loading.models.questionLibEdit
+});
 
-export default connect()(QuestionLibEdit);
+export default connect(mapStateToProps)(QuestionLibEdit);

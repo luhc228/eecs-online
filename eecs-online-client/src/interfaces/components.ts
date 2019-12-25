@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dispatch } from 'dva';
+import History from 'history';
 import { AnyAction } from 'redux';
 import { FORM_COMPONENT, USER_TYPE } from '@/enums';
 
@@ -81,6 +82,7 @@ export interface TabsContentProps {
 }
 
 export interface UmiComponentProps {
+  // TODO: add interface instead of History
   history?: History;
   dispatch: Dispatch<AnyAction>;
 }
