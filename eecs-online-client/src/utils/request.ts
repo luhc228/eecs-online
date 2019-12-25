@@ -40,7 +40,8 @@ const errorHandler = (error: { response: Response }): Response => {
       message: '网络异常',
     });
   }
-  return response;
+
+  throw error;
 };
 
 const host = process.env.NODE_ENV === 'production' ? appConfig.apiUrl : '';

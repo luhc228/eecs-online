@@ -12,7 +12,7 @@ interface LibFilterProps extends UmiComponentProps {
 }
 
 const LibFilter: React.FC<LibFilterProps> = ({ questionLib, dispatch }) => {
-  const { filterFields, courseIdDataSource } = questionLib;
+  const { filterFields, courseIdDataSource, currentTabKey } = questionLib;
 
   const filterFormConfig: FormItemComponentProps[] = [
     {
@@ -42,7 +42,13 @@ const LibFilter: React.FC<LibFilterProps> = ({ questionLib, dispatch }) => {
   const handleSubmit = (values: FilterFieldsModel) => {
     dispatch({
       type: 'questionLib/fetchQuestionLibPagination',
-      payload: { ...PAGINATION_CONFIGS, ...values },
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...values,
+          questionType: Number(currentTabKey)
+        }
+      },
     })
   }
 

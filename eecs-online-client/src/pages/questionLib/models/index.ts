@@ -46,7 +46,6 @@ const questionLibModel = {
       state: StateType,
       { payload }: { payload: { type: string, filterFields: FilterFieldsModel } }
     ) {
-      console.log(payload.filterFields);
       return { ...state, filterFields: payload.filterFields }
     },
 
@@ -103,7 +102,7 @@ const questionLibModel = {
       { put, call }: EffectsCommandMap
     ) {
       const response = yield call(questionLibService.fetchQuestionLibPagination, payload.data);
-      console.log(response);
+
       const { data } = response;
       yield put({
         type: 'save',
@@ -117,17 +116,18 @@ const questionLibModel = {
      * 删除某条题目
      */
     *removeQuestion(
-      { payload }: { type: string; payload: { id: string } },
+      { payload }: { type: string; payload: { questionId: number } },
       { put, call, select }: EffectsCommandMap
     ) {
-      yield call(questionLibService.removeQuestion, payload.id);
+      yield call(questionLibService.removeQuestion, payload.questionId);
 
       const paginationData = yield select((state: any) => {
-        const { questionLib: { data, filterFields } } = state;
+        const { questionLib: { data, filterFields, currentTabKey } } = state;
         const { page, pageSize } = data;
         return {
           page,
           pageSize,
+          questionType: Number(currentTabKey),
           ...filterFields,
         }
       });

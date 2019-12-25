@@ -8,7 +8,7 @@ export interface FilterFieldsModel {
 
 export interface questionListItem {
   // 题目id
-  id: string;
+  questionId: number;
   // 课程名
   courseName: string;
   // 题目类型
