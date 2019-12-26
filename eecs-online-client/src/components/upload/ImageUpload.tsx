@@ -6,16 +6,19 @@ export interface ImageUploadProps {
   name?: string;
   multiple?: boolean;
   action?: string;
+  onChange?: () => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = (props) => {
   const [loading, setLoading] = useState(false);
 
-  const onChange = (info: any) => {
+  const handleChange = (info: any) => {
+    console.log(info);
     const { status } = info.file;
     if (status !== 'uploading') {
       setLoading(true);
     }
+
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);
       setLoading(false);
@@ -23,11 +26,20 @@ const ImageUpload: React.FC<ImageUploadProps> = (props) => {
       setLoading(false);
       message.error(`${info.file.name} file upload failed.`);
     }
+    // if (props.onChange) {
+    //   onchange({
+
+    //   })
+    // }
   };
 
   return (
     <Spin tip="Uoloading..." spinning={loading}>
-      <Upload onChange={onChange} listType="picture" {...props}>
+      <Upload
+        onChange={handleChange}
+        listType="picture"
+        {...props}
+      >
         <Button>
           <Icon type="upload" />Click to upload
         </Button>

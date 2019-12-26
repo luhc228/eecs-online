@@ -5,6 +5,7 @@ import userUtils from '@/utils/user-utils';
 import { fetchCourseList } from '@/services';
 import * as questionLibEditServices from '../services';
 import { QuestionFieldsModel } from '@/interfaces/questionLibEdit';
+import { QUESTION_TYPE } from '@/enums';
 
 export interface StateType {
   questionFields: QuestionFieldsModel;
@@ -16,7 +17,9 @@ const questionLibEdit = {
   namespace: 'questionLibEdit',
 
   state: {
-    questionFields: {},
+    questionFields: {
+      questionType: QUESTION_TYPE.Judge,
+    },
     when: true,
     courseIdDataSource: [],
   },
