@@ -118,11 +118,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             },
             )(
               <ImageUpload {...formItem.props} />
-              // <Upload name="logo" action="/upload.do" listType="picture">
-              //   <Button>
-              //     <Icon type="upload" /> Click to upload
-              // </Button>
-              // </Upload>
             )}
           </>
         )
@@ -224,13 +219,12 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   }
 
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
-      if (err) {
-        console.log('Received values of form: ', values);
-        return;
-      }
+      // if (err) {
+      //   return;
+      // }
 
       onSubmit(values);
     });
@@ -276,7 +270,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
         {formTypes === CUSTOM_FORM_TYPES.Filter &&
           <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
             {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
-
               <Col {...formItemLayout} key={formItem.name}>
                 <Form.Item label={formItem.label}>
                   {renderForm(formItem)}
@@ -297,8 +290,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           </Row>
         }
         {/* 普通表单 */}
-        {
-          (formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) &&
+        {(formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) &&
           formConfig && formConfig.map((formItem: FormItemComponentProps) => (
             <Form.Item label={formItem.label} key={formItem.name} {...formItemLayout}>
               {renderForm(formItem)}
@@ -329,7 +321,7 @@ CustomForm.defaultProps = {
 }
 
 export default Form.create<CustomFormProps>({
-
+  name: 'custom_form',
   // ref: http://react-component.github.io/form/examples/redux.html
   mapPropsToFields(props: CustomFormProps) {
     const result: { [key: string]: { value: string | number | string[], [key: string]: any } } = {};

@@ -15,4 +15,6 @@ export interface QuestionFieldsModel {
   options?: any;
   // 题目正确答案
   answer: string;
+
+  [k: string]: any;
 }

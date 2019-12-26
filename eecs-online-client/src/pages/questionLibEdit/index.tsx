@@ -8,6 +8,7 @@ import appConfig from '@/appConfig';
 import CustomCard from '@/components/CustomCard';
 import { StateType } from './models';
 import RouterPrompt from '@/components/RouterPrompt';
+import { QuestionFieldsModel } from '@/interfaces/questionLibEdit';
 
 export interface QuestionLibEditProps extends UmiComponentProps {
   loading: boolean;
@@ -117,6 +118,12 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
       datasource: courseIdDataSource,
     },
     {
+      label: '单元',
+      name: 'unit',
+      component: FORM_COMPONENT.Input,
+      required: true,
+    },
+    {
       label: '题目内容',
       name: 'content',
       component: FORM_COMPONENT.TextArea,
@@ -141,7 +148,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
       component: FORM_COMPONENT.Upload,
       required: false,
       props: {
-        name: 'file',
+        name: 'image',
         multiple: true,
         action: appConfig.uploadUrl,
       }
@@ -167,9 +174,9 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     // 动态增加Form表单元素
     const dynamicFieldSets: FormItemComponentProps[] = dynamicFieldSetKeys.map((key) => ({
       label: `选项${key}`,
-      name: `options[${key}]`,
+      name: `option${key}`,
       component: FORM_COMPONENT.DynamicFieldSet,
-      required: false,
+      required: true,
       initialValue: [],
       props: {
         handleDelete: handleDynamicFieldSetRemove,
@@ -178,7 +185,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
       }
     }))
 
-    basicFormConfig.splice(3, 0, ...dynamicFieldSets);
+    basicFormConfig.splice(4, 0, ...dynamicFieldSets);
     return basicFormConfig;
   };
 
@@ -210,21 +217,38 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     }
   }, [questionFields.questionType]);
 
-  const handleSubmit = (allFields: object) => {
+  const handleSubmit = (allFields: QuestionFieldsModel) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
 
-    console.log(allFields);
+    const { answer } = allFields;
+    const optionsKeys = Object.keys(allFields).filter((k: string) => k.includes('option'));
+    let options;
+    if (optionsKeys.length) {
+      options = optionsKeys.map((k: string) => {
+        const option = allFields[k];
+        delete allFields[k]
+        return option
+      }).join('|');
+    }
+
+    const newAllFields = {
+      ...allFields,
+      answer: Array.isArray(answer) ? answer.join('|') : answer,
+      options,
+      contentImage: '',
+    }
+
     if (isCreate) {
       dispatch({
         type: 'questionLibEdit/createQuestion',
-        payload: { data: allFields },
+        payload: { data: newAllFields },
       })
     } else {
       dispatch({
         type: 'questionLibEdit/updateQuestion',
         payload: {
           data: {
-            ...allFields,
+            ...newAllFields,
             questionId: questionFields.questionId
           }
         },

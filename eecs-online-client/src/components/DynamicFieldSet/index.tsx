@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { Input, Icon } from 'antd';
 
 export interface DynamicFieldSetProps {
   handleAdd?: () => void;
   handleDelete?: (k: number) => void;
   dynamicKey?: number;
+  onChange?: ChangeEventHandler<any>;
 }
 
 const DynamicFieldSet: React.SFC<DynamicFieldSetProps> = (props) => {
@@ -12,12 +13,14 @@ const DynamicFieldSet: React.SFC<DynamicFieldSetProps> = (props) => {
     handleAdd,
     handleDelete,
     dynamicKey,
+    onChange,
   } = props;
   return (
     <div>
       <Input
         placeholder="请输入"
         style={{ width: '80%', marginRight: 8 }}
+        onChange={onChange}
       />
       {dynamicKey && dynamicKey > 0 ? (
         <Icon

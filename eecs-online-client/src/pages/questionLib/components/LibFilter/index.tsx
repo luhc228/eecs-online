@@ -19,7 +19,7 @@ const LibFilter: React.FC<LibFilterProps> = ({ questionLib, dispatch }) => {
       label: '题目内容',
       name: 'content',
       component: FORM_COMPONENT.Input,
-      required: false,
+      required: true,
     },
     {
       label: '课程名称',
