@@ -276,11 +276,14 @@ const CustomForm: React.FC<CustomFormProps> = props => {
         {formTypes === CUSTOM_FORM_TYPES.Filter &&
           <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
             {formConfig && formConfig.map((formItem: FormItemComponentProps) => (
+
               <Col {...formItemLayout} key={formItem.name}>
                 <Form.Item label={formItem.label}>
                   {renderForm(formItem)}
                 </Form.Item>
               </Col>
+
+
             ))}
             {formConfig &&
               formTypes === CUSTOM_FORM_TYPES.Filter &&
@@ -294,7 +297,8 @@ const CustomForm: React.FC<CustomFormProps> = props => {
           </Row>
         }
         {/* 普通表单 */}
-        {(formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) &&
+        {
+          (formTypes === CUSTOM_FORM_TYPES.OneColumn || formTypes === CUSTOM_FORM_TYPES.TwoColumn) &&
           formConfig && formConfig.map((formItem: FormItemComponentProps) => (
             <Form.Item label={formItem.label} key={formItem.name} {...formItemLayout}>
               {renderForm(formItem)}
@@ -312,8 +316,8 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <>{filterFormButtons('filterFloatRightButtons', resetFieldsVisible)}</>
             )}
         </Form.Item>
-      </Form>
-    </div>
+      </Form >
+    </div >
 
   )
 }
