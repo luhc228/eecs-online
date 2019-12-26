@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
@@ -21,13 +21,15 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
   loading,
   questionLibEdit,
 }) => {
-  const [isOptionsDisplay, setIsOptionsDisplay] = useState(false);
-  const [dynamicKeys, setDynamicKeys] = useState();
+  const { courseIdDataSource, questionFields, when, dynamicKeys, optionDisplay } = questionLibEdit;
 
-  const { courseIdDataSource, questionFields, when } = questionLibEdit;
   const { location } = history;
 
-  const optionsDataSource = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const optionsDataSource: string[] = [];
+  for (let i = 65; i < 91;) {
+    optionsDataSource.push(String.fromCharCode(i));
+    i += 1;
+  }
 
   const singleQuestionAnswerFormItem = {
     component: FORM_COMPONENT.Select,
@@ -43,14 +45,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
   const judgeQuestionAnswerFormItem = {
     component: FORM_COMPONENT.Select,
     datasource: [
-      {
-        value: 0,
-        label: '错误',
-      },
-      {
-        value: 1,
-        label: '正确',
-      }
+
     ],
   }
 
@@ -70,13 +65,14 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
    */
   const handleDynamicFieldSetRemove = (k: number) => {
     const keys = dynamicKeys;
-    // need at least one input
-    if (keys.length === 1) {
-      return;
-    }
 
     const newKeys = keys.filter((key: number) => key !== k);
-    setDynamicKeys(newKeys);
+    dispatch({
+      type: 'questionLibEdit/changeDynamicKeys',
+      payload: {
+        dynamicKeys: newKeys
+      }
+    })
   }
 
   /**
@@ -85,7 +81,12 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
   const handleDynamicFieldSetAdd = () => {
     const keys = dynamicKeys;
     const newKeys = keys.concat(keys[keys.length - 1] + 1);
-    setDynamicKeys(newKeys);
+    dispatch({
+      type: 'questionLibEdit/changeDynamicKeys',
+      payload: {
+        dynamicKeys: newKeys
+      }
+    })
   }
 
   const getFormConfig = (
@@ -94,21 +95,26 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     questionType: number,
   ): FormItemComponentProps[] => {
     let answerDataSource;
-    if (dynamicFieldSetKeys) {
-      answerDataSource = dynamicFieldSetKeys.map(k => ({
-        value: k,
-        label: optionsDataSource[k],
+    if (dynamicFieldSetKeys && (questionType === QUESTION_TYPE.Multiple || questionType === QUESTION_TYPE.Single)) {
+      answerDataSource = dynamicFieldSetKeys.map((_, index) => ({
+        value: optionsDataSource[index],
+        label: optionsDataSource[index],
       }))
     }
+    if (questionType === QUESTION_TYPE.Judge) {
+      answerDataSource = [
+        { value: 0, label: '错误', },
+        { value: 1, label: '正确', }
+      ]
+    }
 
-    const questionFormItem: FormItemComponentProps = {
+    const answerFormItem = {
       label: '答案',
       name: 'answer',
       required: true,
-      component: FORM_COMPONENT.Input,
       ...answerFormItemMap[String(questionType)],
       datasource: answerDataSource
-    };
+    } as FormItemComponentProps;
 
     const basicFormConfig: FormItemComponentProps[] = [{
       label: '所属课程',
@@ -158,12 +164,10 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
       name: 'questionScore',
       component: FORM_COMPONENT.InputNumber,
       required: true,
-      props: {
-        unit: '分'
-      },
+      props: { unit: '分' },
     },
     {
-      ...questionFormItem
+      ...answerFormItem
     }
     ];
 
@@ -189,36 +193,57 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     return basicFormConfig;
   };
 
-  const handleFieldsChange = (allFields: object) => {
+  const handleFieldsChange = (allFields: QuestionFieldsModel, changedFields: any) => {
+    const { questionType } = changedFields;
+
+    if (questionType && questionType.value !== questionFields.questionType) {
+      if (
+        questionType.value === QUESTION_TYPE.Single ||
+        questionType.value === QUESTION_TYPE.Multiple) {
+        dispatch({
+          type: 'questionLibEdit/setOptionsDisplay',
+          payload: {
+            optionDisplay: true
+          }
+        });
+        dispatch({
+          type: 'questionLibEdit/changeDynamicKeys',
+          payload: {
+            dynamicKeys: [0]
+          }
+        })
+      } else {
+        dispatch({
+          type: 'questionLibEdit/setOptionsDisplay',
+          payload: {
+            optionDisplay: false
+          }
+        });
+        dispatch({
+          type: 'questionLibEdit/changeDynamicKeys',
+          payload: {
+            dynamicKeys: undefined
+          }
+        })
+      }
+
+      dispatch({
+        type: 'questionLibEdit/changeQuestionFields',
+        payload: { data: { ...allFields, answer: undefined } },
+      })
+
+      return;
+    }
+
     dispatch({
       type: 'questionLibEdit/changeQuestionFields',
-      payload: { data: allFields },
+      payload: { data: { ...allFields } },
     })
   }
 
-  useEffect(() => {
-    const { questionType } = questionFields;
-    // 清空上次选择的answer的FormItem
-    dispatch({
-      type: 'questionLibEdit/changeQuestionFields',
-      payload: {
-        data: {
-          ...questionFields,
-          answer: []
-        }
-      },
-    })
-    if (+questionType === QUESTION_TYPE.Single || +questionType === QUESTION_TYPE.Multiple) {
-      setIsOptionsDisplay(true);
-      setDynamicKeys([0]);
-    } else {
-      setIsOptionsDisplay(false);
-      setDynamicKeys(undefined);
-    }
-  }, [questionFields.questionType]);
-
   const handleSubmit = (allFields: QuestionFieldsModel) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
+    const { questionId } = location.query;
 
     const { answer } = allFields;
     const optionsKeys = Object.keys(allFields).filter((k: string) => k.includes('option'));
@@ -236,6 +261,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
       answer: Array.isArray(answer) ? answer.join('|') : answer,
       options,
       contentImage: '',
+      questionId,
     }
 
     if (isCreate) {
@@ -266,7 +292,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={loading}
           onFieldsChange={handleFieldsChange}
-          formConfig={getFormConfig(isOptionsDisplay, dynamicKeys, questionFields.questionType)}
+          formConfig={getFormConfig(optionDisplay, dynamicKeys, questionFields.questionType)}
           onSubmit={handleSubmit}
         />
       </CustomCard>

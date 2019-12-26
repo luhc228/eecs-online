@@ -29,14 +29,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location
         style={{
           margin: '24px 16px',
           padding: '5px 20px',
-          overflow: 'initial',
-          // background: '#fff',
-          // minHeight: 1000,
         }}
       >
-        {/* <Card> */}
         {children}
-        {/* </Card> */}
       </Content>
       <Footer />
     </Layout>

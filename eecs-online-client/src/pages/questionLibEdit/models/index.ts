@@ -11,20 +11,54 @@ export interface StateType {
   questionFields: QuestionFieldsModel;
   when: boolean;
   courseIdDataSource: SelectComponentDatasourceModel[];
+  optionDisplay: boolean;
+  dynamicKeys: number[];
+}
+
+const initState = {
+  questionFields: {
+    questionType: QUESTION_TYPE.Judge,
+  },
+  when: true,
+  courseIdDataSource: [],
+  optionDisplay: false,
+  dynamicKeys: undefined,
 }
 
 const questionLibEdit = {
   namespace: 'questionLibEdit',
 
-  state: {
-    questionFields: {
-      questionType: QUESTION_TYPE.Judge,
-    },
-    when: true,
-    courseIdDataSource: [],
-  },
+  state: initState,
 
   reducers: {
+    initState(
+      state: StateType,
+      { payload }: { type: string; payload: { state: StateType } }
+    ) {
+      return { ...payload.state }
+    },
+
+    setOptionsDisplay(
+      state: StateType,
+      { payload }: { type: string; payload: { optionDisplay: boolean } }
+    ) {
+      return {
+        ...state,
+        optionDisplay: payload.optionDisplay,
+      }
+    },
+
+    changeDynamicKeys(
+      state: StateType,
+      { payload }: { type: string; payload: { dynamicKeys: number[] } }
+    ) {
+      console.log(payload.dynamicKeys);
+      return {
+        ...state,
+        dynamicKeys: payload.dynamicKeys,
+      }
+    },
+
     saveCourseIdDataSource(
       state: StateType,
       { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } }
@@ -45,9 +79,17 @@ const questionLibEdit = {
     ) {
       console.log('QuestionFields Change：', payload.data);
 
+      let questionFields = { ...state.questionFields, ...payload.data };
+      // 传进来的fields是空的 需要做初始化
+      if (!Object.getOwnPropertyNames(payload.data).length) {
+        questionFields = {
+          questionType: QUESTION_TYPE.Judge,
+        } as QuestionFieldsModel;
+      }
+
       return {
         ...state,
-        questionFields: payload.data,
+        questionFields,
         when: true,
       }
     }
@@ -77,6 +119,56 @@ const questionLibEdit = {
       });
     },
 
+    /**
+     * 获取试题详情
+     */
+    *fetchQuestionDetail(
+      { payload }: { type: string; payload: { questionId: string } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(questionLibEditServices.fetchQuestionDetail, payload.questionId);
+      const { data } = response;
+      const { answer, options }: { answer: string, options: string } = data;
+
+      let newQuestionFields = data;
+      if (answer) {
+        const newAnswer = answer.includes('|') ? answer.split('|') : answer;
+        newQuestionFields = {
+          ...newQuestionFields,
+          answer: newAnswer,
+        }
+      }
+
+      if (options) {
+        const optionsArray = options.split('|');
+
+        yield put({
+          type: 'changeDynamicKeys',
+          payload: {
+            dynamicKeys: [...new Array(optionsArray.length).keys()],
+          },
+        });
+
+        yield put({
+          type: 'setOptionsDisplay',
+          payload: {
+            optionDisplay: true
+          },
+        });
+
+        optionsArray.forEach((item: string, index: number) => {
+          newQuestionFields[`option${index}`] = item;
+        })
+
+        delete newQuestionFields.options;
+      }
+      yield put({
+        type: 'changeQuestionFields',
+        payload: {
+          data: newQuestionFields,
+        },
+      });
+    },
     /**
     * 新增试题(Create)
     */
@@ -116,15 +208,33 @@ const questionLibEdit = {
     setup(
       { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
-      return history.listen(({ pathname }: { pathname: string }) => {
+      return history.listen(({ pathname, query }: { pathname: string, query: { [k: string]: string } }) => {
+        const { questionId } = query;
+
         if (pathname === '/teacher/question-lib/create' ||
           pathname === '/teacher/question-lib/edit') {
+          dispatch({
+            type: 'initState',
+            payload: {
+              state: initState
+            }
+          });
+
           const userInfo = userUtils.getUserInfo();
           if (Object.keys(userInfo).length !== 0) {
             dispatch({
               type: 'fetchCourseList',
               payload: {
                 teacherId: userInfo.teacherId
+              }
+            });
+          }
+
+          if (questionId) {
+            dispatch({
+              type: 'fetchQuestionDetail',
+              payload: {
+                questionId
               }
             });
           }

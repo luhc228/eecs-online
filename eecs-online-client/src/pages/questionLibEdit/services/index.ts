@@ -12,6 +12,18 @@ export function createQuestion(data: any) {
 }
 
 /**
+ *
+ * @param questionId 题目id
+ */
+export function fetchQuestionDetail(questionId: string) {
+  return request.get('/question_lib/question/teacher/detail', {
+    params: {
+      questionId
+    },
+  })
+}
+
+/**
  * 更新题目信息
  * @param data
  */

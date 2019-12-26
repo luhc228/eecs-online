@@ -3,7 +3,7 @@
  * Filter component usually in the header of the table or the page.
  */
 import React from 'react';
-import { Form, Row, Col, Upload, Icon, Input, Select, Button, Radio, Checkbox } from 'antd';
+import { Form, Row, Col, Input, Select, Button, Radio, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -20,16 +20,25 @@ interface CustomFormProps extends FormComponentProps {
   formTypes: CUSTOM_FORM_TYPES;
   layout?: 'horizontal' | 'inline' | 'vertical';
   formConfig: FormItemComponentProps[];
-  values: object;
+  values: any;
   loading?: boolean;
   children?: React.ReactNode;
-  onFieldsChange: (allFields: object) => void;
-  onSubmit: (value: object) => void;
+  onFieldsChange: (allFields: any, changedFields?: any) => void;
+  onSubmit: (value: any) => void;
   resetFieldsVisible?: boolean;
 }
 
 const CustomForm: React.FC<CustomFormProps> = props => {
-  const { formTypes, form, formConfig, onSubmit, loading, layout, children, resetFieldsVisible } = props;
+  const {
+    formTypes,
+    form,
+    formConfig,
+    onSubmit,
+    loading,
+    layout,
+    children,
+    resetFieldsVisible
+  } = props;
   const { getFieldDecorator } = form;
 
   let formItemLayout: any = null;
@@ -222,9 +231,9 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
-      // if (err) {
-      //   return;
-      // }
+      if (err) {
+        return;
+      }
 
       onSubmit(values);
     });
@@ -338,7 +347,7 @@ export default Form.create<CustomFormProps>({
     return result;
   },
 
-  onFieldsChange(props: CustomFormProps, _: any, allFields: object) {
+  onFieldsChange(props: CustomFormProps, changedFields: any, allFields: object) {
     const result: { [key: string]: any } = {}
     if (allFields) {
       Object.entries(allFields).forEach(formField => {
@@ -346,6 +355,6 @@ export default Form.create<CustomFormProps>({
         result[key] = field.value;
       });
     }
-    props.onFieldsChange(result);
+    props.onFieldsChange(result, changedFields);
   },
 })(CustomForm);

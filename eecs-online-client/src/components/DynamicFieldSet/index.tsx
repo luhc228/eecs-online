@@ -1,9 +1,11 @@
 import React, { ChangeEventHandler } from 'react';
-import { Input, Icon } from 'antd';
+import { Input, Icon, Row } from 'antd';
+import styles from './index.less';
 
 export interface DynamicFieldSetProps {
   handleAdd?: () => void;
   handleDelete?: (k: number) => void;
+  value?: string;
   dynamicKey?: number;
   onChange?: ChangeEventHandler<any>;
 }
@@ -14,25 +16,27 @@ const DynamicFieldSet: React.SFC<DynamicFieldSetProps> = (props) => {
     handleDelete,
     dynamicKey,
     onChange,
+    value,
   } = props;
   return (
-    <div>
+    <Row>
       <Input
         placeholder="请输入"
         style={{ width: '80%', marginRight: 8 }}
         onChange={onChange}
+        value={value}
       />
-      {dynamicKey && dynamicKey > 0 ? (
-        <Icon
-          type="minus-circle"
-          onClick={() => handleDelete(dynamicKey)}
-        />
-      ) : null}
+      {dynamicKey !== undefined && <Icon
+        className={styles.dynamicButton}
+        type="minus-circle"
+        onClick={() => handleDelete(dynamicKey)}
+      />}
       <Icon
+        className={styles.dynamicButton}
         type="plus-circle"
         onClick={() => handleAdd()}
       />
-    </div>
+    </Row>
   )
 }
 

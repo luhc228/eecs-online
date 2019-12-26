@@ -81,8 +81,11 @@ export interface TabsContentProps {
   key: number,
 }
 
+export interface UmiHistory extends History {
+  location: { [k: string]: any }
+}
 export interface UmiComponentProps {
   // TODO: add interface instead of History
-  history?: History;
+  history: UmiHistory;
   dispatch: Dispatch<AnyAction>;
 }
