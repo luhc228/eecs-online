@@ -2,7 +2,7 @@ import React from 'react';
 import { Dispatch } from 'redux';
 import { Select, Spin } from 'antd';
 import { connect } from 'dva';
-import { styles } from './index.less';
+import styles from './collegeClass.less';
 
 const { Option } = Select;
 
@@ -54,7 +54,7 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
       return getOption(college);
     }
     return [];
-  }
+  };
 
   const getClassOption = () => {
     const { studentClass } = props;
@@ -62,7 +62,7 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
       return getOption(studentClass);
     }
     return [];
-  }
+  };
 
   const selectCollegeItem = (item: SelectItem) => {
     const { dispatch, onChange } = props;
@@ -107,11 +107,13 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
   };
   const { college, studentClass } = conversionObject();
   const { loading } = props;
+
+  console.log(styles);
   return (
-    <Spin spinning={loading} wrapperClassName={styles.row}>
+    <Spin spinning={loading} className={styles.row}>
       <Select
         className={styles.item}
-        value={ college }
+        value={college}
         labelInValue
         showSearch
         onSelect={selectCollegeItem}
@@ -120,7 +122,7 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
       </Select>
       <Select
         className={styles.item}
-        value={ studentClass}
+        value={studentClass}
         labelInValue
         showSearch
         onSelect={selectClassItem}
@@ -129,28 +131,28 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
       </Select>
     </Spin>
   );
-}
+};
 
 const mapStateToProps = () => {
   ({
     collegeClass,
     loading,
-  }:{
+  }: {
     collegeClass: {
       college: ViewItemType[];
       studentClass: ViewItemType[];
-    },
+    };
     loading: any;
   }) => {
     const { college, studentClass } = collegeClass;
     loading.models.collegeClass;
-  }
+  };
   // const { college, studentClass } = state.collegeClass;
   // return {
   //   college,
   //   studentClass,
   //   loading: state.loading.models.collegeClass,
   // };
-}
+};
 
 export default connect(mapStateToProps)(CollegeClass);

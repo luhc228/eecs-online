@@ -2,12 +2,9 @@ import request from '@/utils/request';
 import { QUESTION_TYPE } from '@/enums';
 
 export interface QuestionDetailData {
-  course: string;
+  courseId: number;
+  // questionName: string;
   questionType?: QUESTION_TYPE;
-}
-
-export function fetchCourseList() {
-  return request.get('/course/detail');
 }
 
 // export function fetchStudentClassList(params: { college: string }) {
@@ -21,7 +18,7 @@ export function fetchCourseList() {
  * @param data
  */
 export function createTeacherHomework(data: any) {
-  return request.post('/vir_teacherhomework/add', {
+  return request.post('/homework/teacher/add', {
     data,
   });
 }
@@ -31,7 +28,7 @@ export function createTeacherHomework(data: any) {
  * @param data
  */
 export function updateTeacherHomework(data: any) {
-  return request.post('/vir_teacherhomework/edit', {
+  return request.post('/homework/teacher/update', {
     data,
   });
 }
@@ -41,7 +38,8 @@ export function updateTeacherHomework(data: any) {
  * @param data
  */
 export function fetchQuestionDetail(data: QuestionDetailData) {
-  return request.post('/question/detail', {
+  console.log('question_lib', data);
+  return request.post('/question_lib/teacher/pagination', {
     data,
   });
 }

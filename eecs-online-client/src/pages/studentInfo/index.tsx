@@ -5,7 +5,7 @@ import Button from 'antd/es/button/button';
 import { connect } from 'dva';
 import styles from './index.less';
 import { StudentUserForm } from '@/interfaces/studentInfo';
-import CollegeClassView from './components';
+import CollegeClass from './components/collegeClass';
 
 const { Option } = Select;
 
@@ -39,6 +39,7 @@ const validatorCollegeClass = (
 
 const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) => {
   // const [currentUser] = useState(undefined)
+  // console.log(user);
   useEffect(() => {
     dispatch({
       type: 'userInfo/fetchCurrent',
@@ -88,7 +89,7 @@ const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) =
             { required: true, message: '请选择学院 / 班级' },
             { validator: validatorCollegeClass },
           ],
-        })(<CollegeClassView />)}
+        })(<CollegeClass />)}
       </Form.Item>
       <Button type="primary" htmlType="submit" className={styles.submit}>
         保 存

@@ -1,23 +1,25 @@
-import { TableListPaginationProps } from './components';
+import { TableListPaginationProps, PaginationProps } from './components';
 import { QUESTION_TYPE } from '@/enums';
 
 export interface HomeworkFieldsModel {
   homeworkName?: string;
-  // 作业内容
-  content?: string;
+  // 作业总分
+  homeworkScore?: string;
   // 作业描述
   description?: string;
-  // 截止日期
-  deadline?: string;
+  // 发布时间
+  startAt?: string;
+  // 截止事件
+  endAt?: string;
   // 课程名称
   courseName?: string;
   // 课程id
-  courseID?: string;
+  courseId?: string;
 }
 
 export interface HomeworkListItem extends HomeworkFieldsModel {
   // 作业id
-  id: string;
+  homeworkId: number;
 }
 
 export interface HomeworkTableData extends TableListPaginationProps {
@@ -25,32 +27,34 @@ export interface HomeworkTableData extends TableListPaginationProps {
 }
 
 /**
- * 虚拟班级分页接口
+ * 教师作业分页接口
  */
+export interface PaginationParamsModel extends HomeworkFieldsModel, PaginationProps {}
+
 export interface TeacherHomeworkTableData extends TableListPaginationProps {
-  // 班级列表
+  // 作业列表
   list: HomeworkListItem[];
 }
 
 export interface QuestionFieldsModel {
-  // 学生姓名
+  // 题目内容
   content?: string;
-  // 学生学号
+  // 题目类型
   questionType?: QUESTION_TYPE;
 }
 
 export interface QuestionListItem extends QuestionFieldsModel {
-  // 学生ID
+  // 题目ID
   id: string;
 }
 
 export interface QuestionDetailModel {
-  // 学院
+  // 所属课程
   course: string;
-  // 学生班级
+  // 题目内容
   content: string;
-  // 学生姓名
+  // 题目类型
   questionType: QUESTION_TYPE;
-  // 学生学号
+  // 题目分值
   questionScore: number;
 }

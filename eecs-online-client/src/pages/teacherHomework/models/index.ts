@@ -1,92 +1,106 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { HomeworkTableData, HomeworkFieldsModel } from '@/interfaces/teacherHomework';
+import {
+  HomeworkTableData,
+  HomeworkFieldsModel,
+  PaginationParamsModel,
+} from '@/interfaces/teacherHomework';
 import * as homeworkService from '../services';
+import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
+import { Effect } from '@/interfaces/reduxState';
 
 export interface StateType {
-    data: HomeworkTableData;
-    filterFields: HomeworkFieldsModel;
+  data: HomeworkTableData;
+  filterFields: HomeworkFieldsModel;
 }
 
-export type Effect = (
-    action: AnyAction,
-    effects: EffectsCommandMap & { select: <T>(func: (state: StateType) => T) => T },
-) => void;
-
 export interface ModelType {
-    namespace: string;
-    state: StateType;
-    reducers: {save: Reducer<StateType>;
-        changeFilterFields: Reducer<StateType>;
-        };
-    effects: {
-        fetchHomeworkPagination: Effect,
-        removeHomework: Effect,
-    };
+  namespace: string;
+  state: StateType;
+  reducers: { save: Reducer<StateType>; changeFilterFields: Reducer<StateType> };
+  effects: {
+    fetchHomeworkPagination: Effect<StateType>;
+    removeHomework: Effect<StateType>;
+  };
 }
 
 const Model: ModelType = {
-    namespace: 'homework',
+  namespace: 'homework',
 
-    state: {
-        data: {
-          list: [],
-          total: 0,
-          pageSize: 8,
-          page: 1,
-        },
-        filterFields: {
-          homeworkName: undefined,
-          courseName: undefined,
-        },
+  state: {
+    data: DEFAULT_TABLE_PAGINATION_STATE,
+    filterFields: {
+      homeworkName: undefined,
+      courseName: undefined,
+      content: undefined,
+      description: undefined,
+      deadline: undefined,
+      courseId: undefined,
+    },
+  },
+
+  reducers: {
+    save(state: any, { payload }: { type: string; payload: { data: HomeworkTableData } }) {
+      return { ...state, data: payload.data };
     },
 
-    reducers: {
-        save(state: any, { payload: { data } }: any) {
-          return { ...state, data }
+    changeFilterFields(
+      state: any,
+      { payload }: { type: string; payload: { filterFields: HomeworkFieldsModel } },
+    ) {
+      return { ...state, filterFields: payload.filterFields };
+    },
+  },
+
+  effects: {
+    /**
+     * 获取班级信息分页
+     * 包括信息筛选
+     */
+    *fetchHomeworkPagination(
+      { payload }: { type: string; payload: { data: PaginationParamsModel } },
+      { call, put }: EffectsCommandMap,
+    ) {
+      const response = yield call(homeworkService.fetchHomeworkPagination, payload.data);
+      const { data } = response;
+      console.log('data', data);
+      yield put({
+        type: 'save',
+        payload: {
+          data,
         },
-    
-        changeFilterFields(state: any, { payload: { filterFields } }: any) {
-          return { ...state, filterFields }
-        },
+      });
     },
 
-    effects: {
-        /**
-         * 获取班级信息分页
-         * 包括信息筛选
-         */
-        *fetchHomeworkPagination({ payload }: any, { call, put }: any) {
-          const response = yield call(homeworkService.fetchHomeworkPagination, payload);
-          const { data } = response;
-          console.log(data);
-          yield put({
-            type: 'save',
-            payload: {
-              data,
-            },
-          })
-        },
+    /**
+     * 删除某个课程
+     */
+    *removeHomework(
+      { payload }: { type: string; payload: { homeworkId: number } },
+      { call, put, select }: EffectsCommandMap,
+    ) {
+      yield call(homeworkService.removeHomework, payload.homeworkId);
 
-        /**
-        * 删除某个课程
-        */
-        *removeHomework({ payload }: any, { call, put, select }: any) {
-            yield call(homeworkService.removeHomework, payload);
-  
-            const page = yield select((state: any) => {
-                const { teacherHomework: { data } } = state;
-                return data.page
-            });
+      const paginationData = yield select((state: any) => {
+        const {
+          teacherHomework: { data, filterFields },
+        } = state;
+        const { page, pageSize } = data;
+        return {
+          page,
+          pageSize,
+          ...filterFields,
+        };
+      });
 
-            yield put({
-                type: 'fetchHomeworkPagination',
-                payload: {
-                    page,
-                },
-            })
+      yield put({
+        type: 'fetchHomeworkPagination',
+        payload: {
+          page: paginationData,
         },
+      });
     },
-}
-  
-export default Model
+  },
+};
+
+export default Model;

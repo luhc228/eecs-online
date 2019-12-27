@@ -25,11 +25,13 @@ const filterFormConfig: FormItemComponentProps[] = [
         label: '作业名称',
         name: 'homeworkName',
         component: FORM_COMPONENT.Input,
+        required: false,
     },
     {
         label: '课程名称',
         name: 'courseName',
         component: FORM_COMPONENT.Input,
+        required: false,
     },
 ]
 
@@ -51,14 +53,16 @@ const Homework: React.FC<HomeworkProps> = props => {
 
     useEffect(() => {
         dispatch({
-          type: 'teacherHomework/fetchHomeworkPagination',
-          payload: { ...PAGINATION_CONFIGS },
+          type: 'homework/fetchHomeworkPagination',
+          payload: { data: {...PAGINATION_CONFIGS} },
         })
       }, []);
+    // console.log('list',list);
+    // console.log(filterFields);
 
     const handleEdit = (allFields: HomeworkListItem) => {
         dispatch({
-          type: 'teacherHomework/changeHomeworkFields',
+          type: 'homework/changeHomeworkFields',
           payload: { data: allFields },
         })
         router.push('/teacher/homework/edit');
@@ -68,23 +72,25 @@ const Homework: React.FC<HomeworkProps> = props => {
         router.push('/teacher/homework/create');
     };
 
-    const handleDelete = (id: string) => {
+    const handleDelete = (homeworkId: number) => {
         dispatch({
-          type: 'teacherHomework/removeHomework',
-          payload: { id },
+          type: 'homework/removeHomework',
+          payload: { homeworkId },
         })
     };
 
     const handleCompletion = (record: HomeworkListItem) => {
         umiRouter.push({
             pathname: '/teacher/homework/completion',
-            query:{id: record.id},})
+            query:{homeworkId: record.homeworkId},})
     }
 
     const columns: ColumnProps<HomeworkListItem>[] = [
         { title: '作业名称', dataIndex: 'homeworkName' },
-        { title: '截止日期', dataIndex: 'deadline'},
+        // { title: '发布时间', dataIndex: 'startAt'},
+        { title: '截止时间', dataIndex: 'endAt'},
         { title: '作业描述', dataIndex: 'description' },
+        { title: '总分', dataIndex: 'homeworkScore'},
         {
             title: '操作',
             render: (_:string, record: HomeworkListItem) => (
@@ -98,7 +104,7 @@ const Homework: React.FC<HomeworkProps> = props => {
                     <Popconfirm
                         title="确定删除此作业"
                         onConfirm={() => {
-                        handleDelete(record.id)
+                        handleDelete(record.homeworkId)
                     }}>
                         <a href="">删除</a>
                     </Popconfirm>
@@ -116,18 +122,18 @@ const Homework: React.FC<HomeworkProps> = props => {
           formTypes={CUSTOM_FORM_TYPES.Filter}
           onFieldsChange={(allFields: object) => {
             dispatch({
-              type: 'teacherHomework/changeFilterFields',
+              type: 'homework/changeFilterFields',
               payload: { filterFields: allFields },
             })
           }}
           formConfig={filterFormConfig}
           onSubmit={value => dispatch({
-            type: 'teacherHomework/fetchHomeworkPagination',
+            type: 'homework/fetchHomeworkPagination',
             payload: {
               data:
               {
                 ...PAGINATION_CONFIGS,
-                ...value
+                ...value,
               }
             },
           })}
@@ -137,22 +143,21 @@ const Homework: React.FC<HomeworkProps> = props => {
       <CustomCard
         title="作业信息列表"
         extra={
-          <Button type="primary" onClick={handleCreate}>新增作业</Button>
-        }>
+          <Button type="primary" onClick={handleCreate}>新增作业</Button>}>
         <CustomTable
           loading={fetchHomeworkPaginationLoading}
           columns={columns}
           dataSource={list}
           current={page}
           total={total}
-          rowKey={(record: HomeworkListItem) => record.id}
+          rowKey={(record: HomeworkListItem) => record.homeworkId}
           onPagination={(current: number) => {
             dispatch({
-              type: 'teacherHomework/fetchHomeworkPagination',
+              type: 'homework/fetchHomeworkPagination',
               payload: {
                 data: {
                   ...PAGINATION_CONFIGS,
-                  ...filterFields,
+                  // ...filterFields,
                   page: current
                 }
               },
@@ -176,7 +181,7 @@ const mapStateToProps = ({
     };
   }) => ({
     homework,
-    fetchHomeworkPaginationLoading: loading.effects['teacherHomework/fetchHomeworkPagination'],
+    fetchHomeworkPaginationLoading: loading.effects['homework/fetchHomeworkPagination'],
   })
   
 export default connect(mapStateToProps)(Homework);

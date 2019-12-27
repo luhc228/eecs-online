@@ -6,6 +6,7 @@ import { Dispatch } from 'redux';
 import router from 'umi/router';
 import { StudentRegisterForm, TeacherRegisterForm } from '@/interfaces/register';
 import styles from './index.less';
+import { USER_TYPE } from '@/enums';
 
 interface RegisterProps extends FormComponentProps {
   dispatch: Dispatch<any>;
@@ -13,7 +14,7 @@ interface RegisterProps extends FormComponentProps {
   userType: number;
 }
 
-const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) => {
+const RegisterForm: React.FC<RegisterProps> = ({ form, userType, submitting, dispatch }) => {
   const [confirmDirty, setconfirmDirty] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,7 +23,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
       if (!err) {
         dispatch({
           type: 'register/userRegister',
-          payload: { values },
+          payload: { userType, values },
         });
         router.goBack();
       }
@@ -58,7 +59,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
   return (
     <Form onSubmit={handleSubmit} className={styles.registerForm}>
       <Form.Item>
-        {getFieldDecorator('username', {
+        {getFieldDecorator(userType === USER_TYPE.Student ? 'studentName' : 'teacherName', {
           rules: [{ required: true, message: '请输入姓名' }],
         })(
           <Input
@@ -68,7 +69,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, submitting, dispatch }) =
         )}
       </Form.Item>
       <Form.Item>
-        {getFieldDecorator('id', {
+        {getFieldDecorator(userType === USER_TYPE.Student ? 'studentId' : 'teacherId', {
           rules: [{ required: true, message: '请输入学工号' }],
         })(
           <Input

@@ -7,6 +7,7 @@ import Button from 'antd/es/button/button';
 import router from 'umi/router';
 import { TeacherUserForm } from '@/interfaces/teacherInfo';
 import styles from './index.less';
+import CollegeSelect from './components/collegeSelect';
 
 const { Option } = Select;
 
@@ -67,22 +68,19 @@ const TeacherUserInfo: React.FC<TeacherUserProps> = ({ form, dispatch, user }) =
           rules: [{ required: true, message: '请选择性别' }],
         })(
           <Select>
-            <Option value="female">女</Option>
-            <Option value="male">男</Option>
+            <Option value={0}>女</Option>
+            <Option value={1}>男</Option>
           </Select>,
         )}
       </Form.Item>
       <Form.Item label=" 学 院 ">
         {getFieldDecorator('college', {
           rules: [
-            { required: true, message: '请选择学院 / 班级' },
+            { required: true, message: '请选择学院' },
             // { validator: { validatorCollege } }
           ],
         })(
-          <Select>
-            <Option value={0}>信息学院</Option>
-            <Option value={2}>计算机学院</Option>
-          </Select>,
+          <CollegeSelect />,
         )}
       </Form.Item>
       <Button type="primary" htmlType="submit" className={styles.submit}>

@@ -5,13 +5,13 @@ import { TeacherLoginForm, StudentLoginForm } from '@/interfaces/login';
  * @param data
  */
 export function teacherRegister(data: TeacherLoginForm) {
-  return request.post('/api/teacher', {
+  return request.post('/register/teacher', {
     data,
-  })
+  });
 }
 
 export function studentRegister(data: StudentLoginForm) {
-  return request.post('/api/student', {
+  return request.post('/register/student', {
     data,
-  })
+  });
 }

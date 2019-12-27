@@ -46,7 +46,7 @@ const formConfig: FormItemComponentProps[] = [
 
 const columns: ColumnProps<any>[] = [
   {
-    dataIndex: '',
+    dataIndex: 'content',
     title: '题目内容',
   },
   {

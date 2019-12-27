@@ -43,7 +43,7 @@ const TableFilter: React.SFC<TableFilterProps> = ({ teacherHomeworkEdit, dispatc
             },
           });
         }}
-        changeOnSelect
+        changeOnSelect={true}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import { Effect } from '@/interfaces/reduxState';
 import * as teacherHomeworkEditService from '../services';
 import { QuestionDetailModel } from '@/interfaces/teacherHomework';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
+import { fetchCourseList } from '@/services';
 
 export interface courseListItem extends SelectComponentDatasourceModel {
   children: SelectComponentDatasourceModel[];
@@ -97,8 +98,10 @@ const Model: ModelType = {
      * 获取所有课程信息
      */
     *fetchCourseList(_: any, { call, put }: any) {
-      const response = yield call(teacherHomeworkEditService.fetchCourseList);
+      const response = yield call(fetchCourseList);
+      console.log('data', response.data);
       const courseList: courseListItem[] = response.data.list;
+      console.log('courseList', courseList);
       yield put({
         type: 'setCourseList',
         payload: { courseList },

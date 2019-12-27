@@ -19,7 +19,7 @@ const TabPanes: React.ReactNode[] = [
 
 interface RegisterProps {
   dispatch: Dispatch<any>;
-  userType: USER_TYPE.Student | USER_TYPE.Teacher;
+  userType: USER_TYPE;
 }
 
 const Register: React.FC<RegisterProps> = props => (
