@@ -14,6 +14,17 @@ export interface StateType {
   classIdDataSource: SelectComponentDatasourceModel[];
 }
 
+const initState = {
+  courseFields: {
+    courseId: undefined,
+    courseName: undefined,
+    courseLocation: undefined,
+    classId: [],
+  },
+  when: true,
+  classIdDataSource: [],
+}
+
 export interface ModelType {
   namespace: string;
   state: StateType;
@@ -30,18 +41,16 @@ export interface ModelType {
 const Model = {
   namespace: 'courseEdit',
 
-  state: {
-    courseFields: {
-      courseId: undefined,
-      courseName: undefined,
-      courseLocation: undefined,
-      classId: [],
-    },
-    when: true,
-    classIdDataSource: [],
-  },
+  state: initState,
 
   reducers: {
+    initState(
+      state: StateType,
+      { payload }: { type: string; payload: { state: StateType } }
+    ) {
+      return { ...payload.state }
+    },
+
     changeCourseFields(
       state: StateType,
       { payload }: { type: string; payload: { data: CourseFieldsModel } }
@@ -135,6 +144,13 @@ const Model = {
     ) {
       return history.listen(({ pathname }: { pathname: string }) => {
         if (pathname === '/teacher/course/create' || pathname === '/teacher/course/edit') {
+          dispatch({
+            type: 'initState',
+            payload: {
+              state: initState
+            }
+          });
+
           const userInfo = userUtils.getUserInfo();
           if (Object.keys(userInfo).length !== 0) {
             dispatch({

@@ -1,4 +1,4 @@
-import { AnyAction, Reducer } from 'redux';
+import { AnyAction, Reducer, Dispatch } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import * as courseService from '../services';
 import { CourseTableData, filterFieldsProps } from '@/interfaces/course';
@@ -27,17 +27,18 @@ export interface ModelType {
   };
 }
 
+const initState = {
+  data: DEFAULT_TABLE_PAGINATION_STATE,
+  filterFields: {
+    courseName: undefined,
+    location: undefined,
+    classNames: undefined,
+  },
+}
 const Model = {
   namespace: 'course',
 
-  state: {
-    data: DEFAULT_TABLE_PAGINATION_STATE,
-    filterFields: {
-      courseName: undefined,
-      location: undefined,
-      classNames: undefined,
-    },
-  },
+  state: initState,
 
   reducers: {
     save(
@@ -94,6 +95,23 @@ const Model = {
           page,
         },
       })
+    },
+  },
+
+  subscriptions: {
+    setup(
+      { dispatch, history }: { dispatch: Dispatch<any>, history: any }
+    ) {
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/teacher/course') {
+          dispatch({
+            type: 'initState',
+            payload: {
+              state: initState
+            }
+          });
+        }
+      });
     },
   },
 }
