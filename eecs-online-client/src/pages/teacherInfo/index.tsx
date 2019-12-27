@@ -61,7 +61,7 @@ const TeacherUserInfo: React.FC<TeacherUserProps> = ({ form, dispatch, user }) =
       <Form.Item label=" 账 号 ">
         {getFieldDecorator('id', {
           rules: [{ required: true, message: '账号不可为空' }],
-        })(<Input disabled />)}
+        })(<Input disabled={true} />)}
       </Form.Item>
       <Form.Item label=" 性 别 ">
         {getFieldDecorator('gender', {

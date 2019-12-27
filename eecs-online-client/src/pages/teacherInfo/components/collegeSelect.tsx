@@ -89,8 +89,8 @@ const CollegeSelect: React.FC<CollegeProps> = props => {
           <Select
             className={styles.item}
             value={college}
-            labelInValue
-            showSearch
+            labelInValue={true}
+            showSearch={true}
             onSelect={selectCollegeItem}
           >
             {getCollegeOption}

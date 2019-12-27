@@ -114,8 +114,8 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
       <Select
         className={styles.item}
         value={college}
-        labelInValue
-        showSearch
+        labelInValue={true}
+        showSearch={true}
         onSelect={selectCollegeItem}
       >
         {getCollegeOption}
@@ -123,8 +123,8 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
       <Select
         className={styles.item}
         value={studentClass}
-        labelInValue
-        showSearch
+        labelInValue={true}
+        showSearch={true}
         onSelect={selectClassItem}
       >
         {getClassOption}
