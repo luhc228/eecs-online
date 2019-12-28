@@ -60,3 +60,8 @@ export enum NOTIFICATION_TYPE {
   warn,
   loading
 }
+
+export enum JUDGE_VALUE {
+  InCorrect,
+  Correct,
+}

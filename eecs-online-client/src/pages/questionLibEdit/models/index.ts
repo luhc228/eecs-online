@@ -32,7 +32,7 @@ const questionLibEdit = {
 
   reducers: {
     initState(
-      state: StateType,
+      _: StateType,
       { payload }: { type: string; payload: { state: StateType } }
     ) {
       return { ...payload.state }
@@ -76,17 +76,17 @@ const questionLibEdit = {
       state: StateType,
       { payload }: { type: string; payload: { data: QuestionFieldsModel } }
     ) {
-      let questionFields = { ...state.questionFields, ...payload.data };
-      // 传进来的fields是空的 需要做初始化
-      if (!Object.getOwnPropertyNames(payload.data).length) {
-        questionFields = {
-          questionType: QUESTION_TYPE.Judge,
-        } as QuestionFieldsModel;
-      }
+      // let questionFields = { ...state.questionFields, ...payload.data };
+      // // 传进来的fields是空的 需要做初始化
+      // if (!Object.getOwnPropertyNames(payload.data).length) {
+      //   questionFields = {
+      //     questionType: QUESTION_TYPE.Judge,
+      //   } as QuestionFieldsModel;
+      // }
 
       return {
         ...state,
-        questionFields,
+        questionFields: payload.data,
         when: true,
       }
     }

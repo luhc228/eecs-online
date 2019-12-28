@@ -1,38 +1,25 @@
 import { EffectsCommandMap, Dispatch } from 'dva';
 import * as services from '../services';
 import userUtils from '@/utils/user-utils';
-import { QUESTION_TYPE } from '@/enums';
-
-export interface HomeworkListItem {
-  questionId: number;
-  content: string;
-  contentImage?: string;
-  options?: string;
-  questionType: QUESTION_TYPE;
-}
-
-export interface HomeworkDetail {
-  total: number;
-  singleQuestionList?: HomeworkListItem[];
-  multipleQuestionList?: HomeworkListItem[];
-  judgeQuestionList?: HomeworkListItem[];
-  programQuestionList?: HomeworkListItem[];
-}
+import { HomeworkDetail } from '@/interfaces/studentHomeworkEdit';
 
 export interface StateType {
   data: HomeworkDetail;
-  homeworkField: any;
+  homeworkFields: any;
+  when: boolean;
 }
 
 const initState = {
   data: {
     total: 0,
+    homeworkScore: undefined,
     singleQuestionList: [],
     multipleQuestionList: [],
     judgeQuestionList: [],
     programQuestionList: [],
   },
-  homeworkField: {}
+  homeworkFields: {},
+  when: true,
 }
 
 const questionLibEdit = {
@@ -55,6 +42,23 @@ const questionLibEdit = {
       return {
         ...state,
         data: payload.data,
+      }
+    },
+
+    changePromptStatus(
+      state: StateType,
+      { payload }: { type: string; payload: { when: boolean } }
+    ) {
+      return { ...state, when: payload.when }
+    },
+
+    changeHomeworkFields(
+      state: StateType,
+      { payload }: { type: string; payload: { data: any } }
+    ) {
+      return {
+        ...state,
+        homeworkFields: payload.data,
       }
     }
   },

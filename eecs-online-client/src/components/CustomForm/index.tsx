@@ -5,6 +5,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Select, Button, Radio, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
+import router from 'umi/router';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
@@ -259,7 +260,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 
   const commonFormButtons = (
     <span className={styles.commonButtons}>
-      <Button onClick={handleFormReset}>
+      <Button onClick={() => router.goBack()}>
         取消
     </Button>
       <Button

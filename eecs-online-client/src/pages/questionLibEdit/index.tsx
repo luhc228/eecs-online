@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
-import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
+import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE, JUDGE_VALUE } from '@/enums';
 import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
 import { questionTypeMap } from '../questionLib';
 import appConfig from '@/appConfig';
@@ -9,6 +9,7 @@ import CustomCard from '@/components/CustomCard';
 import { StateType } from './models';
 import RouterPrompt from '@/components/RouterPrompt';
 import { QuestionFieldsModel } from '@/interfaces/questionLibEdit';
+import { getOption } from '@/utils';
 
 export interface QuestionLibEditProps extends UmiComponentProps {
   loading: boolean;
@@ -23,13 +24,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
 }) => {
   const { courseIdDataSource, questionFields, when, dynamicKeys, optionDisplay } = questionLibEdit;
 
-  const { location } = history;
-
-  const optionsDataSource: string[] = [];
-  for (let i = 65; i < 91;) {
-    optionsDataSource.push(String.fromCharCode(i));
-    i += 1;
-  }
+  const { location }: any = history;
 
   const singleQuestionAnswerFormItem = {
     component: FORM_COMPONENT.Select,
@@ -97,14 +92,14 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     let answerDataSource;
     if (dynamicFieldSetKeys && (questionType === QUESTION_TYPE.Multiple || questionType === QUESTION_TYPE.Single)) {
       answerDataSource = dynamicFieldSetKeys.map((_, index) => ({
-        value: optionsDataSource[index],
-        label: optionsDataSource[index],
+        value: getOption(index),
+        label: getOption(index),
       }))
     }
     if (questionType === QUESTION_TYPE.Judge) {
       answerDataSource = [
-        { value: 0, label: '错误', },
-        { value: 1, label: '正确', }
+        { value: JUDGE_VALUE.InCorrect, label: '错误' },
+        { value: JUDGE_VALUE.Correct, label: '正确' }
       ]
     }
 
