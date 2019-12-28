@@ -1,18 +1,18 @@
 import request from '@/utils/request';
+import { QuestionFieldsModel } from '@/interfaces/questionLibEdit';
 
 /**
  * 新增题目信息
  * @param data
  */
-// TODO: add Interface
-export function createQuestion(data: any) {
+export function createQuestion(data: QuestionFieldsModel) {
   return request.post('/question_lib/question/teacher/add', {
     data,
   })
 }
 
 /**
- *
+ * 获取已存在的题目的详情
  * @param questionId 题目id
  */
 export function fetchQuestionDetail(questionId: string) {
@@ -27,8 +27,7 @@ export function fetchQuestionDetail(questionId: string) {
  * 更新题目信息
  * @param data
  */
-// TODO: add Interface
-export function updateQuestion(data: any) {
+export function updateQuestion(data: QuestionFieldsModel) {
   return request.post('/question_lib/question/teacher/update', {
     data,
   })

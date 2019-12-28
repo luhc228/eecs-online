@@ -47,8 +47,8 @@ export enum QUESTION_TYPE {
 }
 
 export enum HOMEWORK_STATUS {
-  Done,
   Undone,
+  Done,
 }
 
 // 通知提示框 Notification API 类型

@@ -2,17 +2,20 @@ import request from '@/utils/request';
 
 /**
  * 新增题目信息
- * @param data
+ * @param homeworkId 作业id
+ * @param studentId 学生id
  */
-// TODO: add Interface
-export function fetchHomeworkList(data: any) {
-  return request.post('/homework_condition/student/list', {
-    data,
+export function fetchHomeworkDetail(homeworkId: number, studentId: string) {
+  return request.get('/homework/student/question/list', {
+    params: {
+      homeworkId,
+      studentId,
+    }
   })
 }
 
 /**
- * 暂存答案
+ * 暂存作业答案
  * @param data
  */
 // TODO: add Interface
@@ -23,7 +26,7 @@ export function saveAnswer(data: any) {
 }
 
 /**
- * 提交答案
+ * 提交作业答案
  * @param data
  */
 // TODO: add Interface

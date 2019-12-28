@@ -51,7 +51,7 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
       title: '状态',
       dataIndex: 'status',
       render: (value: number) => (
-        <StatusColumn text={value === HOMEWORK_STATUS.Undone ? '未完成' : '已完成'} status={!!value} />
+        <StatusColumn text={value === HOMEWORK_STATUS.Undone ? '未完成' : '已完成'} status={!value} />
       )
     },
     {

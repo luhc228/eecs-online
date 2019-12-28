@@ -52,7 +52,6 @@ const questionLibEdit = {
       state: StateType,
       { payload }: { type: string; payload: { dynamicKeys: number[] } }
     ) {
-      console.log(payload.dynamicKeys);
       return {
         ...state,
         dynamicKeys: payload.dynamicKeys,
@@ -77,8 +76,6 @@ const questionLibEdit = {
       state: StateType,
       { payload }: { type: string; payload: { data: QuestionFieldsModel } }
     ) {
-      console.log('QuestionFields Change：', payload.data);
-
       let questionFields = { ...state.questionFields, ...payload.data };
       // 传进来的fields是空的 需要做初始化
       if (!Object.getOwnPropertyNames(payload.data).length) {
@@ -123,7 +120,7 @@ const questionLibEdit = {
      * 获取试题详情
      */
     *fetchQuestionDetail(
-      { payload }: { type: string; payload: { questionId: string } },
+      { payload }: { type: string; payload: { questionId: number } },
       { call, put }: EffectsCommandMap
     ) {
       const response = yield call(questionLibEditServices.fetchQuestionDetail, payload.questionId);
@@ -209,10 +206,10 @@ const questionLibEdit = {
       { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
       return history.listen(({ pathname, query }: { pathname: string, query: { [k: string]: string } }) => {
-        const { questionId } = query;
-
         if (pathname === '/teacher/question-lib/create' ||
           pathname === '/teacher/question-lib/edit') {
+          const { questionId } = query;
+
           dispatch({
             type: 'initState',
             payload: {
