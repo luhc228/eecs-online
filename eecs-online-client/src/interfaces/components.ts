@@ -53,7 +53,7 @@ export interface SelectComponentDatasourceModel {
 
 
 export interface FormItemComponentProps {
-  label?: string,
+  label?: string | React.ReactNode,
   name: string,
   initialValue?: any,
   required: boolean;

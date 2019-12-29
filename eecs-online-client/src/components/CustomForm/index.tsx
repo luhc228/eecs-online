@@ -204,6 +204,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Checkbox.Group
                 className={styles.checkboxInRow}
                 options={formItem.datasource}
+                {...formItem.props}
               />
             )}
           </>
@@ -219,7 +220,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <CodeEditor />
+              <CodeEditor {...formItem.props} />
             )}
           </>
         )

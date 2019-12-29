@@ -99,9 +99,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           `,
           name: `multiple${item.questionId}`,
           component: FORM_COMPONENT.Checkbox,
-          props: {
-            mode: 'multiple'
-          },
           datasource,
           required: false
         }

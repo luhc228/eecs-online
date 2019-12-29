@@ -5,6 +5,7 @@ import { HomeworkDetailData } from '@/interfaces/studentHomeworkDetail';
 
 export interface StateType {
   data: HomeworkDetailData,
+  homeworkFields: any,
 }
 
 const initState = {
