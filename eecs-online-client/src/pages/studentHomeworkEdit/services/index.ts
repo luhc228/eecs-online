@@ -1,4 +1,6 @@
 import request from '@/utils/request';
+import { AnswerModel } from '@/interfaces/studentHomeworkEdit';
+
 
 /**
  * 新增题目信息
@@ -18,8 +20,7 @@ export function fetchHomeworkDetail(homeworkId: number, studentId: string) {
  * 暂存作业答案
  * @param data
  */
-// TODO: add Interface
-export function saveAnswer(data: any) {
+export function saveAnswer(data: AnswerModel) {
   return request.post('/homework_condition/student/answer/save', {
     data,
   })
@@ -29,8 +30,7 @@ export function saveAnswer(data: any) {
  * 提交作业答案
  * @param data
  */
-// TODO: add Interface
-export function submitAnswer(data: any) {
+export function submitAnswer(data: AnswerModel) {
   return request.post('/homework_condition/student/answer/submit', {
     data,
   })

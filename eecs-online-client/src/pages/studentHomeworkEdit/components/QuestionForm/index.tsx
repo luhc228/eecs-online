@@ -20,8 +20,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 }) => {
   const { data, homeworkFields, when } = studentHomeworkEdit;
   const {
-    total,
-    homeworkScore,
     singleQuestionList,
     multipleQuestionList,
     judgeQuestionList,

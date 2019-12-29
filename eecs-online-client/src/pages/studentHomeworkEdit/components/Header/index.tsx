@@ -13,18 +13,23 @@ const Header: React.FC<HeaderProps> = ({
   dispatch,
   studentHomeworkEdit
 }) => {
-  const { data } = studentHomeworkEdit;
-  const { homeworkScore } = data;
+  const { data, homeworkFields, questionFormIdMap } = studentHomeworkEdit;
+  const { homeworkScore, homeworkName } = data;
   const handleSave = () => {
     dispatch({
-
+      type: 'studentHomeworkEdit/saveHomeworkAnswer',
+      payload: {
+        data: homeworkFields,
+        questionFormIdMap
+      }
     })
   }
 
   return (
     <div className={styles.header}>
       <div className={styles.content}>
-        作业总分：{homeworkScore}分
+        <div>作业名称：{homeworkName}</div>
+        <div>作业总分：{homeworkScore}分</div>
       </div>
       <Button
         type="primary"

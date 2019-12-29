@@ -12,8 +12,20 @@ export interface HomeworkListItem {
 export interface HomeworkDetail {
   total: number;
   homeworkScore: number;
+  homeworkName: string;
   singleQuestionList?: HomeworkListItem[];
   multipleQuestionList?: HomeworkListItem[];
   judgeQuestionList?: HomeworkListItem[];
   programQuestionList?: HomeworkListItem[];
+}
+
+export interface AnswerList {
+  questionId: number;
+  submitAnswer: string | number;
+}
+
+export interface AnswerModel {
+  studentId: string;
+  homeworkId: number;
+  list: AnswerList[];
 }
