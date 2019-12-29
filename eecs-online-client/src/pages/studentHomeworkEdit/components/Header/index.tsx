@@ -15,18 +15,22 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const { data } = studentHomeworkEdit;
   const { homeworkScore } = data;
+  const handleSave = () => {
+    dispatch({
+
+    })
+  }
+
   return (
     <div className={styles.header}>
       <div className={styles.content}>
-        {homeworkScore}
+        作业总分：{homeworkScore}分
       </div>
       <Button
         type="primary"
-        onClick={() => {
-
-        }}
+        onClick={handleSave}
       >
-        暂存答案
+        暂存作业
       </Button>
     </div>
   )
@@ -34,13 +38,10 @@ const Header: React.FC<HeaderProps> = ({
 
 const mapStateToProps = ({
   studentHomeworkEdit,
-  loading
 }: {
   studentHomeworkEdit: StateType,
-  loading: any,
 }) => ({
-  studentHomeworkEdit,
-  loading: loading.model.studentHomeworkEdit
+  studentHomeworkEdit
 })
 
 export default connect(mapStateToProps)(Header);

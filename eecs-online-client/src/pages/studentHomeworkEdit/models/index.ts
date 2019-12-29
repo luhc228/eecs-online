@@ -20,6 +20,10 @@ const initState = {
   },
   homeworkFields: {},
   when: true,
+  singleQuestionFormIdMap: {},
+  multipleQuestionFormIdMap: {},
+  judgeQuestionFormIdMap: {},
+  programQuestionFormIdMap: {},
 }
 
 const questionLibEdit = {
@@ -45,6 +49,17 @@ const questionLibEdit = {
       }
     },
 
+    saveHomeworkFormIdMap(
+      state: StateType,
+    ) {
+      const { data } = state;
+      const {
+        singleQuestionList,
+        multipleQuestionList,
+        judgeQuestionList,
+        programQuestionList
+      } = data;
+    },
     changePromptStatus(
       state: StateType,
       { payload }: { type: string; payload: { when: boolean } }
@@ -78,6 +93,10 @@ const questionLibEdit = {
         payload: {
           data
         }
+      })
+
+      yield put({
+        type: 'saveHomeworkFormIdMap',
       })
     }
   },
