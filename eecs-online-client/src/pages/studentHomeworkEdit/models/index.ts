@@ -39,7 +39,7 @@ const initState = {
   questionFormIdMap: {}
 }
 
-const questionLibEdit = {
+const studentHomeworkEdit = {
   namespace: 'studentHomeworkEdit',
 
   state: initState,
@@ -331,8 +331,6 @@ const questionLibEdit = {
       return history.listen((
         { pathname, query }: { pathname: string, query: { [k: string]: string } }) => {
         if (pathname === '/student/homework/edit') {
-          const { homeworkId } = query;
-
           dispatch({
             type: 'initState',
             payload: {
@@ -340,6 +338,7 @@ const questionLibEdit = {
             }
           });
 
+          const { homeworkId } = query;
           const userInfo = userUtils.getUserInfo();
 
           if (Object.keys(userInfo).length !== 0 && userInfo.studentId && homeworkId) {
@@ -366,4 +365,4 @@ const questionLibEdit = {
   },
 }
 
-export default questionLibEdit;
+export default studentHomeworkEdit;

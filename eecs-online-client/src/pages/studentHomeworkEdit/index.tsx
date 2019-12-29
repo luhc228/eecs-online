@@ -15,7 +15,6 @@ const studentHomeworkEdit: React.FC<{}> = () => (
       <QuestionForm />
     </CustomCard>
   </>
-
 )
 
 export default studentHomeworkEdit;
