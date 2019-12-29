@@ -302,7 +302,7 @@ const questionLibEdit = {
       }
 
       const response = yield call(
-        services.saveAnswer,
+        services.submitAnswer,
         {
           homeworkId,
           studentId,
