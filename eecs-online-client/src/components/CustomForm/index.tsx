@@ -25,7 +25,7 @@ interface CustomFormProps extends FormComponentProps {
   loading?: boolean;
   children?: React.ReactNode;
   onFieldsChange: (allFields: any, changedFields?: any) => void;
-  onSubmit: (value: any) => void;
+  onSubmit?: (value: any) => void;
   resetFieldsVisible?: boolean;
 }
 
@@ -235,14 +235,17 @@ const CustomForm: React.FC<CustomFormProps> = props => {
       if (err) {
         return;
       }
-
-      onSubmit(values);
+      if (onSubmit) {
+        onSubmit(values);
+      }
     });
   }
 
   const handleFormReset = () => {
     props.form.resetFields();
-    props.onSubmit({});
+    if (onSubmit) {
+      onSubmit({});
+    }
   }
 
   const filterFormButtons = (buttonsStyles?: string, resetVisible: boolean = true) => (
@@ -262,14 +265,16 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     <span className={styles.commonButtons}>
       <Button onClick={() => router.goBack()}>
         取消
-    </Button>
-      <Button
-        style={{ marginLeft: 15 }}
-        type="primary"
-        htmlType="submit"
-        loading={loading}>
-        提交
-     </Button>
+      </Button>
+      {onSubmit && (
+        <Button
+          style={{ marginLeft: 15 }}
+          type="primary"
+          htmlType="submit"
+          loading={loading}>
+          提交
+        </Button>
+      )}
     </span>
   )
 
