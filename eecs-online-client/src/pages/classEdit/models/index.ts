@@ -113,7 +113,6 @@ const Model: ModelType = {
     * fetchStudentDetail({ payload }: any, { call, put }: any) {
       const response = yield call(classEditService.fetchStudentDetail, payload);
       const studentList = response.data.list;
-      console.log(studentList);
       yield put({
         type: 'changeStudentList',
         payload: {

@@ -1,9 +1,10 @@
 import { EffectsCommandMap, Dispatch } from 'dva';
+import router from 'umi/router';
 import * as services from '../services';
 import userUtils from '@/utils/user-utils';
 import { HomeworkDetail, HomeworkListItem, AnswerList } from '@/interfaces/studentHomeworkEdit';
 import showNotification from '@/utils/showNotification';
-import { NOTIFICATION_TYPE } from '@/enums';
+import { NOTIFICATION_TYPE, QUESTION_TYPE } from '@/enums';
 import { getPageQuery, removeEmpty } from '@/utils';
 
 export interface StateType {
@@ -29,6 +30,7 @@ const initState = {
   },
   homeworkFields: {},
   when: true,
+  // for example
   // { formId: questionid }
   singleQuestionFormIdMap: {},
   multipleQuestionFormIdMap: {},
@@ -157,17 +159,64 @@ const questionLibEdit = {
     },
 
     /**
+     * 获取学生暂存作业的情况
+     */
+    *fetchHomeworkCondition(
+      { payload }: { type: string; payload: { homeworkId: number, studentId: string } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(
+        services.fetchHomeworkCondition,
+        payload.homeworkId,
+        payload.studentId
+      );
+
+      const { data } = response;
+      const { list } = data;
+      const submitAnswerField: { [k: string]: any } = {};
+
+      if (list.length) {
+        list.forEach((item: any) => {
+          const {
+            submitAnswer,
+            questionType,
+            questionId }: {
+              submitAnswer: number | string;
+              questionType: number,
+              questionId: number
+            } = item;
+          if (submitAnswer && submitAnswer !== '') {
+            let formatAnswer;
+            if (typeof submitAnswer === 'string' && submitAnswer.includes('|')) {
+              formatAnswer = submitAnswer.split('|');
+            } else {
+              formatAnswer = submitAnswer;
+            }
+            submitAnswerField[`${QUESTION_TYPE[questionType]}${questionId}`] = formatAnswer
+          }
+        })
+      }
+
+      yield put({
+        type: 'changeHomeworkFields',
+        payload: {
+          data: submitAnswerField
+        }
+      })
+    },
+    /**
      * 暂存答案
      */
     *saveHomeworkAnswer(
       { payload }: {
         type: string;
-        payload: { data: { [k: string]: string | string[] | number }, questionFormIdMap: { [k: string]: number } }
+        payload: {
+          data: { [k: string]: string | string[] | number },
+          questionFormIdMap: { [k: string]: number }
+        }
       },
       { call }: EffectsCommandMap
     ) {
-      yield console.log(payload.data, payload.questionFormIdMap);
-
       const allFields = payload.data;
       const { questionFormIdMap } = payload;
 
@@ -178,13 +227,12 @@ const questionLibEdit = {
       const { studentId } = userInfo;
 
       let list: AnswerList[] = [];
+
       const values: { [k: string]: any } = removeEmpty(allFields);
       if (Object.keys(values).length) {
         list = Object.entries(values).map((field) => {
           const [key, value] = field;
-          console.log(key, questionFormIdMap);
           const questionId = questionFormIdMap[key];
-          console.log(questionId);
           let submitAnswer = value;
           if (Array.isArray(value)) {
             submitAnswer = value.join('|');
@@ -196,7 +244,6 @@ const questionLibEdit = {
           }
         })
       }
-
 
       const response = yield call(
         services.saveAnswer,
@@ -217,10 +264,63 @@ const questionLibEdit = {
      * 提交答案
      */
     *submitHomeworkAnswer(
-      { payload }: { type: string; payload: { data: { [k: string]: number } } },
+      { payload }: {
+        type: string;
+        payload: {
+          data: { [k: string]: string | string[] | number },
+          questionFormIdMap: { [k: string]: number }
+        }
+      },
       { call, put }: EffectsCommandMap
     ) {
+      const allFields = payload.data;
+      const { questionFormIdMap } = payload;
 
+      const pageQueryParams = getPageQuery();
+      const userInfo = userUtils.getUserInfo();
+
+      const { homeworkId } = pageQueryParams;
+      const { studentId } = userInfo;
+
+      let list: AnswerList[] = [];
+
+      const values: { [k: string]: any } = removeEmpty(allFields);
+      if (Object.keys(values).length) {
+        list = Object.entries(values).map((field) => {
+          const [key, value] = field;
+          const questionId = questionFormIdMap[key];
+          let submitAnswer = value;
+          if (Array.isArray(value)) {
+            submitAnswer = value.join('|');
+          }
+
+          return {
+            questionId,
+            submitAnswer,
+          }
+        })
+      }
+
+      const response = yield call(
+        services.saveAnswer,
+        {
+          homeworkId,
+          studentId,
+          list,
+        }
+      );
+
+      const { success } = response;
+      if (success) {
+        yield put({
+          type: 'changePromptStatus',
+          payload: {
+            when: false,
+          },
+        })
+        showNotification('通知', '提交答案成功', NOTIFICATION_TYPE.success);
+        router.goBack();
+      }
     },
   },
 
@@ -251,6 +351,14 @@ const questionLibEdit = {
                 studentId
               }
             });
+
+            dispatch({
+              type: 'fetchHomeworkCondition',
+              payload: {
+                homeworkId,
+                studentId,
+              }
+            })
           }
         }
       })

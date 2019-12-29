@@ -17,7 +17,7 @@ export interface StateType {
 
 const initState = {
   questionFields: {
-    questionType: QUESTION_TYPE.Judge,
+    questionType: QUESTION_TYPE.judge,
   },
   when: true,
   courseIdDataSource: [],
@@ -80,7 +80,7 @@ const questionLibEdit = {
       // // 传进来的fields是空的 需要做初始化
       // if (!Object.getOwnPropertyNames(payload.data).length) {
       //   questionFields = {
-      //     questionType: QUESTION_TYPE.Judge,
+      //     questionType: QUESTION_TYPE.judge,
       //   } as QuestionFieldsModel;
       // }
 

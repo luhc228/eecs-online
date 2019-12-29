@@ -18,7 +18,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   dispatch,
   studentHomeworkEdit
 }) => {
-  const { data, homeworkFields, when } = studentHomeworkEdit;
+  const { data, homeworkFields, when, questionFormIdMap } = studentHomeworkEdit;
   const {
     singleQuestionList,
     multipleQuestionList,
@@ -129,7 +129,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   }
 
   const handleFieldsChange = (allFields: object) => {
-    console.log(allFields);
     dispatch({
       type: 'studentHomeworkEdit/changeHomeworkFields',
       payload: {
@@ -139,7 +138,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   }
 
   const handleSubmit = (allFields: object) => {
-    console.log(allFields);
+    dispatch({
+      type: 'studentHomeworkEdit/submitHomeworkAnswer',
+      payload: {
+        data: allFields,
+        questionFormIdMap,
+      }
+    })
   }
 
   return (

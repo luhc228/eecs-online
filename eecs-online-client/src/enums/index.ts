@@ -40,10 +40,10 @@ export enum CUSTOM_FORM_TYPES {
 }
 
 export enum QUESTION_TYPE {
-  Single,
-  Multiple,
-  Judge,
-  Program,
+  single,
+  multiple,
+  judge,
+  program,
 }
 
 export enum HOMEWORK_STATUS {

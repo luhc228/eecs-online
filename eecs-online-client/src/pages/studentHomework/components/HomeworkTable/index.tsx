@@ -59,10 +59,10 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
       render: (_: string, record: studentHomeworkListItem) => (
         record.status ? (
           <span>
-            <a onClick={() => handleEdit(record)}>答题</a>
+            <a onClick={() => handleDetail(record)}>查看成绩</a>
           </span>) : (
             <span>
-              <a onClick={() => handleDetail(record)}>查看成绩</a>
+              <a onClick={() => handleEdit(record)}>答题</a>
             </span>
           )
       ),

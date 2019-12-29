@@ -49,10 +49,10 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
   }
 
   const answerFormItemMap: { [key: string]: object } = {
-    [QUESTION_TYPE.Judge]: judgeQuestionAnswerFormItem,
-    [QUESTION_TYPE.Single]: singleQuestionAnswerFormItem,
-    [QUESTION_TYPE.Multiple]: multipleQuestionAnswerFormItem,
-    [QUESTION_TYPE.Program]: programQuestionAnswerFormItem,
+    [QUESTION_TYPE.judge]: judgeQuestionAnswerFormItem,
+    [QUESTION_TYPE.single]: singleQuestionAnswerFormItem,
+    [QUESTION_TYPE.multiple]: multipleQuestionAnswerFormItem,
+    [QUESTION_TYPE.program]: programQuestionAnswerFormItem,
   }
   /**
    * 动态删除表单项
@@ -90,13 +90,13 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     questionType: number,
   ): FormItemComponentProps[] => {
     let answerDataSource;
-    if (dynamicFieldSetKeys && (questionType === QUESTION_TYPE.Multiple || questionType === QUESTION_TYPE.Single)) {
+    if (dynamicFieldSetKeys && (questionType === QUESTION_TYPE.multiple || questionType === QUESTION_TYPE.single)) {
       answerDataSource = dynamicFieldSetKeys.map((_, index) => ({
         value: getOption(index),
         label: getOption(index),
       }))
     }
-    if (questionType === QUESTION_TYPE.Judge) {
+    if (questionType === QUESTION_TYPE.judge) {
       answerDataSource = [
         { value: JUDGE_VALUE.InCorrect, label: '错误' },
         { value: JUDGE_VALUE.Correct, label: '正确' }
@@ -193,8 +193,8 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
 
     if (questionType && questionType.value !== questionFields.questionType) {
       if (
-        questionType.value === QUESTION_TYPE.Single ||
-        questionType.value === QUESTION_TYPE.Multiple) {
+        questionType.value === QUESTION_TYPE.single ||
+        questionType.value === QUESTION_TYPE.multiple) {
         dispatch({
           type: 'questionLibEdit/setOptionsDisplay',
           payload: {

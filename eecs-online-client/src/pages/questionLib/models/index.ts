@@ -24,7 +24,7 @@ const questionLibModel = {
       content: undefined,
       courseId: undefined,
     },
-    currentTabKey: QUESTION_TYPE.Single,
+    currentTabKey: QUESTION_TYPE.single,
     courseIdDataSource: []
   },
 

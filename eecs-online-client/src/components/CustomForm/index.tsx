@@ -268,7 +268,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
         type="primary"
         htmlType="submit"
         loading={loading}>
-        保存
+        提交
      </Button>
     </span>
   )
