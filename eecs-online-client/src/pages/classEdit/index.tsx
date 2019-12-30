@@ -93,18 +93,12 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
         <CustomForm
           layout="vertical"
           values={classDetail}
-          formTypes={CUSTOM_FORM_TYPES.TwoColumn}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={false}
           onFieldsChange={handleFieldsChange}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         >
-          <StudentListModal record={{}}>
-            <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
-              <Icon type="plus" /> 添加学生
-          </Button>
-          </StudentListModal>
-          <StudentTable />
 
         </CustomForm>
       </CustomCard>

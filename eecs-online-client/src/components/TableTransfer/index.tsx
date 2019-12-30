@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Transfer, Table } from 'antd';
 import difference from 'lodash/difference';
 import { ColumnProps } from 'antd/es/table';
@@ -17,16 +17,24 @@ export interface TableTransferProps {
   children?: React.ReactNode;
 }
 
-const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumns, children, dataSource, ...restProps }) => {
-  const [totalDataSource, changeTotalDataSource] = useState([]);
+const TableTransfer: React.SFC<TableTransferProps> = ({
+  leftColumns,
+  rightColumns,
+  children,
+  dataSource,
+  ...restProps
+}) =>
+  // const [totalDataSource, changeTotalDataSource] = useState([]);
 
-  useEffect(() => {
-
-    changeTotalDataSource(dataSource)
-  }, [dataSource])
-  console.log(dataSource);
-  return (
-    <Transfer {...restProps} dataSource={dataSource} showSelectAll={false}>
+  // useEffect(() => {
+  //   changeTotalDataSource(dataSource)
+  // }, [dataSource])
+  (
+    <Transfer
+      {...restProps}
+      dataSource={dataSource}
+      showSelectAll={false}
+    >
       {({
         direction,
         filteredItems,
@@ -38,17 +46,17 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
         const columns = direction === 'left' ? leftColumns : rightColumns;
 
         const rowSelection = {
-          getCheckboxProps: item => ({ disabled: listDisabled || item.disabled }),
-          onSelectAll(selected, selectedRows) {
+          getCheckboxProps: (item: any) => ({ disabled: listDisabled || item.disabled }),
+          onSelectAll(selected: any, selectedRows: any) {
             const treeSelectedKeys = selectedRows
-              .filter(item => !item.disabled)
-              .map(({ key }) => key);
+              .filter((item: any) => !item.disabled)
+              .map(({ key }: { key: any }) => key);
             const diffKeys = selected
               ? difference(treeSelectedKeys, listSelectedKeys)
               : difference(listSelectedKeys, treeSelectedKeys);
             onItemSelectAll(diffKeys, selected);
           },
-          onSelect({ key }, selected) {
+          onSelect({ key }: { key: any }, selected: any) {
             onItemSelect(key, selected);
           },
           selectedRowKeys: listSelectedKeys,
@@ -56,7 +64,6 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
 
         return (
           <React.Fragment>
-
             {direction === 'left' && children}
             <Table
               rowSelection={rowSelection}
@@ -71,22 +78,10 @@ const TableTransfer: React.SFC<TableTransferProps> = ({ leftColumns, rightColumn
               })}
             />
           </React.Fragment>
-          // <CustomTable
-          //   loading={false}
-          //   rowSelection={rowSelection}
-          //   columns={columns}
-          //   dataSource={filteredItems}
-          //   rowKey="id"
-          //   size="small"
-          //   total={20}
-          //   current={1}
-          //   pageSize={8}
-          //   onPagination={(current: number) => { }}
-          // />
         );
       }}
     </Transfer>
   )
-}
+
 
 export default TableTransfer;
