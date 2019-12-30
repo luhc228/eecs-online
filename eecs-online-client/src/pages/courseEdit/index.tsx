@@ -46,12 +46,12 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
     },
   ]
 
-  const handleFieldsChange = (allFields: object) => {
-    dispatch({
-      type: 'courseEdit/changeCourseFields',
-      payload: { data: allFields },
-    })
-  };
+  // const handleFieldsChange = (allFields: object) => {
+  //   dispatch({
+  //     type: 'courseEdit/changeCourseFields',
+  //     payload: { data: allFields },
+  //   })
+  // };
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
@@ -77,7 +77,8 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
           values={courseFields}
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={loading}
-          onFieldsChange={handleFieldsChange}
+          // TODO: bug: when add this fieldsChange function the error will disappear
+          onFieldsChange={() => { }}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         />

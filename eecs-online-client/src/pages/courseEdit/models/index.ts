@@ -79,7 +79,7 @@ const Model = {
 
   effects: {
     /**
-    * 获取所有学院信息
+    * 获取所有虚拟班级信息
     */
     *fetchvirClassList(
       { payload }: { type: string; payload: { teacherId: string } },
@@ -154,7 +154,7 @@ const Model = {
           const userInfo = userUtils.getUserInfo();
           if (Object.keys(userInfo).length !== 0) {
             dispatch({
-              type: 'fetchCourseList',
+              type: 'fetchvirClassList',
               payload: {
                 teacherId: userInfo.teacherId
               }

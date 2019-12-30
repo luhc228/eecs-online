@@ -1,11 +1,17 @@
 import { Reducer } from 'redux';
 import { Dispatch, EffectsCommandMap } from 'dva';
+import router from 'umi/router';
 import { Effect } from '@/interfaces/reduxState';
 import * as classEditService from '../services';
-import { StudentDetailModel } from '@/interfaces/classEdit';
+import { StudentDetailModel, ClassDetailFields } from '@/interfaces/classEdit';
+import showNotification from '@/utils/showNotification';
+import { NOTIFICATION_TYPE } from '@/enums';
 
 export interface StateType {
+  when: boolean;
   studentList: StudentDetailModel[];
+  targetKeys: string[];
+  classDetailFields: ClassDetailFields;
 }
 
 export interface ModelType {
@@ -31,6 +37,8 @@ export interface ModelType {
 
 const initState = {
   studentList: [],
+  targetKeys: [],
+  classDetailFields: {},
 }
 
 const Model = {
@@ -54,11 +62,27 @@ const Model = {
 
     changeTargetKeys(
       state: StateType,
-      { payload: { nextTargetKeys } }: { payload: { nextTargetKeys: string[] } }
+      { payload: { targetKeys } }: { payload: { targetKeys: string[] } }
     ) {
-      return { ...state, targetKeys: nextTargetKeys }
+      return { ...state, targetKeys }
     },
 
+    changeClassDetailFields(
+      state: StateType,
+      { payload }: { payload: { data: { className: string } } }
+    ) {
+      return {
+        ...state,
+        classDetailFields: payload.data
+      }
+    },
+
+    changePromptStatus(
+      state: StateType,
+      { payload }: { type: string; payload: { when: boolean } }
+    ) {
+      return { ...state, when: payload.when }
+    },
   },
 
   effects: {
@@ -94,9 +118,20 @@ const Model = {
      */
     *createClass(
       { payload }: { type: string, payload: { data: any } },
-      { call }: EffectsCommandMap
+      { call, put }: EffectsCommandMap
     ) {
-      yield call(classEditService.createClass, payload.data);
+      const response = yield call(classEditService.createClass, payload.data);
+      const { success } = response;
+      if (success) {
+        yield put({
+          type: 'changePromptStatus',
+          payload: {
+            when: false,
+          },
+        })
+        showNotification('通知', '新增班级信息成功', NOTIFICATION_TYPE.success);
+        router.goBack();
+      }
     },
 
     /**
@@ -104,9 +139,20 @@ const Model = {
      */
     *updateClass(
       { payload }: { type: string, payload: { data: any } },
-      { call }: EffectsCommandMap
+      { call, put }: EffectsCommandMap
     ) {
-      yield call(classEditService.updateClass, payload.data);
+      const response = yield call(classEditService.updateClass, payload.data);
+      const { success } = response;
+      if (success) {
+        yield put({
+          type: 'changePromptStatus',
+          payload: {
+            when: false,
+          },
+        })
+        showNotification('通知', '更新班级信息成功', NOTIFICATION_TYPE.success);
+        router.goBack();
+      }
     },
   },
 

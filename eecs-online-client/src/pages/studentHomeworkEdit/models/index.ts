@@ -11,10 +11,6 @@ export interface StateType {
   data: HomeworkDetail;
   homeworkFields: any;
   when: boolean;
-  singleQuestionFormIdMap: { [k: string]: number };
-  multipleQuestionFormIdMap: { [k: string]: number };
-  judgeQuestionFormIdMap: { [k: string]: number };
-  programQuestionFormIdMap: { [k: string]: number };
   questionFormIdMap: { [k: string]: number };
 }
 
@@ -30,12 +26,7 @@ const initState = {
   },
   homeworkFields: {},
   when: true,
-  // for example
-  // { formId: questionid }
-  singleQuestionFormIdMap: {},
-  multipleQuestionFormIdMap: {},
-  judgeQuestionFormIdMap: {},
-  programQuestionFormIdMap: {},
+  // For example: { formId: questionid }
   questionFormIdMap: {}
 }
 
@@ -73,10 +64,6 @@ const studentHomeworkEdit = {
         programQuestionList
       } = data;
       const {
-        singleQuestionFormIdMap,
-        multipleQuestionFormIdMap,
-        judgeQuestionFormIdMap,
-        programQuestionFormIdMap,
         questionFormIdMap
       } = state;
 
@@ -106,10 +93,7 @@ const studentHomeworkEdit = {
 
       return {
         ...state,
-        singleQuestionFormIdMap,
-        multipleQuestionFormIdMap,
-        judgeQuestionFormIdMap,
-        programQuestionFormIdMap
+        questionFormIdMap
       }
     },
 

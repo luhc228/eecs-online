@@ -1,19 +1,20 @@
 import React from 'react';
 import { ColumnProps } from 'antd/lib/table';
+import { connect } from 'dva';
 import TableTransfer from '@/components/TableTransfer';
+import { StateType } from '../../models';
+import { UmiComponentProps } from '@/interfaces/components';
+import { StudentDetailModel } from '@/interfaces/classEdit';
 
-const mockData: any[] = [];
-for (let i = 0; i < 20; i++) {
-  mockData.push({
-    key: i.toString(),
-    title: `content${i + 1}`,
-    description: `description of content${i + 1}`,
-    disabled: i % 4 === 0,
-  });
+export interface StudentDetailProps extends UmiComponentProps {
+  classEdit: StateType
 }
 
-const StudentDetail: React.FC<{}> = () => {
-  const originTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
+const StudentDetail: React.FC<StudentDetailProps> = ({
+  classEdit,
+  dispatch
+}) => {
+  const { studentList, targetKeys } = classEdit;
 
   const leftTableColumns: ColumnProps<any>[] = [
     {
@@ -29,11 +30,11 @@ const StudentDetail: React.FC<{}> = () => {
       title: '学生学号',
     },
     {
-      dataIndex: 'gender',
+      dataIndex: 'studentGender',
       title: '性别',
     },
     {
-      dataIndex: 'college',
+      dataIndex: 'studentCollege',
       title: '学院',
     },
   ];
@@ -53,19 +54,28 @@ const StudentDetail: React.FC<{}> = () => {
     },
   ]
 
-  const handleChange = (nextTargetKeys: any[]) => {
-    console.log(nextTargetKeys);
+  const handleChange = (nextTargetKeys: string[]) => {
+    dispatch({
+      type: 'classEdit/changeTargetKeys',
+      payload: {
+        targetKeys: nextTargetKeys
+      }
+    })
   }
 
   return (
     <TableTransfer
-      dataSource={mockData}
-      targetKeys={originTargetKeys}
+      dataSource={studentList}
+      targetKeys={targetKeys}
       disabled={false}
       showSearch
+      rowKey={(record: StudentDetailModel) => record.studentId}
       onChange={handleChange}
       filterOption={(inputValue, item) =>
-        item.studentClass.indexOf(inputValue) !== -1 || item.studentId.indexOf(inputValue) !== -1
+        item.studentClass.indexOf(inputValue) !== -1 ||
+        item.studentId.indexOf(inputValue) !== -1 ||
+        item.studentName.indexOf(inputValue) !== -1 ||
+        item.studentGender.indexOf(inputValue) !== -1
       }
       leftColumns={leftTableColumns}
       rightColumns={rightTableColumns}
@@ -73,4 +83,15 @@ const StudentDetail: React.FC<{}> = () => {
   )
 }
 
-export default StudentDetail;
+const mapStateToProps = ({
+  classEdit,
+  loading
+}: {
+  classEdit: StateType,
+  loading: any
+}) => ({
+  classEdit,
+  loading: loading.effects['classEdit/fetchStudentDetail']
+})
+
+export default connect(mapStateToProps)(StudentDetail);

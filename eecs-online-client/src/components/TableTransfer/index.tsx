@@ -2,11 +2,10 @@ import React from 'react';
 import { Transfer, Table } from 'antd';
 import difference from 'lodash/difference';
 import { ColumnProps } from 'antd/es/table';
-import { TransferItem } from 'antd/lib/transfer';
 
 export interface TableTransferProps {
   // 数据源，其中的数据将会被渲染到左边一栏中，targetKeys 中指定的除外。
-  dataSource: TransferItem[];
+  dataSource: any[];
   // 显示在右侧框数据的 key 集合
   targetKeys: string[];
   disabled: boolean;
@@ -15,6 +14,7 @@ export interface TableTransferProps {
   filterOption: (inputValue: string, option: any) => boolean;
   leftColumns: ColumnProps<any>[];
   rightColumns: ColumnProps<any>[];
+  rowKey: ((record: any) => string);
   children?: React.ReactNode;
 }
 
@@ -23,6 +23,7 @@ const TableTransfer: React.SFC<TableTransferProps> = ({
   rightColumns,
   children,
   dataSource,
+  rowKey,
   ...restProps
 }) =>
   // const [totalDataSource, changeTotalDataSource] = useState([]);
@@ -35,6 +36,7 @@ const TableTransfer: React.SFC<TableTransferProps> = ({
       {...restProps}
       dataSource={dataSource}
       showSelectAll={false}
+      rowKey={rowKey}
     >
       {({
         direction,
