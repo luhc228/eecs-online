@@ -6,6 +6,7 @@ import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { HomeworkDetailListItem } from '@/interfaces/studentHomeworkDetail';
 import { getOption } from '@/utils';
+import styles from './index.less';
 
 export interface QuestionFormProps {
   studentHomeworkDetail: StateType;
@@ -46,11 +47,18 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 }
               ];
               return {
-                label: `
-              【判断题】
-              ${content} 
-              （${questionScore}分）
-              `,
+                //   label: `
+                // 【判断题】
+                // ${content}
+                // （${questionScore}分）
+                // `,
+                label: (
+                  <div className={styles.label}>
+                    <span>【判断题】{content}（{questionScore}分）</span>
+                    <span>正确答案：{answer}</span>
+                    <span>你的得分：{score}分</span>
+                  </div>
+                ),
                 name: `judge${questionId}`,
                 component: FORM_COMPONENT.Radio,
                 initialValue: Number(submitAnswer),
