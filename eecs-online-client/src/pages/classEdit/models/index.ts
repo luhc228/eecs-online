@@ -104,13 +104,33 @@ const Model = {
           studentList: list,
         },
       });
+    },
 
-      // yield put({
-      //   type: 'changeOriginTargetKeys',
-      //   payload: {
-      //     studentList,
-      //   },
-      // })
+    /**
+     * 获取已存在的班级信息
+     */
+    *fetchClassDetail(
+      { payload }: { type: string, payload: { classId: number } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(classEditService.fetchClassDetail, payload.classId);
+      const { className, studentList } = response.data;
+
+      yield put({
+        type: 'changeClassDetailFields',
+        payload: {
+          data: {
+            className
+          }
+        }
+      });
+      const targetKeys = studentList.map((item: any) => item.studentId);
+      yield put({
+        type: 'changeTargetKeys',
+        payload: {
+          targetKeys
+        }
+      })
     },
 
     /**
@@ -158,7 +178,7 @@ const Model = {
 
   subscriptions: {
     setup({ dispatch, history }: { dispatch: Dispatch<any>, history: any }) {
-      return history.listen(({ pathname }: { pathname: string }) => {
+      return history.listen(({ pathname, query }: { pathname: string, query: { classId: number } }) => {
         if (pathname === '/teacher/class/create' || pathname === '/teacher/class/edit') {
           dispatch({
             type: 'initState',
@@ -172,7 +192,17 @@ const Model = {
             payload: {
               values: {}
             }
-          })
+          });
+
+          const { classId } = query;
+          if (classId) {
+            dispatch({
+              type: 'fetchClassDetail',
+              payload: {
+                classId
+              }
+            })
+          }
         }
       })
     },

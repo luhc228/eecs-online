@@ -46,12 +46,13 @@ const CourseClass: React.FC<ClassProps> = props => {
     })
   }, []);
 
-  const handleEdit = (allFields: ClassListItem) => {
-    dispatch({
-      type: 'courseClass/changeClassFields',
-      payload: { data: allFields },
-    })
-    router.push('/teacher/class/edit');
+  const handleEdit = (classId: number) => {
+    router.push({
+      pathname: '/teacher/class/edit',
+      query: {
+        classId
+      }
+    });
   }
 
   const handleCreate = () => {
@@ -73,7 +74,7 @@ const CourseClass: React.FC<ClassProps> = props => {
       render: (_: string, record: ClassListItem) => (
         <span className={styles.operation}>
           <span>
-            <a onClick={() => handleEdit(record)}>编辑班级</a>
+            <a onClick={() => handleEdit(record.classId)}>编辑班级</a>
           </span>
           <Popconfirm
             title="确定删除该班级"
@@ -156,7 +157,7 @@ const mapStateToProps = ({
   };
 }) => ({
   courseClass,
-  fetchClassPaginationLoading: loading.effects['class/fetchClassPagination'],
+  fetchClassPaginationLoading: loading.effects['courseClass/fetchClassPagination'],
 })
 
 export default connect(mapStateToProps)(CourseClass);

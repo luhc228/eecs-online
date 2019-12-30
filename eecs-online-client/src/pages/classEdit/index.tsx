@@ -3,11 +3,10 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Dispatch } from 'redux';
 import RouterPrompt from '@/components/RouterPrompt';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
-import { FormItemComponentProps } from '@/interfaces/components';
+import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
 import StudentDetail from './components/StudentDetail';
@@ -21,14 +20,14 @@ const formConfig: FormItemComponentProps[] = [
   },
 ]
 
-interface ClassEditProps {
+interface ClassEditProps extends UmiComponentProps {
   classEdit: StateType,
-  dispatch: Dispatch<any>,
   location: Location
 }
 
 const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) => {
   const { when, targetKeys, classDetailFields } = classEdit;
+  const { query } = location;
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
@@ -43,12 +42,17 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
         },
       })
     } else {
+      let { classId } = query;
+      if (typeof classId === 'string') {
+        classId = Number(classId)
+      }
       dispatch({
         type: 'classEdit/updateClass',
         payload: {
           data: {
             ...allFields,
-            studentIdList: targetKeys
+            studentIdList: targetKeys,
+            classId,
           }
         },
       })
