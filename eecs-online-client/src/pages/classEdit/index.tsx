@@ -15,6 +15,7 @@ import CustomTable from '@/components/CustomTable';
 import StudentListModal from './components/StudentTableModal';
 import StudentTable from './components/StudentTable';
 import CustomCard from '@/components/CustomCard';
+import StudentDetail from './components/StudentDetail';
 
 const formConfig: FormItemComponentProps[] = [
   {
@@ -99,7 +100,7 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
           formConfig={formConfig}
           onSubmit={handleSubmit}
         >
-
+          <StudentDetail />
         </CustomForm>
       </CustomCard>
     </>

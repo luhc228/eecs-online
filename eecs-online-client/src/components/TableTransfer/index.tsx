@@ -5,13 +5,14 @@ import { ColumnProps } from 'antd/es/table';
 import { TransferItem } from 'antd/lib/transfer';
 
 export interface TableTransferProps {
+  // 数据源，其中的数据将会被渲染到左边一栏中，targetKeys 中指定的除外。
   dataSource: TransferItem[];
-  targetKeys: any[];
+  // 显示在右侧框数据的 key 集合
+  targetKeys: string[];
   disabled: boolean;
   showSearch: boolean;
-  onChange: (targetKeys: any[], direction: string, moveKeys: string[]) => void;
+  onChange: (targetKeys: string[], direction: string, moveKeys: string[]) => void;
   filterOption: (inputValue: string, option: any) => boolean;
-  rowKey: (record: any) => string;
   leftColumns: ColumnProps<any>[];
   rightColumns: ColumnProps<any>[];
   children?: React.ReactNode;

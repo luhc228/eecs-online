@@ -1,22 +1,11 @@
 import { Reducer } from 'redux';
-import { Dispatch } from 'dva';
+import { Dispatch, EffectsCommandMap } from 'dva';
 import { Effect } from '@/interfaces/reduxState';
 import * as classEditService from '../services';
-import { StudentDetailModel } from '@/interfaces/class';
-import { SelectComponentDatasourceModel } from '@/interfaces/components';
-import { fetchCollegeList } from '@/services';
-
-export interface collegeListItem extends SelectComponentDatasourceModel {
-  children: SelectComponentDatasourceModel[]
-}
+import { StudentDetailModel } from '@/interfaces/classEdit';
 
 export interface StateType {
-  classFields: object;
-  when: boolean;
   studentList: StudentDetailModel[];
-  targetKeys: string[];
-  collegeList: collegeListItem[];
-  tableFilterValue: [string, string];
 }
 
 export interface ModelType {
@@ -40,85 +29,58 @@ export interface ModelType {
   }
 }
 
-// @ts-ignore
-const Model: ModelType = {
+const initState = {
+  studentList: [],
+}
+
+const Model = {
   namespace: 'classEdit',
 
-  state: {
-    classFields: {},
-    when: true,
-    studentList: [],
-    targetKeys: [],
-    collegeList: [],
-    tableFilterValue: ['', ''],
-  },
+  state: initState,
 
   reducers: {
+    initState(
+      _: StateType,
+      { payload }: { type: string; payload: { state: StateType } }
+    ) {
+      return { ...payload.state }
+    },
+
     changeStudentList(
       state: StateType,
       { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
       return { ...state, studentList }
     },
 
-    changeOriginTargetKeys(
+    changeTargetKeys(
       state: StateType,
-      { payload: { studentList } }: { payload: { studentList: StudentDetailModel[] } }) {
-      // TODO:
-      const originTargetKeys: string[] = studentList.map((item: StudentDetailModel) => item.studentId);
-      return { ...state, targetKeys: [] }
-    },
-
-    changeTargetKeys(state: StateType, { payload: { nextTargetKeys } }: { payload: { nextTargetKeys: string[] } }) {
+      { payload: { nextTargetKeys } }: { payload: { nextTargetKeys: string[] } }
+    ) {
       return { ...state, targetKeys: nextTargetKeys }
     },
 
-    setCollegeList(state: StateType, { payload: { collegeList } }: { payload: { collegeList: SelectComponentDatasourceModel } }) {
-      return { ...state, collegeList }
-    },
-
-    setTableFilterValue(state: StateType, { payload: { tableFilterValue } }: { payload: { tableFilterValue: [string, string] } }) {
-      return { ...state, tableFilterValue }
-    },
   },
 
   effects: {
     /**
-     * 获取所有学院信息
-     */
-    * fetchCollegeList(_: any, { call, put }: any) {
-      const response = yield call(fetchCollegeList);
-      const collegeList: collegeListItem[] = response.data.list;
-      yield put({
-        type: 'setCollegeList',
-        payload: { collegeList },
-      });
-
-      let tableFilterValue: [string, string] = ['', ''];
-
-      if (collegeList && !!collegeList.length) {
-        tableFilterValue = [collegeList[0].value, collegeList[0].children[0].value]
-      }
-
-      yield put({
-        type: 'setTableFilterValue',
-        payload: {
-          tableFilterValue,
-        },
-      });
-    },
-
-    /**
      * 获取所有学生详情
      */
-    * fetchStudentDetail({ payload }: any, { call, put }: any) {
-      const response = yield call(classEditService.fetchStudentDetail, payload);
-      const studentList = response.data.list;
+    *fetchStudentDetail(
+      { payload }: { type: string, payload: { values: any } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(classEditService.fetchStudentDetail, payload.values);
+      const { data } = response;
+      const { list } = data;
+
+
       yield put({
         type: 'changeStudentList',
         payload: {
-          studentList,
+          studentList: list,
         },
       });
+
       // yield put({
       //   type: 'changeOriginTargetKeys',
       //   payload: {
@@ -130,22 +92,42 @@ const Model: ModelType = {
     /**
      * 新增班级信息
      */
-    * createClass({ payload }: any, { call }: any) {
-      yield call(classEditService.createClass, payload);
+    *createClass(
+      { payload }: { type: string, payload: { data: any } },
+      { call }: EffectsCommandMap
+    ) {
+      yield call(classEditService.createClass, payload.data);
     },
 
     /**
      * 更新班级信息
      */
-    * updateClass({ payload }: any, { call }: any) {
-      yield call(classEditService.updateClass, payload);
+    *updateClass(
+      { payload }: { type: string, payload: { data: any } },
+      { call }: EffectsCommandMap
+    ) {
+      yield call(classEditService.updateClass, payload.data);
     },
   },
 
   subscriptions: {
-    setup({ dispatch }: { dispatch: Dispatch<any> }) {
-      dispatch({
-        type: 'fetchCollegeList',
+    setup({ dispatch, history }: { dispatch: Dispatch<any>, history: any }) {
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/teacher/class/create' || pathname === '/teacher/class/edit') {
+          dispatch({
+            type: 'initState',
+            payload: {
+              state: initState
+            }
+          });
+
+          dispatch({
+            type: 'fetchStudentDetail',
+            payload: {
+              values: {}
+            }
+          })
+        }
       })
     },
   },
