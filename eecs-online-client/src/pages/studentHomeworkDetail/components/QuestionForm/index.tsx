@@ -22,7 +22,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     let formConfig: FormItemComponentProps[] = [];
 
     if (list && list.length) {
-      const formItems = list.map((item: HomeworkDetailListItem) => {
+      const formItems: FormItemComponentProps[] = [];
+      list.forEach((item: HomeworkDetailListItem) => {
         const {
           questionId,
           content,
@@ -46,17 +47,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   label: '正确',
                 }
               ];
-              return {
-                //   label: `
-                // 【判断题】
-                // ${content}
-                // （${questionScore}分）
-                // `,
+
+              const result = {
                 label: (
                   <div className={styles.label}>
                     <span>【判断题】{content}（{questionScore}分）</span>
-                    <span>正确答案：{answer}</span>
-                    <span>你的得分：{score}分</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
                   </div>
                 ),
                 name: `judge${questionId}`,
@@ -68,6 +67,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 },
                 required: false
               }
+
+              formItems.push(result);
+
+              break;
             }
           case QUESTION_TYPE.single:
             {
@@ -79,12 +82,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 }))
               }
 
-              return {
-                label: `
-                【单选题】
-                ${content} 
-                （${questionScore}分）
-                `,
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【单选题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                  </div>
+                ),
                 name: `single${questionId}`,
                 component: FORM_COMPONENT.Radio,
                 initialValue: submitAnswer,
@@ -94,6 +101,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 },
                 required: false
               }
+
+              formItems.push(result);
+
+              break;
             }
           case QUESTION_TYPE.multiple:
             {
@@ -108,12 +119,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   label: `${getOption(index)}、${option}`,
                 }))
               }
-              return {
-                label: `
-                【多选题】
-                ${content} 
-                （${questionScore}分）
-                `,
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【多选题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                  </div>
+                ),
                 name: `multiple${questionId}`,
                 component: FORM_COMPONENT.Checkbox,
                 props: {
@@ -123,30 +138,40 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 datasource,
                 required: false
               }
+
+              formItems.push(result);
+
+              break;
             }
           case QUESTION_TYPE.program:
-            return {
-              label: `
-              【编程题】
-              ${item.content} 
-              （${item.questionScore}分）
-              `,
-              name: `program${item.questionId}`,
-              component: FORM_COMPONENT.CodeEditor,
-              initialValue: submitAnswer,
-              props: {
-                readOnly: true,
-              },
-              required: false
+            {
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【编程题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                  </div>
+                ),
+                name: `program${item.questionId}`,
+                component: FORM_COMPONENT.CodeEditor,
+                initialValue: submitAnswer,
+                props: {
+                  readOnly: true,
+                },
+                required: false
+              }
+              formItems.push(result);
+              break;
             }
-
           default:
-            return {}
+            break
         }
       })
 
       formConfig = [...formConfig, ...formItems]
-      console.log(formConfig);
     }
 
     return formConfig;
