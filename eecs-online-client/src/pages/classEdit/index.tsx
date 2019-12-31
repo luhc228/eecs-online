@@ -3,17 +3,13 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Button, Icon } from 'antd';
-import { Dispatch } from 'redux';
-import { ColumnProps } from 'antd/es/table';
 import RouterPrompt from '@/components/RouterPrompt';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT } from '@/enums';
-import { FormItemComponentProps } from '@/interfaces/components';
+import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
-import CustomTable from '@/components/CustomTable';
-import StudentListModal from './components/StudentTableModal';
-import StudentTable from './components/StudentTable';
+import CustomCard from '@/components/CustomCard';
+import StudentDetail from './components/StudentDetail';
 
 const formConfig: FormItemComponentProps[] = [
   {
@@ -24,110 +20,74 @@ const formConfig: FormItemComponentProps[] = [
   },
 ]
 
-const columns: ColumnProps<any>[] = [
-  {
-    dataIndex: 'college',
-    title: '学院',
-  },
-  {
-    dataIndex: 'studentClass',
-    title: '班级',
-  },
-  {
-    dataIndex: 'studentName',
-    title: '学生姓名',
-  },
-  {
-    dataIndex: 'studentId',
-    title: '学号',
-  },
-  {
-    dataIndex: 'operation',
-    title: '操作',
-    // render: () => {
-
-    // }
-  }
-];
-
-interface ClassEditProps {
+interface ClassEditProps extends UmiComponentProps {
   classEdit: StateType,
-  dispatch: Dispatch<any>,
   location: Location
 }
 
 const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) => {
-  const { classDetail, when, studentList, targetKeys } = classEdit;
-
-  const handleChange = (nextTargetKeys: string[]) => {
-    dispatch({
-      type: 'classEdit/changeTargetKeys',
-      payload: { nextTargetKeys },
-    })
-  }
+  const { when, targetKeys, classDetailFields } = classEdit;
+  const { query } = location;
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
     if (isCreate) {
       dispatch({
         type: 'classEdit/createClass',
-        payload: { ...allFields },
+        payload: {
+          data: {
+            ...allFields,
+            studentIdList: targetKeys
+          }
+        },
       })
     } else {
+      let { classId } = query;
+      if (typeof classId === 'string') {
+        classId = Number(classId)
+      }
       dispatch({
         type: 'classEdit/updateClass',
-        payload: { ...allFields },
+        payload: {
+          data: {
+            ...allFields,
+            studentIdList: targetKeys,
+            classId,
+          }
+        },
       })
     }
   }
 
-  const handleFieldsChange = () => {
-
-  }
+  // const handleFieldsChange = (allFields: object) => {
+  //   dispatch({
+  //     type: 'classEdit/changeClassDetailFields',
+  //     payload: {
+  //       data: {
+  //         ...allFields
+  //       }
+  //     }
+  //   })
+  // }
 
   return (
-    <div style={{ padding: '20px 0' }}>
+    <>
       <RouterPrompt when={when} />
-      <CustomForm
-        layout="horizontal"
-        values={classDetail}
-        formTypes={CUSTOM_FORM_TYPES.TwoColumn}
-        loading={false}
-        onFieldsChange={handleFieldsChange}
-        formConfig={formConfig}
-        onSubmit={handleSubmit}
-      >
-        {/* <TableTransfer
-          rowKey={(record: StudentDetailModel) => record.studentId}
-          dataSource={studentList}
-          targetKeys={targetKeys}
-          disabled={false}
-          showSearch
-          onChange={handleChange}
-          filterOption={(inputValue, item) => item.title.indexOf(inputValue) !== -1}
-          leftColumns={leftTableColumns}
-          rightColumns={rightTableColumns}
-        >
-          <TableFilter />
-        </TableTransfer> */}
-        {/* 
-        <CustomTable
+      <CustomCard>
+        <CustomForm
+          layout="vertical"
+          values={classDetailFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={false}
-          columns={columns}
-          dataSource={[]}
-          rowKey={record => record.studentId}
-          onPagination={(current: number) => {
-            console.log(current);
-          }}
-        /> */}
-        <StudentTable />
-        <StudentListModal record={{}}>
-          <Button type="dashed" onClick={() => { }} style={{ width: '100%' }}>
-            <Icon type="plus" /> 添加学生
-          </Button>
-        </StudentListModal>
-      </CustomForm>
-    </div>
+          // TODO: bug: when add this fieldsChange function the error will disappear
+          onFieldsChange={() => { }}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        >
+          <StudentDetail />
+        </CustomForm>
+      </CustomCard>
+    </>
   )
 }
 

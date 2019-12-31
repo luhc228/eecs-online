@@ -14,10 +14,10 @@ export function fetchQuestionLibPagination(data: any) {
  * 删除题目
  * @param data
  */
-export function removeQuestion(id: string) {
+export function removeQuestion(questionId: number) {
   return request.post('/question_lib/question/teacher/delete', {
     data: {
-      id
+      questionId
     },
   })
 }

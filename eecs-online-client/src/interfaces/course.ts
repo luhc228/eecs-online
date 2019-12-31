@@ -1,16 +1,22 @@
-import { TableListPaginationProps } from './components';
+import { TableListPaginationProps, PaginationProps } from './components';
 
 export interface CourseFieldsModel {
   courseName?: string,
   // 上课地点
-  location?: string,
+  courseLocation?: string,
   // 虚拟班级名称
-  classNames?: string,
+  className?: string,
 }
+
+/**
+ * 虚拟班级分页请求参数接口
+ */
+export interface PaginationParamsModel extends CourseFieldsModel, PaginationProps { }
 
 export interface CourseListItem extends CourseFieldsModel {
   // 课程唯一id
-  id: string,
+  courseId: number,
+  teacherName: string;
 }
 
 export interface CourseTableData extends TableListPaginationProps {

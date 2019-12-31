@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-import { UmiComponentProps, FormItemComponentProps } from '@/interfaces/components';
+import { UmiComponentProps, FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { StateType } from '../../models';
 import FilterForm from '@/components/CustomForm';
 import { HOMEWORK_STATUS, FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import { PAGINATION_CONFIGS } from '@/constants';
 
 
 interface HomeworkFilterProps extends UmiComponentProps {
@@ -15,12 +16,15 @@ const homeworkStatusMap: { [key: string]: any } = {
   Undone: '未完成'
 }
 
-const filterFormConfig: FormItemComponentProps[] = [
+const getFilterFormConfig = (courseIdDataSource: SelectComponentDatasourceModel[]): FormItemComponentProps[] => [
   {
     label: '作业状态',
     name: 'status',
     component: FORM_COMPONENT.Select,
     required: false,
+    props: {
+      allowClear: true,
+    },
     datasource: Object.entries(HOMEWORK_STATUS).slice(2).map((status) => {
       const [label, value] = status;
       return {
@@ -33,14 +37,11 @@ const filterFormConfig: FormItemComponentProps[] = [
     label: '课程名称',
     name: 'courseId',
     component: FORM_COMPONENT.Select,
+    props: {
+      allowClear: true,
+    },
     required: false,
-    // TODO: from backend api or localstorage
-    datasource: [
-      {
-        value: '1',
-        label: 'EECS实验课',
-      },
-    ],
+    datasource: courseIdDataSource
   },
 ]
 
@@ -48,24 +49,38 @@ const HomeworkFilter: React.FC<HomeworkFilterProps> = ({
   dispatch,
   studentHomework,
 }) => {
-  const { filterFields } = studentHomework;
+  const { filterFields, courseIdDataSource } = studentHomework;
 
   const handleFilterFieldsChange = (allFields: object) => {
-    console.log(allFields);
+    dispatch({
+      type: 'studentHomework/changeFilterFields',
+      payload: {
+        filterFields: allFields,
+      }
+    })
   }
 
   const handleFilterFieldsSubmit = (allFields: object) => {
-    console.log(allFields);
+    dispatch({
+      type: 'studentHomework/fetchStudentHomeworkPagination',
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...allFields
+        }
+      }
+    })
   }
 
 
   return (
     <FilterForm
+      resetFieldsVisible={false}
       values={filterFields}
       loading={false}
       formTypes={CUSTOM_FORM_TYPES.Filter}
       onFieldsChange={handleFilterFieldsChange}
-      formConfig={filterFormConfig}
+      formConfig={getFilterFormConfig(courseIdDataSource)}
       onSubmit={handleFilterFieldsSubmit}
     />
   )

@@ -1,5 +1,4 @@
 import request from '@/utils/request';
-// import { CourseTableData } from '@/interfaces/course';
 
 /**
  * 获取课程信息分页
@@ -15,8 +14,10 @@ export function fetchCoursePagination(data: any) {
  * 删除课程
  * @param data
  */
-export function removeCourse(data: { id: number }) {
+export function removeCourse(courseId: string) {
   return request.post('/course/delete', {
-    data,
+    data: {
+      courseId
+    },
   })
 }

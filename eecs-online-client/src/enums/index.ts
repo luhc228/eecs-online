@@ -40,15 +40,15 @@ export enum CUSTOM_FORM_TYPES {
 }
 
 export enum QUESTION_TYPE {
-  Single,
-  Multiple,
-  Judge,
-  Program,
+  single,
+  multiple,
+  judge,
+  program,
 }
 
 export enum HOMEWORK_STATUS {
-  Done,
   Undone,
+  Done,
 }
 
 // 通知提示框 Notification API 类型
@@ -59,4 +59,9 @@ export enum NOTIFICATION_TYPE {
   warning,
   warn,
   loading
+}
+
+export enum JUDGE_VALUE {
+  InCorrect,
+  Correct,
 }

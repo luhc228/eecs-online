@@ -13,31 +13,25 @@ import { StateType } from '../../models';
 
 interface LibTableProps extends UmiComponentProps {
   loading: boolean,
+  questionLib: StateType,
 }
 
-const dataSource = [
-  {
-    id: 1,
-    courseName: 'eecsee',
-    questionType: 1,
-    questionScore: '90',
-    content: 'fjdlkjfajljlkfajlkfjjklf',
-  }
-]
-const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
+const LibTable: React.FC<LibTableProps> = ({ dispatch, loading, questionLib }) => {
+  const { currentTabKey, filterFields, data } = questionLib;
+
   const handleEdit = (record: questionListItem) => {
     umiRouter.push({
       pathname: '/teacher/question-lib/edit',
       query: {
-        id: record.id
+        questionId: record.questionId
       }
     })
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (questionId: number) => {
     dispatch({
       type: 'questionLib/removeQuestion',
-      payload: { id },
+      payload: { questionId },
     })
   };
 
@@ -51,7 +45,16 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
       )
     },
     { title: '题目分数', dataIndex: 'questionScore' },
-    { title: '题目内容', dataIndex: 'content' },
+    {
+      title: '题目内容',
+      dataIndex: 'content',
+      width: 400,
+      render: (value: string) => (
+        <div style={{ height: 60 }}>
+          {value}
+        </div>
+      )
+    },
     {
       title: '操作',
       render: (_: string, record: questionListItem) => (
@@ -60,8 +63,8 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
             <a onClick={() => handleEdit(record)}>查看</a>
           </span>
           <Popconfirm
-            title="确定删除该班级"
-            onConfirm={() => handleDelete(record.id)}
+            title="确定删除该题目"
+            onConfirm={() => handleDelete(record.questionId)}
           >
             <a href="">删除</a>
           </Popconfirm>
@@ -71,21 +74,41 @@ const LibTable: React.FC<LibTableProps> = ({ dispatch, loading }) => {
   ];
 
   useEffect(() => {
+    if (!filterFields.courseId) {
+      return;
+    }
     dispatch({
       type: 'questionLib/fetchQuestionLibPagination',
-      payload: { ...PAGINATION_CONFIGS, },
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...filterFields,
+          questionType: Number(currentTabKey),
+        }
+      },
     })
-  }, []);
+  }, [!filterFields.courseId]);
+
+  const { page, total, list } = data;
   return (
     <CustomTable
       loading={loading}
-      rowKey={(record: questionListItem) => record.id}
+      rowKey={(record: questionListItem) => record.questionId.toString()}
       columns={columns}
-      dataSource={dataSource}
+      dataSource={list}
+      current={page}
+      total={total}
       onPagination={(current: number) => {
         dispatch({
           type: 'questionLib/fetchQuestionLibPagination',
-          payload: { ...PAGINATION_CONFIGS, page: current },
+          payload: {
+            data:
+            {
+              ...PAGINATION_CONFIGS,
+              ...filterFields,
+              page: current,
+            }
+          },
         })
       }}
     />

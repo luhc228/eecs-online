@@ -2,9 +2,10 @@
  * CustomForm component including filter/common form
  * Filter component usually in the header of the table or the page.
  */
-import React, { useState } from 'react';
-import { Form, Row, Col, Input, Select, Button, Icon, Radio, Checkbox } from 'antd';
+import React, { createRef } from 'react';
+import { Form, Row, Col, Input, Select, Button, Radio, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
+import router from 'umi/router';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
@@ -12,6 +13,7 @@ import styles from './index.less';
 import InputNumberWithUnit from '../InputNumberWithUnit';
 import ImageUpload from '../upload/ImageUpload';
 import CodeEditor from '../CodeEditor';
+import DynamicFieldSet from '../DynamicFieldSet';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -19,26 +21,27 @@ interface CustomFormProps extends FormComponentProps {
   formTypes: CUSTOM_FORM_TYPES;
   layout?: 'horizontal' | 'inline' | 'vertical';
   formConfig: FormItemComponentProps[];
-  values: object;
+  values: any;
   loading?: boolean;
   children?: React.ReactNode;
-  onFieldsChange: (allFields: object) => void;
-  onSubmit: (value: object) => void;
+  onFieldsChange: (allFields: any, changedFields?: any) => void;
+  onSubmit?: (value: any) => void;
+  resetFieldsVisible?: boolean;
 }
 
-const formItemLayoutWithOutLabel = {
-  wrapperCol: {
-    xs: { span: 24, offset: 0 },
-    sm: { span: 20, offset: 4 },
-  },
-};
-
-
 const CustomForm: React.FC<CustomFormProps> = props => {
-  const { formTypes, form, formConfig, onSubmit, loading, layout, children } = props;
-  const { getFieldDecorator, getFieldValue } = form;
-
-  const [fieldSetId, changeFieldSetId] = useState(1);
+  const {
+    formTypes,
+    form,
+    formConfig,
+    onSubmit,
+    loading,
+    layout,
+    children,
+    resetFieldsVisible
+  } = props;
+  const { getFieldDecorator } = form;
+  const formRef = createRef<FormComponentProps>();
 
   let formItemLayout: any = null;
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
@@ -50,79 +53,6 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   if (formTypes === CUSTOM_FORM_TYPES.TwoColumn && layout !== 'vertical') {
     formItemLayout = TWO_COLUMNS_FORM_LAYOUT;
   }
-
-  const handleDynamicFieldSetRemove = (k: string) => {
-    const keys = form.getFieldValue('keys');
-    // need at least one input
-    if (keys.length === 1) {
-      return;
-    }
-    form.setFieldsValue({
-      keys: keys.filter((key: string) => key !== k),
-    });
-  }
-
-  /**
-   * 动态增加表单项
-   */
-  const handleDynamicFieldSetAdd = () => {
-    const keys = form.getFieldValue('keys');
-    const newFieldSetId = fieldSetId + 1;
-    changeFieldSetId(newFieldSetId)
-    const nextKeys = keys.concat(fieldSetId);
-
-    form.setFieldsValue({
-      keys: nextKeys,
-    });
-  }
-
-  const renderDynamicFieldSetFormItems = () => {
-    getFieldDecorator('keys', { initialValue: [{}] });
-    const keys = getFieldValue('keys');
-
-    const formItems = keys.map((k: string) => (
-      <Form.Item
-        {...formItemLayoutWithOutLabel}
-        label=""
-        required={false}
-        key={k}
-      >
-        {getFieldDecorator(`field[${k}]`, {
-          validateTrigger: ['onChange', 'onBlur'],
-          rules: [
-            {
-              required: false,
-              whitespace: true,
-              message: '请输入',
-            },
-          ],
-        })(<Input placeholder="请输入" style={{ width: '60%', marginRight: 8 }} />)}
-        {keys.length > 1 ? (
-          <Icon
-            className="dynamic-delete-button"
-            type="minus-circle-o"
-            onClick={() => handleDynamicFieldSetRemove(k)}
-          />
-        ) : null}
-      </Form.Item>
-    ))
-
-    return formItems;
-  }
-
-  const renderDynamicFieldSet = () => (
-    <>
-      {renderDynamicFieldSetFormItems()}
-      <Form.Item>
-        <Button
-          type="dashed"
-          onClick={() => handleDynamicFieldSetAdd()}
-          style={{ width: '100%' }}>
-          <Icon type="plus" />添加
-        </Button>
-      </Form.Item>
-    </>
-  )
 
   const renderForm = (formItem: FormItemComponentProps) => {
     switch (formItem.component) {
@@ -176,9 +106,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <>
-                {renderDynamicFieldSet()}
-              </>
+              <DynamicFieldSet {...formItem.props} />
             )}
           </>
         )
@@ -188,13 +116,19 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             {getFieldDecorator(formItem.name, {
               initialValue: formItem.initialValue,
               valuePropName: 'fileList',
+              getValueFromEvent: e => {
+                if (Array.isArray(e)) {
+                  return e;
+                }
+                return e && e.fileList;
+              },
               rules: [{
                 required: formItem.required,
                 message: formItem.message ? formItem.message : '请上传',
               }],
             },
             )(
-              <ImageUpload {...formItem.props} />
+              <ImageUpload form={form} {...formItem.props} wrappedComponentRef={formRef} />
             )}
           </>
         )
@@ -209,7 +143,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <InputNumberWithUnit {...formItem.props} />
+              <InputNumberWithUnit form={form} {...formItem.props} wrappedComponentRef={formRef} />
             )}
           </>
         )
@@ -271,6 +205,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Checkbox.Group
                 className={styles.checkboxInRow}
                 options={formItem.datasource}
+                {...formItem.props}
               />
             )}
           </>
@@ -286,7 +221,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <CodeEditor />
+              <CodeEditor {...formItem.props} />
             )}
           </>
         )
@@ -296,45 +231,52 @@ const CustomForm: React.FC<CustomFormProps> = props => {
   }
 
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      console.log('Received values of form: ', values);
-      onSubmit(values);
+      if (onSubmit) {
+        onSubmit(values);
+      }
     });
   }
 
   const handleFormReset = () => {
     props.form.resetFields();
-    props.onSubmit({});
+    if (onSubmit) {
+      onSubmit({});
+    }
   }
 
-  const filterFormButtons = (buttonsStyles?: string) => (
+  const filterFormButtons = (buttonsStyles?: string, resetVisible: boolean = true) => (
     <span className={buttonsStyles && styles[buttonsStyles]}>
       <Button type="primary" htmlType="submit" loading={loading}>
         查询
       </Button>
-      <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
-        重置
-      </Button>
+      {resetVisible && (
+        <Button style={{ marginLeft: 15 }} onClick={handleFormReset}>
+          重置
+        </Button>
+      )}
     </span>
   )
 
   const commonFormButtons = (
     <span className={styles.commonButtons}>
-      <Button onClick={handleFormReset}>
+      <Button onClick={() => router.goBack()}>
         取消
-    </Button>
-      <Button
-        style={{ marginLeft: 15 }}
-        type="primary"
-        htmlType="submit"
-        loading={loading}>
-        保存
-     </Button>
+      </Button>
+      {onSubmit && (
+        <Button
+          style={{ marginLeft: 15 }}
+          type="primary"
+          htmlType="submit"
+          loading={loading}>
+          提交
+        </Button>
+      )}
     </span>
   )
 
@@ -350,13 +292,15 @@ const CustomForm: React.FC<CustomFormProps> = props => {
                   {renderForm(formItem)}
                 </Form.Item>
               </Col>
+
+
             ))}
             {formConfig &&
               formTypes === CUSTOM_FORM_TYPES.Filter &&
               formConfig.length % (24 / INLINE_FORM_LAYOUT.md) !== 0 && (
                 <Col {...formItemLayout}>
                   <Form.Item>
-                    {filterFormButtons()}
+                    {filterFormButtons(undefined, resetFieldsVisible)}
                   </Form.Item>
                 </Col>
               )}
@@ -378,11 +322,11 @@ const CustomForm: React.FC<CustomFormProps> = props => {
             )}
           {(formTypes === CUSTOM_FORM_TYPES.Filter) &&
             formConfig.length % (24 / INLINE_FORM_LAYOUT.md) === 0 && (
-              <>{filterFormButtons('filterFloatRightButtons')}</>
+              <>{filterFormButtons('filterFloatRightButtons', resetFieldsVisible)}</>
             )}
         </Form.Item>
-      </Form>
-    </div>
+      </Form >
+    </div >
 
   )
 }
@@ -390,10 +334,11 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 CustomForm.defaultProps = {
   layout: 'inline',
   loading: false,
+  resetFieldsVisible: true,
 }
 
 export default Form.create<CustomFormProps>({
-
+  name: 'custom_form',
   // ref: http://react-component.github.io/form/examples/redux.html
   mapPropsToFields(props: CustomFormProps) {
     const result: { [key: string]: { value: string | number | string[], [key: string]: any } } = {};
@@ -410,7 +355,7 @@ export default Form.create<CustomFormProps>({
     return result;
   },
 
-  onFieldsChange(props: CustomFormProps, _: any, allFields: object) {
+  onFieldsChange(props: CustomFormProps, changedFields: any, allFields: object) {
     const result: { [key: string]: any } = {}
     if (allFields) {
       Object.entries(allFields).forEach(formField => {
@@ -418,6 +363,6 @@ export default Form.create<CustomFormProps>({
         result[key] = field.value;
       });
     }
-    props.onFieldsChange(result);
+    props.onFieldsChange(result, changedFields);
   },
 })(CustomForm);

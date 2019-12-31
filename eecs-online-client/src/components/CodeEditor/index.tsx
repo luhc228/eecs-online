@@ -7,17 +7,19 @@ import 'ace-builds/src-noconflict/theme-github';
 export interface CodeEditorProps {
   value?: string;
   onChange?: Function;
+  readOnly?: boolean;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, readOnly }) => {
   const handleCodeChange = (newValue: string) => {
     if (onChange) {
       onChange(newValue);
     }
   }
   return (
-    <div style={{ display: 'block',  }}>
+    <div style={{ display: 'block', }}>
       <AceEditor
+        readOnly={readOnly}
         mode="python"
         theme="github"
         value={value}
@@ -41,6 +43,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
     //   />
     // </div>
   )
+}
+
+CodeEditor.defaultProps = {
+  readOnly: false
 }
 
 export default CodeEditor;

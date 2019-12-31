@@ -5,14 +5,14 @@ export interface FilterFieldsModel {
   // 作业状态
   status: HOMEWORK_STATUS;
   // 课程id
-  courseId?: string;
+  courseId?: number;
 }
 
 export interface StudentHomeworkPaginationProps extends PaginationProps, FilterFieldsModel { }
 
 export interface studentHomeworkListItem {
   // 学生作业id
-  id: string;
+  homeworkId: number;
   // 作业名称
   homeworkName: string;
   // 课程名称

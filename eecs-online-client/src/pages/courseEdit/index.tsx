@@ -9,14 +9,18 @@ import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import RouterPrompt from '@/components/RouterPrompt';
 import { StateType } from './models';
+import CustomCard from '@/components/CustomCard';
 
 interface CourseEditProps {
   courseEdit: StateType,
   dispatch: Dispatch<any>,
-  location: Location
+  location: Location,
+  loading: boolean
 }
 
-const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location }) => {
+const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location, loading }) => {
+  const { courseFields, when, classIdDataSource } = courseEdit;
+
   const formConfig: FormItemComponentProps[] = [
     {
       label: '课程名称',
@@ -26,78 +30,77 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location 
     },
     {
       label: '上课地点',
-      name: 'location',
+      name: 'courseLocation',
       component: FORM_COMPONENT.Input,
       required: true,
     },
     {
       label: '上课班级',
-      name: 'classNames',
+      name: 'classId',
       component: FORM_COMPONENT.Select,
       required: true,
       props: {
-        selectMode: 'multiple',
+        mode: 'multiple',
       },
-      // TODO: from backend api
-      datasource: [
-        {
-          value: '通信1班',
-          label: '通信1班',
-        },
-      ],
+      datasource: classIdDataSource
     },
   ]
 
-  const handleFieldsChange = (allFields: object) => {
-    dispatch({
-      type: 'courseEdit/changeCourseFields',
-      payload: { data: allFields },
-    })
-  };
+  // const handleFieldsChange = (allFields: object) => {
+  //   dispatch({
+  //     type: 'courseEdit/changeCourseFields',
+  //     payload: { data: allFields },
+  //   })
+  // };
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
     if (isCreate) {
       dispatch({
         type: 'courseEdit/createCourse',
-        payload: { ...allFields },
+        payload: { data: allFields },
       })
     } else {
       dispatch({
         type: 'courseEdit/updateCourse',
-        payload: { ...allFields },
+        payload: { data: { ...allFields, courseId: courseFields.courseId } },
       })
     }
   };
 
-  const { courseFields, when } = courseEdit;
   return (
-    <div style={{ padding: '50px 0' }}>
+    <>
       <RouterPrompt when={when} />
-      <CustomForm
-        layout="horizontal"
-        values={courseFields}
-        formTypes={CUSTOM_FORM_TYPES.OneColumn}
-        loading={false}
-        onFieldsChange={handleFieldsChange}
-        formConfig={formConfig}
-        onSubmit={handleSubmit}
-      />
-    </div>
+      <CustomCard>
+        <CustomForm
+          layout="horizontal"
+          values={courseFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
+          loading={loading}
+          // TODO: bug: when add this fieldsChange function the error will disappear
+          onFieldsChange={() => { }}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        />
+      </CustomCard>
+    </>
   )
 };
 
 const mapStateToProps = ({
   courseEdit,
   router,
+  loading,
 }: {
   courseEdit: StateType,
   router: {
     location: Location
   },
+  loading: any
 }) => ({
   courseEdit,
   location: router.location,
+  loading: loading.models.courseEdit
 });
 
 

@@ -7,29 +7,28 @@ import { FilterFieldsModel } from '@/interfaces/questionLib';
 import { StateType } from '../../models';
 import { PAGINATION_CONFIGS } from '@/constants';
 
-const filterFormConfig: FormItemComponentProps[] = [
-  {
-    label: '题目内容',
-    name: 'content',
-    component: FORM_COMPONENT.Input,
-    required: false,
-  },
-  {
-    label: '课程名称',
-    name: 'courseId',
-    component: FORM_COMPONENT.Select,
-    required: false,
-    datasource: []
-  }
-]
-
-
 interface LibFilterProps extends UmiComponentProps {
   questionLib: StateType
 }
 
 const LibFilter: React.FC<LibFilterProps> = ({ questionLib, dispatch }) => {
-  const { filterFields } = questionLib;
+  const { filterFields, courseIdDataSource, currentTabKey } = questionLib;
+
+  const filterFormConfig: FormItemComponentProps[] = [
+    {
+      label: '题目内容',
+      name: 'content',
+      component: FORM_COMPONENT.Input,
+      required: false,
+    },
+    {
+      label: '课程名称',
+      name: 'courseId',
+      component: FORM_COMPONENT.Select,
+      required: false,
+      datasource: courseIdDataSource
+    }
+  ]
 
   const handleFieldsChange = (allFields: FilterFieldsModel) => {
     dispatch({
@@ -43,7 +42,13 @@ const LibFilter: React.FC<LibFilterProps> = ({ questionLib, dispatch }) => {
   const handleSubmit = (values: FilterFieldsModel) => {
     dispatch({
       type: 'questionLib/fetchQuestionLibPagination',
-      payload: { ...PAGINATION_CONFIGS, ...values },
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...values,
+          questionType: Number(currentTabKey)
+        }
+      },
     })
   }
 
