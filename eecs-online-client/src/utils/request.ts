@@ -40,7 +40,8 @@ const errorHandler = (error: { response: Response }): Response => {
       message: '网络异常',
     });
   }
-  return response;
+
+  throw error;
 };
 
 const host = process.env.NODE_ENV === 'production' ? appConfig.apiUrl : '';
@@ -70,6 +71,7 @@ request.interceptors.response.use((response) => {
   if (response.status !== 200) {
     showNotification(response.status, codeMessage[response.status], NOTIFICATION_TYPE.error);
   }
+
   return response;
 });
 

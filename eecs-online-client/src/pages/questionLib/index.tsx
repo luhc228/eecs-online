@@ -9,20 +9,21 @@ import LibFilter from './components/LibFilter';
 import LibTable from './components/LibTable';
 import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
+import { PAGINATION_CONFIGS } from '@/constants';
 
 interface QuestionEditProps extends UmiComponentProps {
   questionLib: StateType
 }
 
 export const questionTypeMap = {
-  [QUESTION_TYPE.Single]: '单选题',
-  [QUESTION_TYPE.Multiple]: '多选题',
-  [QUESTION_TYPE.Judge]: '判断题',
-  [QUESTION_TYPE.Program]: '编程题',
+  [QUESTION_TYPE.judge]: '判断题',
+  [QUESTION_TYPE.single]: '单选题',
+  [QUESTION_TYPE.multiple]: '多选题',
+  [QUESTION_TYPE.program]: '编程题',
 }
 
 const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => {
-  const { currentTabKey } = questionLib;
+  const { currentTabKey, filterFields } = questionLib;
   function callback(key: string) {
     dispatch({
       type: 'questionLib/changecurrentTabKey',
@@ -30,61 +31,54 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
         currentTabKey: Number(key),
       }
     });
-    // TODO: add fetch pagination
-    // dispatch({
-    //   type: 'questionLib/fetchQuestionLibPagination',
-    //   payload: {
-    //     currentTabKey: Number(key),
-    //   }
-    // })
+
+    dispatch({
+      type: 'questionLib/fetchQuestionLibPagination',
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...filterFields,
+          questionType: Number(key),
+        }
+      }
+    })
   }
 
   function handleCreate() {
+    dispatch({
+      type: 'questionLibEdit/changeQuestionFields',
+      payload: {
+        data: {}
+      }
+    });
+
     router.push('/teacher/question-lib/create')
   }
 
   const tabsContent: CardTabListType[] = [
     {
-      tab: questionTypeMap[QUESTION_TYPE.Single],
-      key: QUESTION_TYPE.Single.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.single],
+      key: QUESTION_TYPE.single.toString(),
     },
     {
-      tab: questionTypeMap[QUESTION_TYPE.Multiple],
-      key: QUESTION_TYPE.Multiple.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.multiple],
+      key: QUESTION_TYPE.multiple.toString(),
     },
     {
-      tab: questionTypeMap[QUESTION_TYPE.Judge],
-      key: QUESTION_TYPE.Judge.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.judge],
+      key: QUESTION_TYPE.judge.toString(),
     },
     {
-      tab: questionTypeMap[QUESTION_TYPE.Program],
-      key: QUESTION_TYPE.Program.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.program],
+      key: QUESTION_TYPE.program.toString(),
     },
   ];
 
   return (
-    // <Tabs
-    //   activeKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
-    //   onChange={callback}
-    // >
-    //   {tabsContent.map((item: TabsContentProps) => (
-    //     <TabPane tab={item.tab} key={item.key.toString()}>
-    //       <LibFilter />
-
-    //       <CustomCard
-    //         extra={
-    //           <Button type="primary" onClick={handleCreate}>新增题目</Button>}
-    //       >
-    //         <LibTable />
-    //       </CustomCard>
-
-    //     </TabPane>
-    //   ))}
-    // </Tabs>
     <CustomCard
       tabList={tabsContent}
       tabBarExtraContent={<Button type="primary" onClick={handleCreate}>新增题目</Button>}
-      activeTabKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
+      activeTabKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.single.toString()}
       onTabChange={callback}
     >
       <LibFilter />

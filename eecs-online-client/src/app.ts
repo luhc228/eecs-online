@@ -6,12 +6,9 @@ const persistConfig = {
   key: 'root',
   storage,
   // 不存储于localStorage的Redux状态
-  blacklist: [
-    // 'router',
-    // 'questionLib'
-  ],
+  blacklist: [],
   whitelist: [
-
+    'courseEdit'
   ]
 };
 

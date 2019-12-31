@@ -2,7 +2,7 @@ import router from 'umi/router';
 import { stringify } from 'qs';
 import * as service from '../services';
 import { USER_TYPE } from '@/enums';
-import { getPageQuery } from '@/utils/utils';
+import { getPageQuery } from '@/utils';
 import userUtils from '@/utils/user-utils';
 
 export default {

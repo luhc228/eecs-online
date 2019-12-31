@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dispatch } from 'dva';
+import History from 'history';
 import { AnyAction } from 'redux';
 import { FORM_COMPONENT, USER_TYPE } from '@/enums';
 
@@ -52,7 +53,7 @@ export interface SelectComponentDatasourceModel {
 
 
 export interface FormItemComponentProps {
-  label?: string,
+  label?: string | React.ReactNode,
   name: string,
   initialValue?: any,
   required: boolean;
@@ -80,7 +81,10 @@ export interface TabsContentProps {
   key: number,
 }
 
+export interface UmiHistory extends History {
+  location: { [k: string]: any }
+}
 export interface UmiComponentProps {
-  history?: History;
+  history?: UmiHistory;
   dispatch: Dispatch<AnyAction>;
 }

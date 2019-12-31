@@ -43,7 +43,7 @@ const CustomTable: React.SFC<CustomTableProps> = ({
   size,
   buttons
 }) => (
-    <div style={{ minHeight: '400px' }}>
+    <div style={{ display: 'block', height: 'auto' }}>
       <Table
         loading={loading}
         columns={columns}
@@ -59,32 +59,34 @@ const CustomTable: React.SFC<CustomTableProps> = ({
         onRow={onRow}
         scroll={{ x: true }}
       />
-      {buttons !== undefined && (
-        <div className={styles.btnWrap}>
-          {buttons.map(button => (
-            <Button
-              key={button.text}
-              type={button.type}
-              onClick={button.onClick}
-              className={`${styles.btn} ${button.type !== 'primary' && styles.secondary}`}
-            >
-              <CustomIcon name={button.icon} />
-              <span>{button.text}</span>
-            </Button>
-          ))}
-        </div>
-      )}
-      {onPagination !== undefined && (
-        <Pagination
-          className="ant-table-pagination"
-          showQuickJumper
-          size={size}
-          total={total}
-          pageSize={pageSize}
-          current={current}
-          onChange={onPagination}
-        />
-      )}
+      <div className={styles.tableBottom}>
+        {buttons !== undefined && (
+          <div className={styles.btnWrap}>
+            {buttons.map(button => (
+              <Button
+                key={button.text}
+                type={button.type}
+                onClick={button.onClick}
+                className={`${styles.btn} ${button.type !== 'primary' && styles.secondary}`}
+              >
+                <CustomIcon name={button.icon} />
+                <span>{button.text}</span>
+              </Button>
+            ))}
+          </div>
+        )}
+        {onPagination !== undefined && (
+          <Pagination
+            className="ant-table-pagination"
+            showQuickJumper
+            size={size}
+            total={total}
+            pageSize={pageSize}
+            current={current}
+            onChange={onPagination}
+          />
+        )}
+      </div>
     </div>
   )
 

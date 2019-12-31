@@ -4,11 +4,13 @@ import { QUESTION_TYPE } from '@/enums';
 export interface FilterFieldsModel {
   // 题目内容
   content?: string;
+  // 课程Id
+  courseId?: number;
 }
 
 export interface questionListItem {
   // 题目id
-  id: string;
+  questionId: number;
   // 课程名
   courseName: string;
   // 题目类型

@@ -48,7 +48,7 @@ const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) =
 
   console.log('user', user);
 
-  const handleSubmit = (e: React.MouseEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields(err => {
       if (!err) {

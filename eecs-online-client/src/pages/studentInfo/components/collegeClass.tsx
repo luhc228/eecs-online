@@ -108,9 +108,8 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
   const { college, studentClass } = conversionObject();
   const { loading } = props;
 
-  console.log(styles);
   return (
-    <Spin spinning={loading} className={styles.row}>
+    <Spin spinning={false} className={styles.row}>
       <Select
         className={styles.item}
         value={college}
@@ -133,26 +132,20 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
   );
 };
 
-const mapStateToProps = () => {
-  ({
-    collegeClass,
-    loading,
-  }: {
-    collegeClass: {
-      college: ViewItemType[];
-      studentClass: ViewItemType[];
-    };
-    loading: any;
-  }) => {
-    const { college, studentClass } = collegeClass;
-    loading.models.collegeClass;
-  };
-  // const { college, studentClass } = state.collegeClass;
-  // return {
-  //   college,
-  //   studentClass,
-  //   loading: state.loading.models.collegeClass,
-  // };
-};
+// const mapStateToProps = () => {
+//   ({
+//     collegeClass,
+//     loading,
+//   }: {
+//     collegeClass: {
+//       college: ViewItemType[];
+//       studentClass: ViewItemType[];
+//     };
+//     loading: any;
+//   }) => {
+//     const { college, studentClass } = collegeClass;
+//     loading.models.collegeClass;
+//   };
+// };
 
 export default connect(mapStateToProps)(CollegeClass);

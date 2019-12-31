@@ -22,7 +22,7 @@ interface TeacherUserProps extends FormComponentProps {
 }
 
 const TeacherUserInfo: React.FC<TeacherUserProps> = ({ form, dispatch, user }) => {
-  const handleSubmit = (e: React.MouseEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields(err => {
       if (!err) {
