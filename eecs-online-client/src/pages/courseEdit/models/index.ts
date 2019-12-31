@@ -14,6 +14,7 @@ export interface StateType {
   classIdDataSource: SelectComponentDatasourceModel[];
 }
 
+<<<<<<< HEAD
 const initState = {
   courseFields: {
     courseId: undefined,
@@ -25,6 +26,8 @@ const initState = {
   classIdDataSource: [],
 }
 
+=======
+>>>>>>> teacher_modules
 export interface ModelType {
   namespace: string;
   state: StateType;

@@ -58,7 +58,7 @@ const menuConfig: MenuListItemModel[] = [
   {
     key: 'teacher-homework-completion',
     name: '作业完成情况',
-    link: '/teacher/homework-completion',
+    link: '/teacher/homework/completion',
     icon: 'icon-shouye1',
     userType: USER_TYPE.Teacher,
   },
@@ -69,6 +69,6 @@ const menuConfig: MenuListItemModel[] = [
     icon: 'icon-shouye1',
     userType: USER_TYPE.Student,
   },
-]
+];
 
 export default menuConfig;
