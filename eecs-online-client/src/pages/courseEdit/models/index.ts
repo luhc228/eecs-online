@@ -143,7 +143,9 @@ const Model = {
       { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
       return history.listen(({ pathname }: { pathname: string }) => {
-        if (pathname === '/teacher/course/create' || pathname === '/teacher/course/edit') {
+        if (pathname === '/teacher/course/create'
+          // || pathname === '/teacher/course/edit'
+        ) {
           dispatch({
             type: 'initState',
             payload: {

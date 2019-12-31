@@ -68,6 +68,7 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
     }
   };
 
+  console.log(courseFields);
   return (
     <>
       <RouterPrompt when={when} />
