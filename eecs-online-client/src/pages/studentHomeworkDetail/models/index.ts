@@ -55,7 +55,6 @@ const studentHomeworkDetail = {
         payload.studentId
       );
       const { data } = response;
-      console.log(data);
       yield put({
         type: 'save',
         payload: {

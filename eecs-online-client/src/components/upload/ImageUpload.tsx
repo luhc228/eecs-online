@@ -1,52 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Upload, Icon, message, Spin, Button } from 'antd';
+import { FormComponentProps } from 'antd/lib/form/Form';
 import appConfig from '@/appConfig';
 
-export interface ImageUploadProps {
+export interface ImageUploadProps extends FormComponentProps {
   name?: string;
   multiple?: boolean;
   action?: string;
   onChange?: () => void;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = (props) => {
-  const [loading, setLoading] = useState(false);
+const ImageUpload = forwardRef<FormComponentProps, ImageUploadProps>(
+  (props: ImageUploadProps, ref) => {
+    useImperativeHandle(ref, () => ({
+      form: props.form
+    }));
 
-  const handleChange = (info: any) => {
-    console.log(info);
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      setLoading(true);
-    }
+    const [loading, setLoading] = useState(false);
 
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-      setLoading(false);
-    } else if (status === 'error') {
-      setLoading(false);
-      message.error(`${info.file.name} file upload failed.`);
-    }
-    // if (props.onChange) {
-    //   onchange({
+    const handleChange = (info: any) => {
+      const { status } = info.file;
+      if (status !== 'uploading') {
+        setLoading(true);
+      }
 
-    //   })
-    // }
-  };
+      if (status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully.`);
+        setLoading(false);
+      } else if (status === 'error') {
+        setLoading(false);
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    };
 
-  return (
-    <Spin tip="Uoloading..." spinning={loading}>
-      <Upload
-        onChange={handleChange}
-        listType="picture"
-        {...props}
-      >
-        <Button>
-          <Icon type="upload" />Click to upload
+    return (
+      <Spin tip="Uoloading..." spinning={loading}>
+        <Upload
+          onChange={handleChange}
+          listType="picture"
+          {...props}
+        >
+          <Button>
+            <Icon type="upload" />Click to upload
         </Button>
-      </Upload>
-    </Spin>
-  )
-}
+        </Upload>
+      </Spin>
+    )
+  }
+)
 
 ImageUpload.defaultProps = {
   name: 'file',
