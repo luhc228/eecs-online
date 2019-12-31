@@ -5,7 +5,8 @@ import userUtils from '@/utils/user-utils';
 import { fetchCourseList } from '@/services';
 import * as questionLibEditServices from '../services';
 import { QuestionFieldsModel } from '@/interfaces/questionLibEdit';
-import { QUESTION_TYPE } from '@/enums';
+import { QUESTION_TYPE, NOTIFICATION_TYPE } from '@/enums';
+import showNotification from '@/utils/showNotification';
 
 export interface StateType {
   questionFields: QuestionFieldsModel;
@@ -173,14 +174,19 @@ const questionLibEdit = {
       { payload }: { type: string; payload: { data: QuestionFieldsModel } },
       { call, put }: EffectsCommandMap
     ) {
-      yield call(questionLibEditServices.createQuestion, payload.data);
-      yield put({
-        type: 'changePromptStatus',
-        payload: {
-          when: false,
-        },
-      })
-      router.goBack();
+      const response = yield call(questionLibEditServices.createQuestion, payload.data);
+      const { success } = response;
+      if (success) {
+        yield put({
+          type: 'changePromptStatus',
+          payload: {
+            when: false,
+          },
+        })
+
+        showNotification('通知', '添加题目成功', NOTIFICATION_TYPE.success);
+        router.goBack();
+      }
     },
 
     /**
@@ -190,14 +196,20 @@ const questionLibEdit = {
       { payload }: { type: string; payload: { data: QuestionFieldsModel } },
       { call, put }: EffectsCommandMap
     ) {
-      yield call(questionLibEditServices.updateQuestion, payload.data);
-      yield put({
-        type: 'changePromptStatus',
-        payload: {
-          when: false,
-        },
-      })
-      router.goBack();
+      const response = yield call(questionLibEditServices.updateQuestion, payload.data);
+      const { success } = response;
+      if (success) {
+        yield put({
+          type: 'changePromptStatus',
+          payload: {
+            when: false,
+          },
+        })
+
+        showNotification('通知', '添加题目成功', NOTIFICATION_TYPE.success);
+
+        router.goBack();
+      }
     },
   },
 
@@ -205,7 +217,14 @@ const questionLibEdit = {
     setup(
       { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
-      return history.listen(({ pathname, query }: { pathname: string, query: { [k: string]: string } }) => {
+      return history.listen((
+        {
+          pathname,
+          query
+        }: {
+          pathname: string,
+          query: { [k: string]: string }
+        }) => {
         if (pathname === '/teacher/question-lib/create' ||
           pathname === '/teacher/question-lib/edit') {
           const { questionId } = query;

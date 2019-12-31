@@ -240,7 +240,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     const isCreate = location.pathname.split('/')[3] === 'create';
     const { questionId } = location.query;
 
-    const { answer } = allFields;
+    const { answer, contentImage } = allFields;
     const optionsKeys = Object.keys(allFields).filter((k: string) => k.includes('option'));
     let options;
     if (optionsKeys.length) {
@@ -250,12 +250,17 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
         return option
       }).join('|');
     }
+    if (contentImage) {
+      const newContentImage = contentImage.map((item) => {
+
+      })
+    }
 
     const newAllFields = {
       ...allFields,
       answer: Array.isArray(answer) ? answer.join('|') : answer,
       options,
-      contentImage: '',
+      // contentImage: '',
       questionId,
     }
 
