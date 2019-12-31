@@ -1,6 +1,6 @@
 export interface StudentUserForm {
-  name: string;
-  id: string;
+  studentName: number;
+  studentId: string;
   gender: string;
   studentClass: string;
   college: string;

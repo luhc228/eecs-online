@@ -1,17 +1,27 @@
 import request from '@/utils/request';
-import { QUESTION_TYPE } from '@/enums';
+import { QuestionDetailModel } from '@/interfaces/teacherHomeworkEdit';
 
-export interface QuestionDetailData {
-  courseId: number;
-  // questionName: string;
-  questionType?: QUESTION_TYPE;
+/**
+ * 获取题目信息列表
+ * @param data
+ */
+export function fetchQuestionDetail(data: QuestionDetailModel) {
+  return request.post('/question_lib/teacher/pagination', {
+    data,
+  });
 }
 
-// export function fetchStudentClassList(params: { college: string }) {
-//     return request.get('/student/class/detail', {
-//       params
-//     })
-// }
+/**
+ * 获取作业信息列表
+ * @param data
+ */
+export function fetchTeacherHomeworkDetail(homeworkId: number) {
+  return request.post('/homework/teacher/get', {
+    data: {
+      homeworkId,
+    },
+  });
+}
 
 /**
  * 新增作业信息
@@ -29,17 +39,6 @@ export function createTeacherHomework(data: any) {
  */
 export function updateTeacherHomework(data: any) {
   return request.post('/homework/teacher/update', {
-    data,
-  });
-}
-
-/**
- * 获取问题分页
- * @param data
- */
-export function fetchQuestionDetail(data: QuestionDetailData) {
-  console.log('question_lib', data);
-  return request.post('/question_lib/teacher/pagination', {
     data,
   });
 }

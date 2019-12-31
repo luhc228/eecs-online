@@ -1,10 +1,6 @@
 /**
  * 定义共用api接口
-<<<<<<< HEAD
-*/
-=======
  */
->>>>>>> teacher_modules
 
 import request from '@/utils/request';
 
@@ -12,11 +8,7 @@ import request from '@/utils/request';
  * 获取学院信息列表
  */
 export function fetchCollegeList() {
-<<<<<<< HEAD
-  return request.get('/college/detail')
-=======
   return request.get('/college/detail');
->>>>>>> teacher_modules
 }
 
 /**
@@ -25,30 +17,20 @@ export function fetchCollegeList() {
 export function fetchVirClassList(teacherId: string) {
   return request.get('/vir_class/list', {
     params: {
-<<<<<<< HEAD
       teacherId
     }
   })
-=======
-      teacherId,
-    },
-  });
->>>>>>> teacher_modules
 }
 
 /**
  * 获取课程信息列表
  */
-export function fetchCourseList(teacherId?: string, studentId?: string) {
+export function fetchCourseList(courseId?: number, courseName?: string) {
+  console.log('courseId', courseId);
   return request.get('/course/list', {
     params: {
-      teacherId,
-      studentId,
-<<<<<<< HEAD
-    }
-  })
-=======
+      courseName,
+      courseId,
     },
   });
->>>>>>> teacher_modules
 }

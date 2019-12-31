@@ -39,20 +39,21 @@ const validatorCollegeClass = (
 
 const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) => {
   // const [currentUser] = useState(undefined)
-  // console.log(user);
   useEffect(() => {
     dispatch({
-      type: 'userInfo/fetchCurrent',
-      payload: { ...StudentUserInfo },
+      type: 'studentInfo/fetchCurrent',
+      payload: { ...user },
     });
   }, []);
+
+  console.log('user', user);
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     form.validateFields(err => {
       if (!err) {
         dispatch({
-          type: 'userInfo/changeUserInfo',
+          type: 'studentInfo/saveCurrentUser',
           payload: { user },
         });
       }
