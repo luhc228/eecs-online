@@ -33,6 +33,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           submitAnswer,
           questionScore,
           score,
+          contentImage
         } = item;
         switch (questionType) {
           case QUESTION_TYPE.judge:
@@ -56,6 +57,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
                   </div>
                 ),
                 name: `judge${questionId}`,
@@ -90,6 +96,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
                   </div>
                 ),
                 name: `single${questionId}`,
@@ -127,6 +138,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
                   </div>
                 ),
                 name: `multiple${questionId}`,
@@ -153,6 +169,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
                   </div>
                 ),
                 name: `program${item.questionId}`,

@@ -250,17 +250,23 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
         return option
       }).join('|');
     }
-    if (contentImage) {
-      const newContentImage = contentImage.map((item) => {
 
+    let newContentImage = '';
+
+    if (contentImage && Array.isArray(contentImage) && !!contentImage.length) {
+      const imageUrls = contentImage.map((item) => {
+        const { response: { imageUrl } } = item;
+        return imageUrl;
       })
+
+      newContentImage = imageUrls.join('|')
     }
 
     const newAllFields = {
       ...allFields,
       answer: Array.isArray(answer) ? answer.join('|') : answer,
       options,
-      // contentImage: '',
+      contentImage: newContentImage,
       questionId,
     }
 

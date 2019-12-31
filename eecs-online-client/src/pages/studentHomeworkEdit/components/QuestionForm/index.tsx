@@ -42,11 +42,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           }
         ];
         return {
-          label: `
-          【判断题】
-          ${item.content} 
-          （${item.questionScore}分）
-          `,
+          label: (
+            <>
+              <div>【判断题】 {item.content} （{item.questionScore}分）</div>
+              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
+                <div>
+                  <img src={imgSrc} alt="questionImage" />
+                </div>
+              ))}
+            </>
+          ),
           name: `judge${item.questionId}`,
           component: FORM_COMPONENT.Radio,
           datasource,
@@ -67,11 +72,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           }))
         }
         return {
-          label: `
-          【单选题】
-          ${item.content} 
-          （${item.questionScore}分）
-          `,
+          label: (
+            <>
+              <div>【单选题】 {item.content} （{item.questionScore}分）</div>
+              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
+                <div>
+                  <img src={imgSrc} alt="questionImage" />
+                </div>
+              ))}
+            </>
+          ),
           name: `single${item.questionId}`,
           component: FORM_COMPONENT.Radio,
           datasource,
@@ -92,11 +102,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           }))
         }
         return {
-          label: `
-          【多选题】
-          ${item.content} 
-          （${item.questionScore}分）
-          `,
+          label: (
+            <>
+              <div>【多选题】 {item.content} （{item.questionScore}分）</div>
+              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
+                <div>
+                  <img src={imgSrc} alt="questionImage" />
+                </div>
+              ))}
+            </>
+          ),
           name: `multiple${item.questionId}`,
           component: FORM_COMPONENT.Checkbox,
           datasource,
@@ -109,11 +124,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
     if (programQuestionList && programQuestionList.length) {
       const formItems = programQuestionList.map((item: HomeworkListItem) => ({
-        label: `
-          【编程题】
-          ${item.content} 
-          （${item.questionScore}分）
-          `,
+        label: (
+          <>
+            <div>【编程题】 {item.content} （{item.questionScore}分）</div>
+            {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
+              <div>
+                <img src={imgSrc} alt="questionImage" />
+              </div>
+            ))}
+          </>
+        ),
         name: `program${item.questionId}`,
         component: FORM_COMPONENT.CodeEditor,
         required: false
