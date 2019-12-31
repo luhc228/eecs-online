@@ -3,17 +3,13 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Button, Icon } from 'antd';
-import { Dispatch } from 'redux';
-import { ColumnProps } from 'antd/es/table';
 import RouterPrompt from '@/components/RouterPrompt';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
-import { FormItemComponentProps } from '@/interfaces/components';
+import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
 import { StateType } from './models';
-import CustomTable from '@/components/CustomTable';
-import QuestionListModal from './components/QuestionTableModal';
-import QuestionTable from './components/QuestionTable';
+import CustomCard from '@/components/CustomCard';
+import QuestionDetail from './components/QuestionDetail'
 
 export const questionTypeMap = {
   [QUESTION_TYPE.Single]: '单选题',
@@ -24,8 +20,8 @@ export const questionTypeMap = {
 
 const formConfig: FormItemComponentProps[] = [
   {
-    label: '所属课程',
-    name: 'courseId',
+    label: '作业名称',
+    name: 'homeworkName',
     component: FORM_COMPONENT.Input,
     required: true,
   },
@@ -44,99 +40,77 @@ const formConfig: FormItemComponentProps[] = [
   // },
 ];
 
-const columns: ColumnProps<any>[] = [
-  {
-    dataIndex: 'content',
-    title: '题目内容',
-  },
-  {
-    dataIndex: 'questionType',
-    title: '题目类型',
-  },
-  {
-    dataIndex: 'questionScore',
-    title: '题目分值',
-  },
-  {
-    dataIndex: 'operation',
-    title: '操作',
-    // render: () => {
-
-    // }
-  },
-];
-
-interface TeacherHomeworkEditProps {
-  teacherHomeworkEdit: StateType;
-  dispatch: Dispatch<any>;
-  location: Location;
+interface TeacherHomeworkEditProps extends UmiComponentProps {
+  teacherHomeworkEdit: StateType,
+  location: Location
 }
 
-const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
-  teacherHomeworkEdit,
-  location,
-  dispatch,
-}) => {
-  const { teacherHomeworkFields, when, questionList, targetKeys } = teacherHomeworkEdit;
-
-  const handleChange = (nextTargetKeys: string[]) => {
-    dispatch({
-      type: 'teacherHomeworkEdit/changeTargetKeys',
-      payload: { nextTargetKeys },
-    });
-  };
+const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({ teacherHomeworkEdit, location, dispatch }) => {
+  const { when, targetKeys, homeworkDetailFields } = teacherHomeworkEdit;
+  const { query } = location;
 
   const handleSubmit = (allFields: object) => {
     const isCreate = location.pathname.split('/')[3] === 'create';
     if (isCreate) {
       dispatch({
-        type: 'teacherHomeworkEdit/createHomework',
-        payload: { ...allFields },
-      });
+        type: 'teacherHomeworkEdit/createTeacherHomework',
+        payload: {
+          data: {
+            ...allFields,
+            questionIdList: targetKeys
+          }
+        },
+      })
     } else {
+      let { homeworkId } = query;
+      if (typeof homeworkId === 'string') {
+        homeworkId = Number(homeworkId)
+      }  
       dispatch({
-        type: 'teacherHomeworkEdit/updateHomework',
-        payload: { ...allFields },
-      });
+        type: 'teacherHomeworkEdit/updateTeacherHomework',
+        payload: {
+          data: {
+            ...allFields,
+            questionIdList: targetKeys,
+            homeworkId,
+          }
+        }
+      })
     }
-  };
-
-  const handleFieldsChange = () => {};
+  }
 
   return (
-    <div style={{ padding: '20px 0' }}>
+    <>
       <RouterPrompt when={when} />
-      <CustomForm
-        layout="horizontal"
-        values={teacherHomeworkFields}
-        formTypes={CUSTOM_FORM_TYPES.TwoColumn}
-        loading={false}
-        onFieldsChange={handleFieldsChange}
-        formConfig={formConfig}
-        onSubmit={handleSubmit}
-      >
-        <QuestionTable />
-        <QuestionListModal record={{}}>
-          <Button type="dashed" onClick={() => {}} style={{ width: '100%' }}>
-            <Icon type="plus" /> 添加题目
-          </Button>
-        </QuestionListModal>
-      </CustomForm>
-    </div>
-  );
-};
+      <CustomCard>
+        <CustomForm
+          layout="vertical"
+          values={homeworkDetailFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
+          loading={false}
+          // TODO: bug: when add this fieldsChange function the error will disappear
+          onFieldsChange={() => { }}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        >
+          <QuestionDetail />
+        </CustomForm>
+      </CustomCard>
+    </>
+  )
+}
 
 const mapStateToProps = ({
   teacherHomeworkEdit,
   router,
 }: {
-  teacherHomeworkEdit: StateType;
+  teacherHomeworkEdit: StateType,
   router: {
-    location: Location;
-  };
+    location: Location
+  },
 }) => ({
   teacherHomeworkEdit,
   location: router.location,
-});
+})
 
 export default connect(mapStateToProps)(TeacherHomeworkEdit);

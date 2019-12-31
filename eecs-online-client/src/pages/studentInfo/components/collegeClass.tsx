@@ -69,7 +69,7 @@ const CollegeClass: React.FC<CollegeClassProps> = props => {
 
     if (dispatch) {
       dispatch({
-        type: 'userInfo/fetchCollege',
+        type: 'studentInfo/fetchCollege',
         payload: item.key,
       });
     }

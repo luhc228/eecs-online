@@ -1,5 +1,5 @@
-import { Effect } from 'dva';
 import { Reducer, AnyAction } from 'redux';
+import { Effect } from '@/interfaces/reduxState';
 import * as service from '../services';
 import { StudentUserForm } from '@/interfaces/studentInfo';
 import { ViewItemType } from '../components/collegeClass';
@@ -15,13 +15,13 @@ export interface ModelType {
   namespace: string;
   state: StateType;
   effects: {
-    fetchCurrent: Effect;
-    fetch: Effect;
-    fecthCollege: Effect;
-    fetchStudentClass: Effect;
+    fetchCurrent: Effect<StateType>;
+    // fetch: Effect;
+    fecthCollege: Effect<StateType>;
+    fetchStudentClass: Effect<StateType>;
   };
   reducers: {
-    saveCurrentUser: Reducer<StateType>;
+    save: Reducer<StateType>;
     setCollege: Reducer<StateType>;
     setStudentClass: Reducer<StateType>;
     changeLoading: Reducer<StateType>;
@@ -39,10 +39,10 @@ const Model: ModelType = {
   },
 
   reducers: {
-    saveCurrentUser(state: any, action: AnyAction) {
+    save(state: any, action: AnyAction) {
       return {
         ...state,
-        currentUser: action.payload || {},
+        user: action.payload || {},
       };
     },
     setCollege(state: any, action: AnyAction) {
@@ -66,29 +66,30 @@ const Model: ModelType = {
   },
 
   effects: {
-    *fetch(_: any, { call, put }: any) {
-      const response = yield call(service.queryUsers);
+    // *fetch(_: any, { call, put }: any) {
+    //   const response = yield call(service.queryUsers);
+    //   yield put({
+    //     type: 'save',
+    //     payload: response,
+    //   });
+    // },
+
+    *fetchCurrent(_: any, { call, put }: any) {
+      const response = yield call(service.queryCurrent);
+      console.log(response);
       yield put({
         type: 'save',
         payload: response,
       });
     },
 
-    *fetchCurrent(_: any, { call, put }: any) {
-      const response = yield call(service.queryCurrent);
-      console.log(response);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
-    },
-
     *fecthCollege(_: any, { call, put }: any) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
+      // yield put({
+      //   type: 'changeLoading',
+      //   payload: true,
+      // });
       const response = yield call(service.queryCollege);
+      console.log('response', response.data.list);
       yield put({
         type: 'setCollege',
         payload: response,

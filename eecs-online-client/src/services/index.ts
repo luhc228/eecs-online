@@ -25,11 +25,12 @@ export function fetchVirClassList(teacherId: string) {
 /**
  * 获取课程信息列表
  */
-export function fetchCourseList(teacherId?: string, studentId?: string) {
+export function fetchCourseList(courseId?: number, courseName?: string) {
+  console.log('courseId', courseId);
   return request.get('/course/list', {
     params: {
-      teacherId,
-      studentId,
+      courseName,
+      courseId,
     },
   });
 }
