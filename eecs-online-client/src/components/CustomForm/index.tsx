@@ -2,7 +2,7 @@
  * CustomForm component including filter/common form
  * Filter component usually in the header of the table or the page.
  */
-import React from 'react';
+import React, { createRef } from 'react';
 import { Form, Row, Col, Input, Select, Button, Radio, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import router from 'umi/router';
@@ -41,6 +41,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     resetFieldsVisible
   } = props;
   const { getFieldDecorator } = form;
+  const formRef = createRef<FormComponentProps>();
 
   let formItemLayout: any = null;
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
@@ -127,7 +128,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <ImageUpload {...formItem.props} />
+              <ImageUpload form={form} {...formItem.props} wrappedComponentRef={formRef} />
             )}
           </>
         )
@@ -142,7 +143,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <InputNumberWithUnit {...formItem.props} />
+              <InputNumberWithUnit form={form} {...formItem.props} wrappedComponentRef={formRef} />
             )}
           </>
         )
