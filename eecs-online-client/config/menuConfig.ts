@@ -70,14 +70,14 @@ const menuConfig: MenuListItemModel[] = [
     userType: USER_TYPE.Student,
   },
   {
-    key: 'teacher-userInfo',
+    key: 'student-userInfo',
     name: '个人信息',
     link: '/student/userInfo',
     icon: 'icon-shouye1',
     userType: USER_TYPE.Student,
   },
   {
-    key: 'student-userInfo',
+    key: 'teacher-userInfo',
     name: '个人信息',
     link: '/teacher/userInfo',
     icon: 'icon-shouye1',
