@@ -5,7 +5,7 @@
 import { FormItemComponentProps } from '@/interfaces/components';
 import { Dispatch } from 'redux';
 import { PAGINATION_CONFIGS } from '@/constants';
-import { HomeworkListItem } from '@/interfaces/teacherHomework';
+import { TeacherHomeworkListItem } from '@/interfaces/teacherHomework';
 import umiRouter from 'umi/router';
 import { StateType } from './models';
 import styles from './index.less';
@@ -60,7 +60,7 @@ const Homework: React.FC<HomeworkProps> = props => {
     // console.log('list',list);
     // console.log(filterFields);
 
-    const handleEdit = (allFields: HomeworkListItem) => {
+    const handleEdit = (allFields: TeacherHomeworkListItem) => {
         dispatch({
           type: 'homework/changeHomeworkFields',
           payload: { data: allFields },
@@ -79,13 +79,13 @@ const Homework: React.FC<HomeworkProps> = props => {
         })
     };
 
-    const handleCompletion = (record: HomeworkListItem) => {
+    const handleCompletion = (record: TeacherHomeworkListItem) => {
         umiRouter.push({
             pathname: '/teacher/homework/completion',
             query:{homeworkId: record.homeworkId},})
     }
 
-    const columns: ColumnProps<HomeworkListItem>[] = [
+    const columns: ColumnProps<TeacherHomeworkListItem>[] = [
         { title: '作业名称', dataIndex: 'homeworkName' },
         // { title: '发布时间', dataIndex: 'startAt'},
         { title: '截止时间', dataIndex: 'endAt'},
@@ -93,7 +93,7 @@ const Homework: React.FC<HomeworkProps> = props => {
         { title: '总分', dataIndex: 'homeworkScore'},
         {
             title: '操作',
-            render: (_:string, record: HomeworkListItem) => (
+            render: (_:string, record: TeacherHomeworkListItem) => (
                 <span className={styles.operation}>
                     <span>
                         <a onClick={() => handleEdit(record)}>编辑作业</a>

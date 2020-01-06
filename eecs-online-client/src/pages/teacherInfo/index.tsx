@@ -37,7 +37,7 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
       component: FORM_COMPONENT.Select,
       required: true,
       props: {
-        mode: 'multiple',
+        selectMode: 'multiple',
       },
       datasource: collegeIdDataSource,
     },

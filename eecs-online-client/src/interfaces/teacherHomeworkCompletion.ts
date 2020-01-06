@@ -4,13 +4,15 @@ export interface CompletionFilterFieldsModel {
   //
   studentName?: string;
   //
-  studentId?: string;
+  studentId?: number;
   //
   studentClass?: string;
   //
   delay?: boolean;
   //
   homeworkScore: number;
+  //
+  courseId?: number;
 }
 
 /**
@@ -20,7 +22,7 @@ export interface PaginationParamsModel extends CompletionFilterFieldsModel, Pagi
 
 export interface CompletionListItem extends CompletionFilterFieldsModel {
   //
-  homeworkId: string;
+  homeworkId: number;
 }
 
 /**

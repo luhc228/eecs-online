@@ -136,7 +136,7 @@ const Model = {
     },
 
     /**
-     * 更新课程信息
+     * 更新学生信息
      */
     *updateStudentInfo(
       { payload }: { type: string; payload: { data: StudentInfoFieldsModel } },
