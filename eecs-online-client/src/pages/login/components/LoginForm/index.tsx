@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import router from 'umi/router';
+import Link from 'umi/link';
 import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 import { USER_TYPE } from '@/enums';
@@ -29,22 +30,6 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, dispatch }) => {
         payload: { userType, values },
       });
     });
-  };
-
-  const handleRegister = () => {
-    dispatch({
-      type: 'login/userRegister',
-      payload: {},
-    });
-    router.push('/login/register');
-  };
-
-  const handleFogotPassword = () => {
-    dispatch({
-      type: 'login/userFogotPassword',
-      payload: {},
-    });
-    router.push('/login/forgotPassword');
   };
 
   const { getFieldDecorator } = form;
@@ -77,13 +62,13 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, dispatch }) => {
           valuePropName: 'checked',
           initialValue: true,
         })(<Checkbox>记住我</Checkbox>)}
-        <a className={styles.forgot} href="" onClick={handleFogotPassword}>
+        <Link className={styles.forgot} to="/login/forgotPassword">
           忘记密码？
-          </a>
+        </Link>
         <Button type="primary" htmlType="submit" className={styles.submit}>
           登录
           </Button>
-        <a href="" onClick={handleRegister}>新用户注册</a>
+        <Link to="/login/register">新用户注册</Link>
       </Form.Item>
     </Form>
   );
