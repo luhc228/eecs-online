@@ -77,20 +77,22 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
           />,
         )}
       </Form.Item>
-      <Form.Item>
+      <Form.Item className={styles.check}>
         {getFieldDecorator('remember', {
           valuePropName: 'checked',
           initialValue: true,
         })(<Checkbox>Remember me</Checkbox>)}
-        <a className={styles.fogotPassword} onClick={handleFogotPassword}>
+      </Form.Item>
+      <Form.Item>
+        <a className={styles.register} onClick={handleRegister}>
+          用户注册
+        </a>
+        <a className={styles.forgot} onClick={handleFogotPassword}>
           忘记密码
         </a>
         <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
           登录
         </Button>
-        <a className={styles.register} onClick={handleRegister}>
-          用户注册
-        </a>
       </Form.Item>
     </Form>
   );

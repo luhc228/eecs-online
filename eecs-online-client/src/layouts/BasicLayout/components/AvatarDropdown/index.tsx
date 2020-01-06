@@ -34,25 +34,6 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
         });
       }
     }
-
-    if (key === 'userInfo') {
-      const { dispatch, currentUser } = props;
-      if (dispatch) {
-        if (currentUser) {
-          if (currentUser.userType === USER_TYPE.Student) {
-            dispatch({
-              type: 'student/userInfo',
-            });
-            router.push('/student/userInfo');
-          } else {
-            dispatch({
-              type: 'teacher/userInfo',
-            });
-            router.push('/teacher/userInfo');
-          }
-        }
-      }
-    }
   };
 
   const menuHeaderDropdown = (
@@ -60,10 +41,6 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
       <Menu.Item key="logout">
         <Icon type="logout" />
         <span>退出登录</span>
-      </Menu.Item>
-      <Menu.Item key="userInfo">
-        <Icon type="userInfo" />
-        <span>个人信息</span>
       </Menu.Item>
     </Menu>
   );
@@ -94,9 +71,7 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
   );
 };
 
-const mapStateToProps = ({
-  user
-}: ConnectState) =>
+const mapStateToProps = ({ user }: ConnectState) =>
   // TODO:
   ({
     currentUser: user.currentUser,

@@ -17,25 +17,13 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ teacherHomeworkEdit, di
       dataIndex: 'questionName',
       title: '题目名称',
     },
-    {
-      dataIndex: 'courseName',
-      title: '所属课程',
-    },
     // {
-    //   dataIndex: 'questionId',
-    //   title: '题目ID',
+    //   dataIndex: 'questionType',
+    //   title: '题目类型',
     // },
-    {
-      dataIndex: 'questionType',
-      title: '题目类型',
-    },
     {
       dataIndex: 'questionScore',
       title: '题目分值',
-    },
-    {
-      dataIndex: 'content',
-      title: '题目内容',
     },
   ];
 
@@ -68,7 +56,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ teacherHomeworkEdit, di
       dataSource={questionList}
       targetKeys={targetKeys}
       disabled={false}
-      showSearch={true}
+      showSearch
       rowKey={(record: QuestionDetailModel) => record.questionId}
       onChange={handleChange}
       filterOption={(inputValue, item) =>

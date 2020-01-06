@@ -6,12 +6,15 @@ import { NOTIFICATION_TYPE } from '@/enums';
 import { QuestionDetailModel, TeacherHomeworkDetailFields } from '@/interfaces/teacherHomeworkEdit';
 import showNotification from '@/utils/showNotification';
 import router from 'umi/router';
+import { SelectComponentDatasourceModel } from '@/interfaces/components';
+import { fetchCourseList } from '@/services';
 
 export interface StateType {
   when: boolean;
   questionList: QuestionDetailModel[];
   targetKeys: string[];
   homeworkDetailFields: TeacherHomeworkDetailFields;
+  courseIdDataSource: SelectComponentDatasourceModel[];
 }
 
 export interface ModelType {
@@ -39,6 +42,7 @@ const initState = {
   questionList: [],
   targetKeys: [],
   homeworkDetailFields: {},
+  courseIdDataSource: [],
 };
 
 const Model: ModelType = {
@@ -52,6 +56,14 @@ const Model: ModelType = {
       { payload }: { type: string; payload: { state: StateType } }
     ) {
       return { ...payload.state };
+    },
+
+    saveCourseIdDataSource(
+      state: StateType,
+      { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } },
+    ) {
+      console.log(payload.data);
+      return { ...state, courseIdDataSource: payload.data };
     },
 
     changeQuestionList(
@@ -87,6 +99,27 @@ const Model: ModelType = {
   },
 
   effects: {
+    *fetchCourseList({ payload }: { type: string; payload: { teacherId: string} }, { call, put }: EffectsCommandMap) {
+      const response = yield call(fetchCourseList, payload.teacherId);
+      if (!response) {
+        return;
+      }
+      const {
+        data: { list },
+      } = response;
+      const courseIdDataSource = list.map((item: any) => ({
+        label: item.course,
+        value: item.courseId,
+      }));
+
+      yield put({
+        type: 'saveCourseIdDataSource',
+        payload: {
+          data: courseIdDataSource,
+        },
+      });
+    },
+
     /**
      * 获取所有题目详情
      */
@@ -136,7 +169,7 @@ const Model: ModelType = {
     /**
      * 新增教师作业信息
      */
-    *createClass(
+    *createTeacherHomework(
       { payload }: { type: string, payload: { data: any } },
       { call, put }: EffectsCommandMap
     ) {
@@ -157,7 +190,7 @@ const Model: ModelType = {
     /**
      * 更新作业信息
      */
-    *updateClass(
+    *updateTeacherHomework(
       { payload }: { type: string, payload: { data: any } },
       { call, put }: EffectsCommandMap
     ) {

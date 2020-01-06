@@ -4,6 +4,7 @@ import * as service from '../services';
 import { USER_TYPE } from '@/enums';
 import { getPageQuery } from '@/utils';
 import userUtils from '@/utils/user-utils';
+import { TWO_COLUMNS_FORM_LAYOUT } from '@/constants';
 
 export default {
   namespace: 'login',
@@ -17,7 +18,7 @@ export default {
       return {
         ...state,
         userType,
-      }
+      };
     },
   },
 
@@ -25,7 +26,7 @@ export default {
     *userLogin({ payload: { userType, values } }: any, { call, put }: any) {
       let userLogin;
       if (typeof userType === 'string') {
-        userType = Number(userType)
+        userType = Number(userType);
       }
 
       switch (userType) {
@@ -45,6 +46,9 @@ export default {
       }
       const { accessToken, ...userInfo } = response.data;
 
+      // console.log(response);
+      // console.log(accessToken);
+      // console.log(userType);
       userUtils.saveToken(accessToken);
       userUtils.saveUserInfo({ ...userInfo, userType });
 
@@ -58,7 +62,7 @@ export default {
           redirect = redirect.substr(urlParams.origin.length);
           // 如果切换用户登录，则需要置换pathname 自动跳转至对应用户的默认路由
           if (redirectUrlParams.pathname.split('/')[1] !== userTypeName) {
-            redirect = `/${userTypeName}`
+            redirect = `/${userTypeName}`;
           }
           if (redirect.match(/^\/.*#/)) {
             redirect = redirect.substr(redirect.indexOf('#') + 1);
@@ -91,4 +95,4 @@ export default {
       }
     },
   },
-}
+};
