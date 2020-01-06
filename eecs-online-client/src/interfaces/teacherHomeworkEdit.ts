@@ -11,14 +11,16 @@ export interface QuestionDetailModel {
   questionId: number;
   // 问题名字
   questionName: string;
-  // // 选项
-  // options?: string;
-  // // 答案
-  // answer: any;
+  // 选项
+  options?: string;
+  // 答案
+  answer: any;
   // 题目分数
   questionScore: number;
   // 题目图片
   contentImage?: string;
+  // 题目内容
+  content?: string;
 }
 
 export interface TeacherHomeworkEditData {
@@ -36,8 +38,8 @@ export interface TeacherHomeworkEditData {
   endAt?: string;
 }
 
-export interface TeacherHomeworkEditListItem extends TeacherHomeworkEditData {
-  homeworkId?: number;
+export interface TeacherHomeworkEditListItem {
+  homeworkFields: TeacherHomeworkEditData;
   // 题目列表
   list: QuestionDetailModel[];
 }

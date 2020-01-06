@@ -3,7 +3,7 @@ import { Dispatch, EffectsCommandMap } from 'dva';
 import { Effect } from '@/interfaces/reduxState';
 import * as teacherHomeworkEditService from '../services';
 import { NOTIFICATION_TYPE } from '@/enums';
-import { QuestionDetailModel, TeacherHomeworkDetailFields } from '@/interfaces/teacherHomeworkEdit';
+import { QuestionDetailModel, TeacherHomeworkEditListItem, TeacherHomeworkEditData } from '@/interfaces/teacherHomeworkEdit';
 import showNotification from '@/utils/showNotification';
 import router from 'umi/router';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -13,7 +13,8 @@ export interface StateType {
   when: boolean;
   questionList: QuestionDetailModel[];
   targetKeys: string[];
-  homeworkDetailFields: TeacherHomeworkDetailFields;
+  homeworkDetailFields: TeacherHomeworkEditListItem;
+  homeworkFields: TeacherHomeworkEditData;
   courseIdDataSource: SelectComponentDatasourceModel[];
 }
 
@@ -41,6 +42,7 @@ export interface ModelType {
 const initState = {
   questionList: [],
   targetKeys: [],
+  homeworkFields: [],
   homeworkDetailFields: {},
   courseIdDataSource: [],
 };
@@ -82,7 +84,7 @@ const Model: ModelType = {
 
     changeTeacherHomeworkDetailFields(
       state: StateType,
-      { payload }: { payload: { data: { homeworkName: string } } }
+      { payload }: { payload: { data: { homeworkFileds: TeacherHomeworkEditData } } }
     ) {
       return {
         ...state,

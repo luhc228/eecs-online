@@ -10,6 +10,7 @@ import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/componen
 import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
 import QuestionDetail from './components/QuestionDetail'
+import QuestionTable from './components/QuestionTable';
 
 export const questionTypeMap = {
   [QUESTION_TYPE.single]: '单选题',
@@ -25,19 +26,6 @@ const formConfig: FormItemComponentProps[] = [
     component: FORM_COMPONENT.Input,
     required: true,
   },
-  // {
-  //   label: '题目类型',
-  //   name: 'questionType',
-  //   component: FORM_COMPONENT.Select,
-  //   required: true,
-  //   datasource: Object.entries(questionTypeMap).map(item => {
-  //     const [value, label] = item;
-  //     return {
-  //       value,
-  //       label,
-  //     };
-  //   }),
-  // },
 ];
 
 interface TeacherHomeworkEditProps extends UmiComponentProps {
@@ -94,6 +82,7 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({ teacherHomewo
           onSubmit={handleSubmit}
         >
           <QuestionDetail />
+          <QuestionTable />
         </CustomForm>
       </CustomCard>
     </>
