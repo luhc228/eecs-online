@@ -15,24 +15,19 @@ interface LoginFormProps extends FormComponentProps {
   loading: boolean;
 }
 
-const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatch }) => {
+const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, dispatch }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
       if (err) {
-      } else {
-        //   dispatch({
-        //     type: 'login/userLogin',
-        //     payload: { userType, values },
-        //   });
-        // }
-        delete values.remember;
-
-        dispatch({
-          type: 'login/userLogin',
-          payload: { userType, values },
-        });
+        return;
       }
+      delete values.remember;
+
+      dispatch({
+        type: 'login/userLogin',
+        payload: { userType, values },
+      });
     });
   };
 
@@ -62,7 +57,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
         })(
           <Input
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Username"
+            placeholder="学工号"
           />,
         )}
       </Form.Item>
@@ -73,26 +68,22 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
           <Input
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type="password"
-            placeholder="Password"
+            placeholder="密码"
           />,
         )}
       </Form.Item>
-      <Form.Item className={styles.check}>
+      <Form.Item>
         {getFieldDecorator('remember', {
           valuePropName: 'checked',
           initialValue: true,
-        })(<Checkbox>Remember me</Checkbox>)}
-      </Form.Item>
-      <Form.Item>
-        <a className={styles.register} onClick={handleRegister}>
-          用户注册
-        </a>
-        <a className={styles.forgot} onClick={handleFogotPassword}>
-          忘记密码
-        </a>
-        <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
+        })(<Checkbox>记住我</Checkbox>)}
+        <a className={styles.forgot} href="" onClick={handleFogotPassword}>
+          忘记密码？
+          </a>
+        <Button type="primary" htmlType="submit" className={styles.submit}>
           登录
-        </Button>
+          </Button>
+        <a href="" onClick={handleRegister}>新用户注册</a>
       </Form.Item>
     </Form>
   );
