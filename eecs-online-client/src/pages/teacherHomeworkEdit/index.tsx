@@ -12,10 +12,10 @@ import CustomCard from '@/components/CustomCard';
 import QuestionDetail from './components/QuestionDetail'
 
 export const questionTypeMap = {
-  [QUESTION_TYPE.Single]: '单选题',
-  [QUESTION_TYPE.Multiple]: '多选题',
-  [QUESTION_TYPE.Judge]: '判断题',
-  [QUESTION_TYPE.Program]: '编程题',
+  [QUESTION_TYPE.single]: '单选题',
+  [QUESTION_TYPE.multiple]: '多选题',
+  [QUESTION_TYPE.judge]: '判断题',
+  [QUESTION_TYPE.program]: '编程题',
 };
 
 const formConfig: FormItemComponentProps[] = [

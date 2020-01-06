@@ -56,7 +56,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ teacherHomeworkEdit, di
       dataSource={questionList}
       targetKeys={targetKeys}
       disabled={false}
-      showSearch
+      showSearch={true}
       rowKey={(record: QuestionDetailModel) => record.questionId}
       onChange={handleChange}
       filterOption={(inputValue, item) =>
