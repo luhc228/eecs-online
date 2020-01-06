@@ -4,7 +4,6 @@ import * as service from '../services';
 import { USER_TYPE } from '@/enums';
 import { getPageQuery } from '@/utils';
 import userUtils from '@/utils/user-utils';
-import { TWO_COLUMNS_FORM_LAYOUT } from '@/constants';
 
 export default {
   namespace: 'login',
@@ -46,9 +45,6 @@ export default {
       }
       const { accessToken, ...userInfo } = response.data;
 
-      // console.log(response);
-      // console.log(accessToken);
-      // console.log(userType);
       userUtils.saveToken(accessToken);
       userUtils.saveUserInfo({ ...userInfo, userType });
 
