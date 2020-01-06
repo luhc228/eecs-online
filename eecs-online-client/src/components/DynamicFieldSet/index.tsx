@@ -1,8 +1,9 @@
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, forwardRef, useImperativeHandle } from 'react';
 import { Input, Icon, Row } from 'antd';
+import { FormComponentProps } from 'antd/lib/form/Form';
 import styles from './index.less';
 
-export interface DynamicFieldSetProps {
+export interface DynamicFieldSetProps extends FormComponentProps {
   handleAdd?: () => void;
   handleDelete?: (k: number) => void;
   value?: string;
@@ -10,35 +11,39 @@ export interface DynamicFieldSetProps {
   onChange?: ChangeEventHandler<any>;
 }
 
-const DynamicFieldSet: React.SFC<DynamicFieldSetProps> = (props) => {
-  const {
-    handleAdd,
+const DynamicFieldSet = forwardRef<FormComponentProps, DynamicFieldSetProps>(
+  ({ handleAdd,
     handleDelete,
     dynamicKey,
     onChange,
     value,
-  } = props;
-  return (
-    <Row>
-      <Input
-        placeholder="请输入"
-        style={{ width: '80%', marginRight: 8 }}
-        onChange={onChange}
-        value={value}
-      />
-      {dynamicKey !== undefined && <Icon
-        className={styles.dynamicButton}
-        type="minus-circle"
-        onClick={() => handleDelete(dynamicKey)}
-      />}
-      <Icon
-        className={styles.dynamicButton}
-        type="plus-circle"
-        onClick={() => handleAdd()}
-      />
-    </Row>
-  )
-}
+    form
+  }: DynamicFieldSetProps, ref) => {
+    useImperativeHandle(ref, () => ({
+      form
+    }));
 
+    return (
+      <Row>
+        <Input
+          placeholder="请输入"
+          style={{ width: '80%', marginRight: 8 }}
+          onChange={onChange}
+          value={value}
+        />
+        {dynamicKey !== undefined && <Icon
+          className={styles.dynamicButton}
+          type="minus-circle"
+          onClick={() => handleDelete(dynamicKey)}
+        />}
+        <Icon
+          className={styles.dynamicButton}
+          type="plus-circle"
+          onClick={() => handleAdd()}
+        />
+      </Row>
+    )
+  }
+)
 
 export default DynamicFieldSet;

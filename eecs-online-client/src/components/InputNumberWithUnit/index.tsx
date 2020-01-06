@@ -7,8 +7,8 @@ export interface InputNumberWithUnitProps extends FormComponentProps {
   unit?: string;
   max?: number;
   disabled?: boolean;
-  value?: number | undefined;
-  onChange?: (value: number | undefined) => void;
+  value?: number;
+  onChange?: (value?: number) => void;
 }
 
 const InputNumberWithUnit = forwardRef<FormComponentProps, InputNumberWithUnitProps>(
