@@ -12,10 +12,10 @@ import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
 
 interface CourseEditProps {
-  courseEdit: StateType,
-  dispatch: Dispatch<any>,
-  location: Location,
-  loading: boolean
+  courseEdit: StateType;
+  dispatch: Dispatch<any>;
+  location: Location;
+  loading: boolean;
 }
 
 const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location, loading }) => {
@@ -42,9 +42,9 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
       props: {
         mode: 'multiple',
       },
-      datasource: classIdDataSource
+      datasource: classIdDataSource,
     },
-  ]
+  ];
 
   // const handleFieldsChange = (allFields: object) => {
   //   dispatch({
@@ -59,12 +59,12 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
       dispatch({
         type: 'courseEdit/createCourse',
         payload: { data: allFields },
-      })
+      });
     } else {
       dispatch({
         type: 'courseEdit/updateCourse',
         payload: { data: { ...allFields, courseId: courseFields.courseId } },
-      })
+      });
     }
   };
 
@@ -79,13 +79,13 @@ const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location,
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={loading}
           // TODO: bug: when add this fieldsChange function the error will disappear
-          onFieldsChange={() => { }}
+          onFieldsChange={() => {}}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         />
       </CustomCard>
     </>
-  )
+  );
 };
 
 const mapStateToProps = ({
@@ -93,16 +93,15 @@ const mapStateToProps = ({
   router,
   loading,
 }: {
-  courseEdit: StateType,
+  courseEdit: StateType;
   router: {
-    location: Location
-  },
-  loading: any
+    location: Location;
+  };
+  loading: any;
 }) => ({
   courseEdit,
   location: router.location,
-  loading: loading.models.courseEdit
+  loading: loading.models.courseEdit,
 });
-
 
 export default connect(mapStateToProps)(CourseEdit);

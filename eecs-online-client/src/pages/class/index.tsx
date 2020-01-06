@@ -117,8 +117,7 @@ const CourseClass: React.FC<ClassProps> = props => {
       <CustomCard
         title="班级信息列表"
         extra={
-          <Button type="primary" onClick={handleCreate}>新增班级</Button>
-        }
+          <Button type="primary" onClick={handleCreate}>新增班级</Button>}
       >
         <CustomTable
           loading={fetchClassPaginationLoading}

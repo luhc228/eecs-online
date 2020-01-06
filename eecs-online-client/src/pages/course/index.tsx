@@ -132,8 +132,7 @@ const Course: React.FC<CourseProps> = props => {
       <CustomCard
         title="课程信息列表"
         extra={
-          <Button type="primary" onClick={handleCreate}>新增课程</Button>
-        }>
+          <Button type="primary" onClick={handleCreate}>新增课程</Button>}>
         <CustomTable
           loading={fetchCoursePaginationLoading}
           columns={columns}

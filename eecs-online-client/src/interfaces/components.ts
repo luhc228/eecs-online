@@ -51,6 +51,10 @@ export interface SelectComponentDatasourceModel {
   label: string,
 }
 
+export interface SelectComponentDatasourceProps extends SelectComponentDatasourceModel {
+  children: SelectComponentDatasourceModel[],
+}
+
 
 export interface FormItemComponentProps {
   label?: string | React.ReactNode,

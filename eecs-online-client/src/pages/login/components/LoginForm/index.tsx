@@ -3,6 +3,8 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
+import router from 'umi/router';
+import Link from 'umi/link';
 import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 import { USER_TYPE } from '@/enums';
@@ -14,24 +16,19 @@ interface LoginFormProps extends FormComponentProps {
   loading: boolean;
 }
 
-const LoginForm: React.SFC<LoginFormProps> = ({
-  form,
-  userType,
-  loading,
-  dispatch,
-}) => {
+const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, dispatch }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
       if (err) {
         return;
       }
-      delete values.remember
+      delete values.remember;
 
       dispatch({
         type: 'login/userLogin',
         payload: { userType, values },
-      })
+      });
     });
   };
 
@@ -45,7 +42,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
         })(
           <Input
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Username"
+            placeholder="学工号"
           />,
         )}
       </Form.Item>
@@ -56,7 +53,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({
           <Input
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type="password"
-            placeholder="Password"
+            placeholder="密码"
           />,
         )}
       </Form.Item>
@@ -64,21 +61,25 @@ const LoginForm: React.SFC<LoginFormProps> = ({
         {getFieldDecorator('remember', {
           valuePropName: 'checked',
           initialValue: true,
-        })(<Checkbox>Remember me</Checkbox>)}
-        <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
+        })(<Checkbox>记住我</Checkbox>)}
+        <Link className={styles.forgot} to="/login/forgotPassword">
+          忘记密码？
+        </Link>
+        <Button type="primary" htmlType="submit" className={styles.submit}>
           登录
-        </Button>
+          </Button>
+        <Link to="/login/register">新用户注册</Link>
       </Form.Item>
     </Form>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state: any) => {
   const { userType } = state.login;
   return {
     userType,
     loading: state.loading.models.login,
-  }
-}
+  };
+};
 
 export default Form.create({ name: 'normal_login' })(connect(mapStateToProps)(LoginForm));

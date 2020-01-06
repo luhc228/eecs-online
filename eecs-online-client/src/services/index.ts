@@ -1,14 +1,13 @@
 /**
  * 定义共用api接口
-*/
-
+ */
 import request from '@/utils/request';
 
 /**
  * 获取学院信息列表
  */
 export function fetchCollegeList() {
-  return request.get('/college/detail')
+  return request.get('/college/detail');
 }
 
 /**
@@ -17,9 +16,16 @@ export function fetchCollegeList() {
 export function fetchVirClassList(teacherId: string) {
   return request.get('/vir_class/list', {
     params: {
-      teacherId
-    }
-  })
+      teacherId,
+    },
+  });
+}
+
+/**
+ * 获取真实班级信息列表
+ */
+export function fetchClassList() {
+  return request.get('/student/class/list');
 }
 
 /**
@@ -30,6 +36,6 @@ export function fetchCourseList(teacherId?: string, studentId?: string) {
     params: {
       teacherId,
       studentId,
-    }
-  })
+    },
+  });
 }
