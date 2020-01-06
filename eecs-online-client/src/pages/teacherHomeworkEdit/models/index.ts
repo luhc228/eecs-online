@@ -1,60 +1,38 @@
-import { Reducer } from 'redux';
 import { Dispatch, EffectsCommandMap } from 'dva';
-import { Effect } from '@/interfaces/reduxState';
+import router from 'umi/router';
 import * as teacherHomeworkEditService from '../services';
 import { NOTIFICATION_TYPE } from '@/enums';
-import { QuestionDetailModel, TeacherHomeworkEditListItem, TeacherHomeworkEditData } from '@/interfaces/teacherHomeworkEdit';
+import { QuestionDetailModel, TeacherHomeworkFormFields, TeacherHomeworkEditDetail } from '@/interfaces/teacherHomeworkEdit';
 import showNotification from '@/utils/showNotification';
-import router from 'umi/router';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
-import { fetchCourseList } from '@/services';
+import * as services from '@/services';
+import userUtils from '@/utils/user-utils';
 
 export interface StateType {
   when: boolean;
   questionList: QuestionDetailModel[];
   targetKeys: string[];
-  homeworkDetailFields: TeacherHomeworkEditListItem;
-  homeworkFields: TeacherHomeworkEditData;
+  homeworkDetailFields: TeacherHomeworkEditDetail;
+  // homeworkFields: TeacherHomeworkEditData;
   courseIdDataSource: SelectComponentDatasourceModel[];
-}
-
-export interface ModelType {
-  namespace: string;
-
-  state: StateType;
-
-  reducers: {
-    changeQuestionList: Reducer<any>;
-    changeOriginTargetKeys: Reducer<any>;
-  };
-  effects: {
-    createTeacherHomework: Effect<StateType>;
-    updateTeacherHomework: Effect<StateType>;
-    fetchTeacherQuestionDetail: Effect<StateType>;
-    fetchCourseList: Effect<StateType>;
-  };
-
-  subscriptions: {
-    setup: ({ dispatch }: { dispatch: Dispatch<any> }) => void;
-  };
 }
 
 const initState = {
   questionList: [],
   targetKeys: [],
-  homeworkFields: [],
-  homeworkDetailFields: {},
+  homeworkFields: {},
+  // homeworkDetailFields: {},
   courseIdDataSource: [],
 };
 
-const Model: ModelType = {
+const Model = {
   namespace: 'teacherHomeworkEdit',
 
   state: initState,
 
   reducers: {
     initState(
-      _: StateType, 
+      _: StateType,
       { payload }: { type: string; payload: { state: StateType } }
     ) {
       return { ...payload.state };
@@ -64,13 +42,12 @@ const Model: ModelType = {
       state: StateType,
       { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } },
     ) {
-      console.log(payload.data);
       return { ...state, courseIdDataSource: payload.data };
     },
 
     changeQuestionList(
       state: StateType,
-      {payload: { questionList }}: { payload: { questionList: QuestionDetailModel[] } },
+      { payload: { questionList } }: { payload: { questionList: QuestionDetailModel[] } },
     ) {
       return { ...state, questionList };
     },
@@ -84,7 +61,7 @@ const Model: ModelType = {
 
     changeTeacherHomeworkDetailFields(
       state: StateType,
-      { payload }: { payload: { data: { homeworkFileds: TeacherHomeworkEditData } } }
+      { payload }: { payload: { data: { homeworkFields: TeacherHomeworkFormFields } } }
     ) {
       return {
         ...state,
@@ -101,17 +78,19 @@ const Model: ModelType = {
   },
 
   effects: {
-    *fetchCourseList({ payload }: { type: string; payload: { teacherId: string} }, { call, put }: EffectsCommandMap) {
-      const response = yield call(fetchCourseList, payload.teacherId);
-      if (!response) {
-        return;
-      }
-      const {
-        data: { list },
-      } = response;
+    /**
+       * 获取所有课程信息列表
+       */
+    *fetchCourseList(
+      { payload }: { type: string; payload: { teacherId: string } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(services.fetchCourseList, payload.teacherId);
+
+      const { data: { list } } = response;
       const courseIdDataSource = list.map((item: any) => ({
-        label: item.course,
-        value: item.courseId,
+        label: item.courseName,
+        value: item.courseId
       }));
 
       yield put({
@@ -126,9 +105,9 @@ const Model: ModelType = {
      * 获取所有题目详情
      */
     *fetchQuestionDetail(
-      { payload }: { type:string, payload: { values:any } },
+      { payload }: { type: string, payload: { values: any } },
       { call, put }: EffectsCommandMap
-      ) {
+    ) {
       const response = yield call(teacherHomeworkEditService.fetchQuestionDetail, payload);
       const { data } = response;
       const { list } = data;
@@ -222,12 +201,25 @@ const Model: ModelType = {
             }
           });
 
-          dispatch({
-            type: 'fetchQuestionDetail',
-            payload: {
-              values: {}
-            }
-          });
+          // dispatch({
+          //   type: 'fetchQuestionDetail',
+          //   payload: {
+
+          //     page: 1,
+          //     pageSize: 8
+
+          //   }
+          // });
+
+          const userInfo = userUtils.getUserInfo();
+          if (Object.keys(userInfo).length !== 0) {
+            dispatch({
+              type: 'fetchCourseList',
+              payload: {
+                teacherId: userInfo.teacherId
+              }
+            });
+          }
 
           const { homeworkId } = query;
           if (homeworkId) {

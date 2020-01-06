@@ -31,16 +31,18 @@ const DynamicFieldSet = forwardRef<FormComponentProps, DynamicFieldSetProps>(
           onChange={onChange}
           value={value}
         />
-        {dynamicKey !== undefined && <Icon
-          className={styles.dynamicButton}
-          type="minus-circle"
-          onClick={() => handleDelete(dynamicKey)}
-        />}
-        <Icon
+        {dynamicKey &&
+          handleDelete &&
+          <Icon
+            className={styles.dynamicButton}
+            type="minus-circle"
+            onClick={() => handleDelete(dynamicKey)}
+          />}
+        {handleAdd && <Icon
           className={styles.dynamicButton}
           type="plus-circle"
           onClick={() => handleAdd()}
-        />
+        />}
       </Row>
     )
   }

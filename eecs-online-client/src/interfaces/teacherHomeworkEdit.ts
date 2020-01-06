@@ -23,23 +23,23 @@ export interface QuestionDetailModel {
   content?: string;
 }
 
-export interface TeacherHomeworkEditData {
+export interface TeacherHomeworkFormFields {
   // 作业id
   homeworkId?: number;
   // 作业名称
-  homeworkName?: string;
+  homeworkName: string;
   // 作业总分
-  homeworkScore?: string;
+  homeworkScore: string;
   // 作业描述
   description?: string;
   // 发布时间
-  startAt?: string;
+  startAt: string;
   // 截止时间
-  endAt?: string;
+  endAt: string;
 }
 
-export interface TeacherHomeworkEditListItem {
-  homeworkFields: TeacherHomeworkEditData;
+export interface TeacherHomeworkEditDetail {
+  homeworkFields: TeacherHomeworkFormFields;
   // 题目列表
   list: QuestionDetailModel[];
 }
