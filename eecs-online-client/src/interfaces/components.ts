@@ -51,9 +51,13 @@ export interface SelectComponentDatasourceModel {
   label: string,
 }
 
+export interface SelectComponentDatasourceProps extends SelectComponentDatasourceModel {
+  children: SelectComponentDatasourceModel[],
+}
+
 
 export interface FormItemComponentProps {
-  label?: string,
+  label?: string | React.ReactNode,
   name: string,
   initialValue?: any,
   required: boolean;
@@ -85,7 +89,6 @@ export interface UmiHistory extends History {
   location: { [k: string]: any }
 }
 export interface UmiComponentProps {
-  // TODO: add interface instead of History
-  history: UmiHistory;
+  history?: UmiHistory;
   dispatch: Dispatch<AnyAction>;
 }

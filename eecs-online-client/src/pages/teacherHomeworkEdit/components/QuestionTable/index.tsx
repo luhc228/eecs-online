@@ -1,55 +1,120 @@
 import React from 'react';
 import { ColumnProps } from 'antd/lib/table';
-import CustomTable from '@/components/CustomTable';
-import TableFilter from '../TableFilter';
+import { connect } from 'dva';
+import { StateType } from '../../models';
+import { UmiComponentProps } from '@/interfaces/components';
+import TableTransfer from '@/components/TableTransfer';
+import { QuestionDetailModel } from '@/interfaces/teacherHomeworkEdit';
 
-interface QuestionTableProps {}
+export interface QuestionTableProps extends UmiComponentProps {
+  teacherHomeworkEdit: StateType;
+}
 
-const QuestionTable: React.FC<QuestionTableProps> = () => {
-  const columns: ColumnProps<any>[] = [
-    // {
-    //   dataIndex: 'questionId',
-    //   title: '问题编号',
-    // },
+const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, dispatch }) => {
+  const { questionList, targetKeys, homeworkFormFields } = teacherHomeworkEdit;
+
+  const leftTableColumns: ColumnProps<any>[] = [
     {
-      dataIndex: 'courseId',
-      title: '所属课程',
+      dataIndex: 'questionTypeName',
+      title: '题目类型',
     },
     {
       dataIndex: 'content',
       title: '题目内容',
-    },
-    {
-      dataIndex: 'questionType',
-      title: '题目类型',
+      width: 150,
     },
     {
       dataIndex: 'questionScore',
       title: '题目分值',
     },
-    {
-      dataIndex: 'operation',
-      title: '操作',
-      // render: () => {
+  ];
 
-      // }
+  const rightTableColumns: ColumnProps<any>[] = [
+    {
+      dataIndex: 'questionTypeName',
+      title: '题目类型',
+    },
+    {
+      dataIndex: 'content',
+      title: '题目内容',
+      width: 150,
+    },
+    {
+      dataIndex: 'questionScore',
+      title: '题目分值',
     },
   ];
 
+  const handleChange = (nextTargetKeys: string[]) => {
+    let homeworkScore = 0;
+    const list: number[] = [];
+    nextTargetKeys.forEach((key: string) => {
+      const questionId = Number(key);
+      const result = questionList.find(
+        (questionItem: QuestionDetailModel) => questionItem.questionId === questionId
+      );
+      if (!result) {
+        return;
+      }
+      const { questionScore } = result;
+
+      homeworkScore += questionScore
+      list.push(questionId);
+    })
+
+    dispatch({
+      type: 'teacherHomeworkEdit/changeTargetKeys',
+      payload: {
+        targetKeys: nextTargetKeys,
+      },
+    });
+
+    dispatch({
+      type: 'teacherHomeworkEdit/changeTeacherHomeworkFormFields',
+      payload: {
+        data: {
+          ...homeworkFormFields,
+          homeworkScore,
+        }
+      }
+    });
+
+    dispatch({
+      type: 'teacherHomeworkEdit/changeSelectQuestionList',
+      payload: {
+        data: list
+      }
+    });
+  };
+
   return (
-    <div>
-      <TableFilter />
-      <CustomTable
-        loading={false}
-        columns={columns}
-        dataSource={[]}
-        rowKey={record => record.questionId}
-        onPagination={(current: number) => {
-          console.log(current);
-        }}
-      />
-    </div>
+    <TableTransfer
+      dataSource={questionList}
+      targetKeys={targetKeys}
+      disabled={false}
+      showSearch
+      rowKey={(record: QuestionDetailModel) => record.questionId.toString()}
+      onChange={handleChange}
+      filterOption={(inputValue, item) => (
+        item.questionTypeName.indexOf(inputValue) !== -1 ||
+        item.content.indexOf(inputValue) !== -1
+      )
+      }
+      leftColumns={leftTableColumns}
+      rightColumns={rightTableColumns}
+    />
   );
 };
 
-export default QuestionTable;
+const mapStateToProps = ({
+  teacherHomeworkEdit,
+  loading,
+}: {
+  teacherHomeworkEdit: StateType;
+  loading: any;
+}) => ({
+  teacherHomeworkEdit,
+  loading: loading.effects['teacherHomeworkEdit/fetchCourseQuestionLib'],
+});
+
+export default connect(mapStateToProps)(QuestionTable);

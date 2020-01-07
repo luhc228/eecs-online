@@ -73,7 +73,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, userType, submitting, dis
           rules: [{ required: true, message: '请输入学工号' }],
         })(
           <Input
-            prefix={<Icon type="id" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            prefix={<Icon type="idcard" style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="Id"
           />,
         )}
@@ -83,7 +83,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, userType, submitting, dis
           rules: [{ required: true, message: '请输入密码' }, { validator: validateToNextPassword }],
         })(
           <Input.Password
-            prefix={<Icon type="password" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="Password"
           />,
         )}
@@ -97,8 +97,8 @@ const RegisterForm: React.FC<RegisterProps> = ({ form, userType, submitting, dis
         })(
           <Input.Password
             onBlur={handleConfirmBlur}
-            prefix={<Icon type="confirm" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Passwordconfirm"
+            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            placeholder="Password confirm"
           />,
         )}
       </Form.Item>

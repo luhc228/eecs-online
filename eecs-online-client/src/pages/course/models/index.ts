@@ -41,6 +41,13 @@ const Model = {
   state: initState,
 
   reducers: {
+    initState(
+      state: StateType,
+      { payload }: { type: string; payload: { state: StateType } }
+    ) {
+      return { ...payload.state }
+    },
+
     save(
       state: StateType,
       { payload }: { type: string; payload: { data: CourseTableData } }

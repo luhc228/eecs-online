@@ -2,20 +2,24 @@
  * CustomForm component including filter/common form
  * Filter component usually in the header of the table or the page.
  */
-import React from 'react';
-import { Form, Row, Col, Input, Select, Button, Radio, Checkbox } from 'antd';
+import React, { createRef } from 'react';
+import { Form, Row, Col, Input, Select, Button, Radio, Checkbox, DatePicker } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
-import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import router from 'umi/router';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES, NOTIFICATION_TYPE } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
-import styles from './index.less';
 import InputNumberWithUnit from '../InputNumberWithUnit';
 import ImageUpload from '../upload/ImageUpload';
 import CodeEditor from '../CodeEditor';
 import DynamicFieldSet from '../DynamicFieldSet';
+import styles from './index.less';
+import showNotification from '@/utils/showNotification';
 
 const { Option } = Select;
 const { TextArea } = Input;
+const { RangePicker } = DatePicker;
+
 interface CustomFormProps extends FormComponentProps {
   formTypes: CUSTOM_FORM_TYPES;
   layout?: 'horizontal' | 'inline' | 'vertical';
@@ -24,7 +28,7 @@ interface CustomFormProps extends FormComponentProps {
   loading?: boolean;
   children?: React.ReactNode;
   onFieldsChange: (allFields: any, changedFields?: any) => void;
-  onSubmit: (value: any) => void;
+  onSubmit?: (value: any) => void;
   resetFieldsVisible?: boolean;
 }
 
@@ -40,6 +44,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     resetFieldsVisible
   } = props;
   const { getFieldDecorator } = form;
+  const formRef = createRef<FormComponentProps>();
 
   let formItemLayout: any = null;
   if (formTypes === CUSTOM_FORM_TYPES.Filter) {
@@ -104,7 +109,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <DynamicFieldSet {...formItem.props} />
+              <DynamicFieldSet form={form} {...formItem.props} />
             )}
           </>
         )
@@ -126,7 +131,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <ImageUpload {...formItem.props} />
+              <ImageUpload form={form} {...formItem.props} wrappedComponentRef={formRef} />
             )}
           </>
         )
@@ -141,7 +146,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <InputNumberWithUnit {...formItem.props} />
+              <InputNumberWithUnit form={form} {...formItem.props} wrappedComponentRef={formRef} />
             )}
           </>
         )
@@ -179,11 +184,17 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Radio.Group {...formItem.props}>
                 {formItem.datasource &&
                   formItem.datasource.map((item: SelectComponentDatasourceModel) => (
-                    <Radio style={{
-                      display: 'block',
-                      height: '30px',
-                      lineHeight: '30px',
-                    }} value={item.value} key={item.label}>{item.label}</Radio>
+                    <Radio
+                      style={{
+                        display: 'block',
+                        height: '30px',
+                        lineHeight: '30px',
+                      }}
+                      value={item.value}
+                      key={item.label}
+                    >
+                      {item.label}
+                    </Radio>
                   ))}
               </Radio.Group>
             )}
@@ -203,7 +214,38 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Checkbox.Group
                 className={styles.checkboxInRow}
                 options={formItem.datasource}
+                {...formItem.props}
               />
+            )}
+          </>
+        )
+      case FORM_COMPONENT.RangePicker:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请选择日期和时间'
+              }],
+            },
+            )(
+              <RangePicker placeholder={['请选择', '请选择']} style={{ width: '100%' }} {...formItem.props} />,
+            )}
+          </>
+        )
+      case FORM_COMPONENT.DatePicker:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请选择日期和时间'
+              }],
+            },
+            )(
+              <DatePicker placeholder="请选择" style={{ width: '100%' }} {...formItem.props} />,
             )}
           </>
         )
@@ -218,7 +260,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <CodeEditor />
+              <CodeEditor {...formItem.props} />
             )}
           </>
         )
@@ -232,16 +274,20 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (err) {
+        showNotification('错误', '请选择或输入内容', NOTIFICATION_TYPE.error)
         return;
       }
-
-      onSubmit(values);
+      if (onSubmit) {
+        onSubmit(values);
+      }
     });
   }
 
   const handleFormReset = () => {
     props.form.resetFields();
-    props.onSubmit({});
+    if (onSubmit) {
+      onSubmit({});
+    }
   }
 
   const filterFormButtons = (buttonsStyles?: string, resetVisible: boolean = true) => (
@@ -259,16 +305,18 @@ const CustomForm: React.FC<CustomFormProps> = props => {
 
   const commonFormButtons = (
     <span className={styles.commonButtons}>
-      <Button onClick={handleFormReset}>
+      <Button onClick={() => router.goBack()}>
         取消
-    </Button>
-      <Button
-        style={{ marginLeft: 15 }}
-        type="primary"
-        htmlType="submit"
-        loading={loading}>
-        保存
-     </Button>
+      </Button>
+      {onSubmit && (
+        <Button
+          style={{ marginLeft: 15 }}
+          type="primary"
+          htmlType="submit"
+          loading={loading}>
+          提交
+        </Button>
+      )}
     </span>
   )
 

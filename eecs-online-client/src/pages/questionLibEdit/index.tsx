@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import CustomForm from '@/components/CustomForm';
-import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
+import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE, JUDGE_VALUE } from '@/enums';
 import { FormItemComponentProps, UmiComponentProps } from '@/interfaces/components';
 import { questionTypeMap } from '../questionLib';
 import appConfig from '@/appConfig';
@@ -9,6 +9,7 @@ import CustomCard from '@/components/CustomCard';
 import { StateType } from './models';
 import RouterPrompt from '@/components/RouterPrompt';
 import { QuestionFieldsModel } from '@/interfaces/questionLibEdit';
+import { getOption } from '@/utils';
 
 export interface QuestionLibEditProps extends UmiComponentProps {
   loading: boolean;
@@ -23,13 +24,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
 }) => {
   const { courseIdDataSource, questionFields, when, dynamicKeys, optionDisplay } = questionLibEdit;
 
-  const { location } = history;
-
-  const optionsDataSource: string[] = [];
-  for (let i = 65; i < 91;) {
-    optionsDataSource.push(String.fromCharCode(i));
-    i += 1;
-  }
+  const { location }: any = history;
 
   const singleQuestionAnswerFormItem = {
     component: FORM_COMPONENT.Select,
@@ -54,10 +49,10 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
   }
 
   const answerFormItemMap: { [key: string]: object } = {
-    [QUESTION_TYPE.Judge]: judgeQuestionAnswerFormItem,
-    [QUESTION_TYPE.Single]: singleQuestionAnswerFormItem,
-    [QUESTION_TYPE.Multiple]: multipleQuestionAnswerFormItem,
-    [QUESTION_TYPE.Program]: programQuestionAnswerFormItem,
+    [QUESTION_TYPE.judge]: judgeQuestionAnswerFormItem,
+    [QUESTION_TYPE.single]: singleQuestionAnswerFormItem,
+    [QUESTION_TYPE.multiple]: multipleQuestionAnswerFormItem,
+    [QUESTION_TYPE.program]: programQuestionAnswerFormItem,
   }
   /**
    * 动态删除表单项
@@ -95,16 +90,16 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     questionType: number,
   ): FormItemComponentProps[] => {
     let answerDataSource;
-    if (dynamicFieldSetKeys && (questionType === QUESTION_TYPE.Multiple || questionType === QUESTION_TYPE.Single)) {
+    if (dynamicFieldSetKeys && (questionType === QUESTION_TYPE.multiple || questionType === QUESTION_TYPE.single)) {
       answerDataSource = dynamicFieldSetKeys.map((_, index) => ({
-        value: optionsDataSource[index],
-        label: optionsDataSource[index],
+        value: getOption(index),
+        label: getOption(index),
       }))
     }
-    if (questionType === QUESTION_TYPE.Judge) {
+    if (questionType === QUESTION_TYPE.judge) {
       answerDataSource = [
-        { value: 0, label: '错误', },
-        { value: 1, label: '正确', }
+        { value: JUDGE_VALUE.InCorrect, label: '错误' },
+        { value: JUDGE_VALUE.Correct, label: '正确' }
       ]
     }
 
@@ -198,8 +193,8 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
 
     if (questionType && questionType.value !== questionFields.questionType) {
       if (
-        questionType.value === QUESTION_TYPE.Single ||
-        questionType.value === QUESTION_TYPE.Multiple) {
+        questionType.value === QUESTION_TYPE.single ||
+        questionType.value === QUESTION_TYPE.multiple) {
         dispatch({
           type: 'questionLibEdit/setOptionsDisplay',
           payload: {
@@ -245,7 +240,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
     const isCreate = location.pathname.split('/')[3] === 'create';
     const { questionId } = location.query;
 
-    const { answer } = allFields;
+    const { answer, contentImage } = allFields;
     const optionsKeys = Object.keys(allFields).filter((k: string) => k.includes('option'));
     let options;
     if (optionsKeys.length) {
@@ -256,11 +251,22 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
       }).join('|');
     }
 
+    let newContentImage = '';
+
+    if (contentImage && Array.isArray(contentImage) && !!contentImage.length) {
+      const imageUrls = contentImage.map((item) => {
+        const { response: { imageUrl } } = item;
+        return imageUrl;
+      })
+
+      newContentImage = imageUrls.join('|')
+    }
+
     const newAllFields = {
       ...allFields,
       answer: Array.isArray(answer) ? answer.join('|') : answer,
       options,
-      contentImage: '',
+      contentImage: newContentImage,
       questionId,
     }
 

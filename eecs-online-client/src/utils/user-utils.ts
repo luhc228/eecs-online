@@ -11,7 +11,7 @@ export default {
    * 保存用户accesstoken
    */
   saveToken: (token: string) => {
-    localStorage.setItem('accesstoken', token)
+    localStorage.setItem('accesstoken', token);
   },
 
   /**
@@ -25,7 +25,7 @@ export default {
    * 保存用户信息
    */
   saveUserInfo: (currentUser: CurrentUserModels) => {
-    localStorage.setItem('userInfo', JSON.stringify(currentUser))
+    localStorage.setItem('userInfo', JSON.stringify(currentUser));
   },
 
   /**
@@ -60,5 +60,5 @@ export default {
       return userTypeName;
     }
     return null;
-  }
-}
+  },
+};

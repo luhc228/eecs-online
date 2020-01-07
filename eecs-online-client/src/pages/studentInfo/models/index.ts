@@ -1,106 +1,181 @@
-import { Reducer, AnyAction } from 'redux';
+import { Reducer } from 'redux';
+import router from 'umi/router';
+import { EffectsCommandMap, Dispatch } from 'dva';
+import { StudentInfoFieldsModel } from '@/interfaces/studentInfo';
+import * as studentInfoService from '../services';
 import { Effect } from '@/interfaces/reduxState';
-import * as service from '../services';
-import { StudentUserForm } from '@/interfaces/studentInfo';
-import { ViewItemType } from '../components/collegeClass';
+import { fetchCollegeList, fetchClassList } from '@/services';
+import userUtils from '@/utils/user-utils';
+import { SelectComponentDatasourceModel } from '@/interfaces/components';
 
 export interface StateType {
-  user?: Partial<StudentUserForm>;
-  college?: ViewItemType[];
-  studentClass?: ViewItemType[];
-  loading?: boolean;
+  studentInfoFields: StudentInfoFieldsModel;
+  // password: string;
+  when: boolean;
+  collegeIdDataSource: SelectComponentDatasourceModel[];
+  classIdDataSource: SelectComponentDatasourceModel[];
 }
+
+const initState = {
+  studentInfoFields: userUtils.getUserInfo(),
+  // password: userUtils.getToken(),
+  // {
+  // studentId: undefined,
+  // studentName: undefined,
+  // studentGender: undefined,
+  // studentCollege: undefined,
+  // studentClass: undefined,
+  // },
+  when: true,
+  collegeIdDataSource: [],
+  classIdDataSource: [],
+};
 
 export interface ModelType {
   namespace: string;
   state: StateType;
-  effects: {
-    fetchCurrent: Effect<StateType>;
-    // fetch: Effect;
-    fecthCollege: Effect<StateType>;
-    fetchStudentClass: Effect<StateType>;
-  };
   reducers: {
-    save: Reducer<StateType>;
-    setCollege: Reducer<StateType>;
-    setStudentClass: Reducer<StateType>;
-    changeLoading: Reducer<StateType>;
+    changeStudentInfoFields: Reducer<StateType>;
+    changePromptStatus: Reducer<StateType>;
+  };
+  effects: {
+    updateStudentInfo: Effect<StateType>;
   };
 }
 
-const Model: ModelType = {
+const Model = {
   namespace: 'studentInfo',
 
-  state: {
-    user: {},
-    college: [],
-    studentClass: [],
-    loading: false,
-  },
+  state: initState,
 
   reducers: {
-    save(state: any, action: AnyAction) {
+    initState(state: StateType, { payload }: { type: string; payload: { state: StateType } }) {
+      return { ...payload.state };
+    },
+
+    changeStudentInfoFields(
+      state: StateType,
+      { payload }: { type: string; payload: { data: StudentInfoFieldsModel } },
+    ) {
+      // console.log(payload.data);
       return {
         ...state,
-        user: action.payload || {},
+        studentInfoFields: payload.data,
+        when: true,
       };
     },
-    setCollege(state: any, action: AnyAction) {
-      return {
-        ...state,
-        college: action.payload,
-      };
+
+    changePromptStatus(
+      state: StateType,
+      { payload }: { type: string; payload: { when: boolean } },
+    ) {
+      return { ...state, when: payload.when };
     },
-    setStudentClass(state: any, action: AnyAction) {
-      return {
-        ...state,
-        studentClass: action.payload,
-      };
+
+    saveCollegeIdDataSource(
+      state: StateType,
+      { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } },
+    ) {
+      console.log(payload.data);
+      return { ...state, collegeIdDataSource: payload.data };
     },
-    changeLoading(state: any, action: AnyAction) {
-      return {
-        ...state,
-        loading: action.payload,
-      };
+
+    saveClassIdDataSource(
+      state: StateType,
+      { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } },
+    ) {
+      console.log(payload.data);
+      return { ...state, classIdDataSource: payload.data };
     },
   },
 
   effects: {
-    // *fetch(_: any, { call, put }: any) {
-    //   const response = yield call(service.queryUsers);
-    //   yield put({
-    //     type: 'save',
-    //     payload: response,
-    //   });
-    // },
+    *fetchClassList({ payload }: { type: string; payload: {} }, { call, put }: EffectsCommandMap) {
+      const response = yield call(fetchClassList, payload);
+      if (!response) {
+        return;
+      }
+      const {
+        data: { list },
+      } = response;
+      const classIdDataSource = list.map((item: any) => ({
+        label: item.class,
+        value: item.classId,
+      }));
 
-    *fetchCurrent(_: any, { call, put }: any) {
-      const response = yield call(service.queryCurrent);
-      console.log(response);
       yield put({
-        type: 'save',
-        payload: response,
+        type: 'saveClassIdDataSource',
+        payload: {
+          data: classIdDataSource,
+        },
       });
     },
 
-    *fecthCollege(_: any, { call, put }: any) {
-      // yield put({
-      //   type: 'changeLoading',
-      //   payload: true,
-      // });
-      const response = yield call(service.queryCollege);
-      console.log('response', response.data.list);
+    *fetchCollegeList(
+      { payload }: { type: string; payload: {} },
+      { call, put }: EffectsCommandMap,
+    ) {
+      const response = yield call(fetchCollegeList, payload);
+      if (!response) {
+        return;
+      }
+      const {
+        data: { list },
+      } = response;
+      const collegeIdDataSource = list.map((item: any) => ({
+        label: item.college,
+        value: item.collegeId,
+      }));
+
       yield put({
-        type: 'setCollege',
-        payload: response,
+        type: 'saveCollegeIdDataSource',
+        payload: {
+          data: collegeIdDataSource,
+        },
       });
     },
 
-    *fetchStudentClass(_: any, { call, put }: any) {
-      const { response } = yield call(service.queryCollege);
+    /**
+     * 更新课程信息
+     */
+    *updateStudentInfo(
+      { payload }: { type: string; payload: { data: StudentInfoFieldsModel } },
+      { call, put }: EffectsCommandMap,
+    ) {
+      yield call(studentInfoService.updateStudentInfo, payload.data);
       yield put({
-        type: 'setStudentClass',
-        payload: { response },
+        type: 'changePromptStatus',
+        payload: {
+          when: false,
+        },
+      });
+      router.goBack();
+    },
+  },
+
+  subscriptions: {
+    setup({ dispatch, history }: { dispatch: Dispatch<any>; history: any }) {
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/student/userInfo') {
+          dispatch({
+            type: 'initState',
+            payload: {
+              state: initState,
+            },
+          });
+
+          const studentInfo = userUtils.getUserInfo();
+          if (Object.keys(studentInfo).length !== 0) {
+            dispatch({
+              type: 'fetchCollegeList',
+              payload: {},
+            });
+            dispatch({
+              type: 'fetchClassList',
+              payload: {},
+            });
+          }
+        }
       });
     },
   },

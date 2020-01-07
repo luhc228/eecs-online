@@ -25,6 +25,10 @@ export enum FORM_COMPONENT {
   Checkbox = 'Checkbox',
   // 代码组件
   CodeEditor = 'CodeEditor',
+  // RangePicker 日期范围选择 可通过添加showTime增加选择时间
+  RangePicker = 'RangePicker',
+  // DatePicker 选择日期
+  DatePicker = 'DatePicker',
 }
 
 export enum FORM_LAYOUTS {
@@ -40,15 +44,15 @@ export enum CUSTOM_FORM_TYPES {
 }
 
 export enum QUESTION_TYPE {
-  Single,
-  Multiple,
-  Judge,
-  Program,
+  single,
+  multiple,
+  judge,
+  program,
 }
 
 export enum HOMEWORK_STATUS {
-  Done,
   Undone,
+  Done,
 }
 
 // 通知提示框 Notification API 类型
@@ -59,4 +63,9 @@ export enum NOTIFICATION_TYPE {
   warning,
   warn,
   loading
+}
+
+export enum JUDGE_VALUE {
+  InCorrect,
+  Correct,
 }

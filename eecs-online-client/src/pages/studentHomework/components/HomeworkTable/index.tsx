@@ -51,7 +51,7 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
       title: '状态',
       dataIndex: 'status',
       render: (value: number) => (
-        <StatusColumn text={value === HOMEWORK_STATUS.Undone ? '未完成' : '已完成'} status={!!value} />
+        <StatusColumn text={value === HOMEWORK_STATUS.Undone ? '未完成' : '已完成'} status={!value} />
       )
     },
     {
@@ -59,10 +59,10 @@ const HomeworkTable: React.FC<HomeworkTableProps> = ({
       render: (_: string, record: studentHomeworkListItem) => (
         record.status ? (
           <span>
-            <a onClick={() => handleEdit(record)}>答题</a>
+            <a onClick={() => handleDetail(record)}>查看成绩</a>
           </span>) : (
             <span>
-              <a onClick={() => handleDetail(record)}>查看成绩</a>
+              <a onClick={() => handleEdit(record)}>答题</a>
             </span>
           )
       ),

@@ -1,100 +1,101 @@
 import React from 'react';
-import { FormComponentProps } from 'antd/lib/form';
-import { Dispatch } from 'redux';
-import { Input, Form, Select } from 'antd';
 import { connect } from 'dva';
-import Button from 'antd/es/button/button';
-import router from 'umi/router';
-import { TeacherUserForm } from '@/interfaces/teacherInfo';
-import styles from './index.less';
-import CollegeSelect from './components/collegeSelect';
+import { Dispatch } from 'redux';
+import CustomForm from '@/components/CustomForm';
+import { FormItemComponentProps } from '@/interfaces/components';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import RouterPrompt from '@/components/RouterPrompt';
+import { StateType } from './models';
+import CustomCard from '@/components/CustomCard';
 
-const { Option } = Select;
-
-// interface SelectItem {
-//     label: string;
-//     key: string;
-//   }
-
-interface TeacherUserProps extends FormComponentProps {
+interface TeacherInfoProps {
+  teacherInfo: StateType;
   dispatch: Dispatch<any>;
-  user: TeacherUserForm;
+  location: Location;
+  loading: boolean;
 }
 
-const TeacherUserInfo: React.FC<TeacherUserProps> = ({ form, dispatch, user }) => {
-  const handleSubmit = (e: React.MouseEvent) => {
-    e.preventDefault();
-    form.validateFields(err => {
-      if (!err) {
-        dispatch({
-          type: 'userInfo/updateInfo',
-          payload: { user },
-        });
-        router.goBack();
-      }
+const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, location, loading }) => {
+  const { teacherInfoFields, when, collegeIdDataSource } = teacherInfo;
+
+  const formConfig: FormItemComponentProps[] = [
+    {
+      label: '用户名',
+      name: 'teacherName',
+      component: FORM_COMPONENT.Input,
+      required: true,
+    },
+    {
+      label: '工号',
+      name: 'teacherId',
+      component: FORM_COMPONENT.Input,
+      required: true,
+    },
+    {
+      label: '学院',
+      name: 'teacherCollege',
+      component: FORM_COMPONENT.Select,
+      required: true,
+      props: {
+        mode: 'multiple',
+      },
+      datasource: collegeIdDataSource,
+    },
+    {
+      label: '性别',
+      name: 'teacherGender',
+      component: FORM_COMPONENT.Radio,
+      required: true,
+      props: {
+        mode: 'multiple',
+      },
+      datasource: [
+        { label: '男', value: '男' },
+        { label: '女', value: '女' },
+      ],
+    },
+  ];
+
+  const handleSubmit = (allFields: object) => {
+    dispatch({
+      type: 'teacherInfo/updateTeacherInfo',
+      payload: { data: { ...allFields, teacherId: teacherInfoFields.teacherId } },
     });
   };
 
-  // const validatorCollege = (
-  //     _: any,
-  //     value: {
-  //         college: SelectItem;
-  //     },
-  //     callback: (message?: string) => void,
-  // ) => {
-  //     const { college } = value;
-  //     if (!college.key) {
-  //         callback('请选择学院！');
-  //     }
-  //     callback();
-  // };
-
-  const { getFieldDecorator } = form;
-
   return (
-    <Form onSubmit={handleSubmit} className={styles.userInfo}>
-      <Form.Item label=" 用 户 名 ">
-        {getFieldDecorator('name', {
-          rules: [{ required: true, message: '用户名不可为空' }],
-        })(<Input />)}
-      </Form.Item>
-      <Form.Item label=" 账 号 ">
-        {getFieldDecorator('id', {
-          rules: [{ required: true, message: '账号不可为空' }],
-        })(<Input disabled={true} />)}
-      </Form.Item>
-      <Form.Item label=" 性 别 ">
-        {getFieldDecorator('gender', {
-          rules: [{ required: true, message: '请选择性别' }],
-        })(
-          <Select>
-            <Option value={0}>女</Option>
-            <Option value={1}>男</Option>
-          </Select>,
-        )}
-      </Form.Item>
-      <Form.Item label=" 学 院 ">
-        {getFieldDecorator('college', {
-          rules: [
-            { required: true, message: '请选择学院' },
-            // { validator: { validatorCollege } }
-          ],
-        })(
-          <CollegeSelect />,
-        )}
-      </Form.Item>
-      <Button type="primary" htmlType="submit" className={styles.submit}>
-        保 存
-      </Button>
-    </Form>
+    <>
+      <RouterPrompt when={when} />
+      <CustomCard title="个人信息编辑">
+        <CustomForm
+          layout="horizontal"
+          values={teacherInfoFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
+          loading={loading}
+          // TODO: bug: when add this fieldsChange function the error will disappear
+          onFieldsChange={() => { }}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        />
+      </CustomCard>
+    </>
   );
 };
 
-const mapStateToProps = (state: any) => {
-  const { currentuser } = state.user;
-  return {
-    currentuser,
-    loading: state.loading.models.studentInfo,
+const mapStateToProps = ({
+  teacherInfo,
+  router,
+  loading,
+}: {
+  teacherInfo: StateType;
+  router: {
+    location: Location;
   };
-};
-export default Form.create({ name: 'teacherInfo' })(connect(mapStateToProps)(TeacherUserInfo));
+  loading: any;
+}) => ({
+  teacherInfo,
+  location: router.location,
+  loading: loading.models.teacherInfo,
+});
+
+export default connect(mapStateToProps)(TeacherInfo);

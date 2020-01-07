@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import router from 'umi/router';
+import Link from 'umi/link';
 import styles from './index.less';
 import { StudentLoginForm, TeacherLoginForm } from '@/interfaces/login';
 import { USER_TYPE } from '@/enums';
@@ -15,41 +16,20 @@ interface LoginFormProps extends FormComponentProps {
   loading: boolean;
 }
 
-const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatch }) => {
+const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, dispatch }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     form.validateFields((err: Error, values: StudentLoginForm | TeacherLoginForm) => {
       if (err) {
-      } else {
-        //   dispatch({
-        //     type: 'login/userLogin',
-        //     payload: { userType, values },
-        //   });
-        // }
-        delete values.remember;
-
-        dispatch({
-          type: 'login/userLogin',
-          payload: { userType, values },
-        });
+        return;
       }
-    });
-  };
+      delete values.remember;
 
-  const handleRegister = () => {
-    dispatch({
-      type: 'login/userRegister',
-      payload: {},
+      dispatch({
+        type: 'login/userLogin',
+        payload: { userType, values },
+      });
     });
-    router.push('/login/register');
-  };
-
-  const handleFogotPassword = () => {
-    dispatch({
-      type: 'login/userFogotPassword',
-      payload: {},
-    });
-    router.push('/login/forgotPassword');
   };
 
   const { getFieldDecorator } = form;
@@ -62,7 +42,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
         })(
           <Input
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Username"
+            placeholder="学工号"
           />,
         )}
       </Form.Item>
@@ -73,7 +53,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
           <Input
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type="password"
-            placeholder="Password"
+            placeholder="密码"
           />,
         )}
       </Form.Item>
@@ -81,16 +61,14 @@ const LoginForm: React.SFC<LoginFormProps> = ({ form, userType, loading, dispatc
         {getFieldDecorator('remember', {
           valuePropName: 'checked',
           initialValue: true,
-        })(<Checkbox>Remember me</Checkbox>)}
-        <a className={styles.fogotPassword} onClick={handleFogotPassword}>
-          忘记密码
-        </a>
-        <Button loading={loading} type="primary" htmlType="submit" className={styles.submit}>
+        })(<Checkbox>记住我</Checkbox>)}
+        <Link className={styles.forgot} to="/login/forgotPassword">
+          忘记密码？
+        </Link>
+        <Button type="primary" htmlType="submit" className={styles.submit}>
           登录
-        </Button>
-        <a className={styles.register} onClick={handleRegister}>
-          用户注册
-        </a>
+          </Button>
+        <Link to="/login/register">新用户注册</Link>
       </Form.Item>
     </Form>
   );

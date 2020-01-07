@@ -55,19 +55,33 @@ const menuConfig: MenuListItemModel[] = [
     icon: 'icon-shouye1',
     userType: USER_TYPE.Teacher,
   },
-  {
-    key: 'teacher-homework-completion',
-    name: '作业完成情况',
-    link: '/teacher/homework/completion',
-    icon: 'icon-shouye1',
-    userType: USER_TYPE.Teacher,
-  },
+  // {
+  //   key: 'teacher-homework-completion',
+  //   name: '作业完成情况',
+  //   link: '/teacher/homework/completion',
+  //   icon: 'icon-shouye1',
+  //   userType: USER_TYPE.Teacher,
+  // },
   {
     key: 'student-homework',
     name: '作业信息',
     link: '/student/homework',
     icon: 'icon-shouye1',
     userType: USER_TYPE.Student,
+  },
+  {
+    key: 'student-userInfo',
+    name: '个人信息',
+    link: '/student/userInfo',
+    icon: 'icon-shouye1',
+    userType: USER_TYPE.Student,
+  },
+  {
+    key: 'teacher-userInfo',
+    name: '个人信息',
+    link: '/teacher/userInfo',
+    icon: 'icon-shouye1',
+    userType: USER_TYPE.Teacher,
   },
 ];
 

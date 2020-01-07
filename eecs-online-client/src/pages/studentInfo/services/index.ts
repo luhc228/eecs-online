@@ -1,18 +1,12 @@
 import request from '@/utils/request';
+import { StudentInfoFieldsModel } from '@/interfaces/studentInfo';
 
-export async function queryCurrent() {
-  return request.post('/student/edit', { data });
+/**
+ * 更新课程信息
+ * @param data
+ */
+export function updateStudentInfo(data: StudentInfoFieldsModel) {
+  return request.post('/student/edit', {
+    data,
+  });
 }
-
-export async function queryCollege() {
-  return request.get('/college/detail', { data });
-}
-
-export async function queryStudentClass(studentClass: string) {
-  return request.get('/student/class/list');
-  // return request(`/student/college/${studentClass}`);
-}
-
-// export async function queryUsers() {
-//   return request('/student/users');
-// }

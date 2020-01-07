@@ -1,109 +1,114 @@
-import React, { Dispatch, useEffect } from 'react';
-import { FormComponentProps } from 'antd/es/form';
-import { Form, Input, Select } from 'antd';
-import Button from 'antd/es/button/button';
+import React from 'react';
 import { connect } from 'dva';
-import styles from './index.less';
-import { StudentUserForm } from '@/interfaces/studentInfo';
-import CollegeClass from './components/collegeClass';
+import { Dispatch } from 'redux';
+import CustomForm from '@/components/CustomForm';
+import { FormItemComponentProps } from '@/interfaces/components';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import RouterPrompt from '@/components/RouterPrompt';
+import { StateType } from './models';
+import CustomCard from '@/components/CustomCard';
+import userUtils from '@/utils/user-utils';
 
-const { Option } = Select;
-
-interface SelectItem {
-  label: string;
-  key: string;
-}
-
-interface StudentUserProps extends FormComponentProps {
+interface StudentInfoProps {
+  studentInfo: StateType;
   dispatch: Dispatch<any>;
-  user: StudentUserForm;
+  location: Location;
+  loading: boolean;
 }
 
-const validatorCollegeClass = (
-  _: any,
-  value: {
-    college: SelectItem;
-    studentClass: SelectItem;
-  },
-  callback: (message?: string) => void,
-) => {
-  const { college, studentClass } = value;
-  if (!college.key) {
-    callback('请选择学院！');
-  }
-  if (!studentClass.key) {
-    callback('请选择班级！');
-  }
-  callback();
-};
+const StudentInfo: React.FC<StudentInfoProps> = ({ studentInfo, dispatch, location, loading }) => {
+  const { studentInfoFields, when, collegeIdDataSource, classIdDataSource } = studentInfo;
 
-const StudentUserInfo: React.FC<StudentUserProps> = ({ form, user, dispatch }) => {
-  // const [currentUser] = useState(undefined)
-  useEffect(() => {
+  // console.log(password);
+  // console.log(userUtils.getUserInfo());
+  const formConfig: FormItemComponentProps[] = [
+    {
+      label: '用户名',
+      name: 'studentName',
+      component: FORM_COMPONENT.Input,
+      required: true,
+    },
+    {
+      label: '学号',
+      name: 'studentId',
+      component: FORM_COMPONENT.Input,
+      required: true,
+    },
+    {
+      label: '学院',
+      name: 'studentCollege',
+      component: FORM_COMPONENT.Select,
+      required: true,
+      props: {
+        mode: 'multiple',
+      },
+      datasource: collegeIdDataSource,
+    },
+    {
+      label: '班级',
+      name: 'studentClass',
+      component: FORM_COMPONENT.Select,
+      required: true,
+      props: {
+        mode: 'multiple',
+      },
+      datasource: classIdDataSource,
+    },
+    {
+      label: '性别',
+      name: 'studentGender',
+      component: FORM_COMPONENT.Radio,
+      required: true,
+      props: {
+        mode: 'multiple',
+      },
+      datasource: [
+        { label: '男', value: '男' },
+        { label: '女', value: '女' },
+      ],
+    },
+  ];
+
+  const handleSubmit = (allFields: object) => {
     dispatch({
-      type: 'studentInfo/fetchCurrent',
-      payload: { ...user },
-    });
-  }, []);
-
-  console.log('user', user);
-
-  const handleSubmit = (e: React.MouseEvent) => {
-    e.preventDefault();
-    form.validateFields(err => {
-      if (!err) {
-        dispatch({
-          type: 'studentInfo/saveCurrentUser',
-          payload: { user },
-        });
-      }
+      type: 'studentInfo/updateStudentInfo',
+      payload: { data: { ...allFields, studentId: studentInfoFields.studentId } },
     });
   };
 
-  const { getFieldDecorator } = form;
-
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Item label="UserName">
-        {getFieldDecorator('name', {
-          rules: [{ required: true, message: '修改用户名于此处' }],
-        })(<Input />)}
-      </Form.Item>
-      <Form.Item label="Id">
-        {getFieldDecorator('id', {
-          rules: [{ required: true, message: '修改账号于此处' }],
-        })(<Input disabled={true} />)}
-      </Form.Item>
-      <Form.Item label="gender">
-        {getFieldDecorator('gender', {
-          rules: [{ required: true, message: '请选择性别' }],
-        })(
-          <Select>
-            <Option value="female">女</Option>
-            <Option value="male">男</Option>
-          </Select>,
-        )}
-      </Form.Item>
-      <Form.Item label="学院 / 班级">
-        {getFieldDecorator('collegeClass', {
-          rules: [
-            { required: true, message: '请选择学院 / 班级' },
-            { validator: validatorCollegeClass },
-          ],
-        })(<CollegeClass />)}
-      </Form.Item>
-      <Button type="primary" htmlType="submit" className={styles.submit}>
-        保 存
-      </Button>
-    </Form>
+    <>
+      <RouterPrompt when={when} />
+      <CustomCard title="个人信息编辑">
+        <CustomForm
+          layout="horizontal"
+          values={studentInfoFields}
+          formTypes={CUSTOM_FORM_TYPES.OneColumn}
+          loading={loading}
+          // TODO: bug: when add this fieldsChange function the error will disappear
+          onFieldsChange={() => {}}
+          formConfig={formConfig}
+          onSubmit={handleSubmit}
+        />
+      </CustomCard>
+    </>
   );
 };
 
-const mapStateToProps = (state: any) => {
-  const { user } = state.user;
-  return {
-    user,
-    loading: state.loading.models.studentInfo,
+const mapStateToProps = ({
+  studentInfo,
+  router,
+  loading,
+}: {
+  studentInfo: StateType;
+  router: {
+    location: Location;
   };
-};
-export default Form.create({ name: 'studentInfo' })(connect(mapStateToProps)(StudentUserInfo));
+  loading: any;
+}) => ({
+  studentInfo,
+  location: router.location,
+  loading: loading.models.studentInfo,
+});
+
+export default connect(mapStateToProps)(StudentInfo);

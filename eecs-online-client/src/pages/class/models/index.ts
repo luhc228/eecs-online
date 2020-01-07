@@ -1,4 +1,4 @@
-import { Reducer } from 'redux';
+import { Reducer, Dispatch } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { ClassTableData, ClassFilterFieldsModel, PaginationParamsModel } from '@/interfaces/class';
 import * as classService from '../services';
@@ -26,16 +26,18 @@ export interface ModelType {
   };
 }
 
+const initState = {
+  data: DEFAULT_TABLE_PAGINATION_STATE,
+  filterFields: {
+    className: undefined,
+    studentNum: undefined,
+  },
+};
+
 const Model = {
   namespace: 'courseClass',
 
-  state: {
-    data: DEFAULT_TABLE_PAGINATION_STATE,
-    filterFields: {
-      className: undefined,
-      studentNum: undefined,
-    },
-  },
+  state: initState,
 
   reducers: {
     save(
@@ -97,6 +99,23 @@ const Model = {
           data: paginationData,
         },
       })
+    },
+  },
+
+  subscriptions: {
+    setup(
+      { dispatch, history }: { dispatch: Dispatch<any>, history: any }
+    ) {
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/teacher/class') {
+          dispatch({
+            type: 'initState',
+            payload: {
+              state: initState
+            }
+          });
+        }
+      });
     },
   },
 }

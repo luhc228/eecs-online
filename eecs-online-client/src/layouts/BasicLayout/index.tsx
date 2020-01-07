@@ -17,14 +17,16 @@ interface BasicLayoutProps extends RoutingType {
 }
 
 const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location }) => (
-  <Layout>
+  <Layout style={{ display: 'flex' }}>
     <Sider trigger={null} collapsible width={250} collapsed={collapsed} collapsedWidth={80}>
       <div className={styles.logo} />
       <NavMenu />
     </Sider>
     <Layout>
       <Header />
-      <Breadcrumb location={location} />
+      <div>
+        <Breadcrumb location={location} />
+      </div>
       <Content
         style={{
           margin: '24px 16px',

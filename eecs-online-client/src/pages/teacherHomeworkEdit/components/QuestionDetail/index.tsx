@@ -1,97 +1,212 @@
 import React from 'react';
-import { ColumnProps } from 'antd/lib/table';
 import { connect } from 'dva';
+import { QuestionDetailModel } from '@/interfaces/teacherHomeworkEdit';
+import CustomForm from '@/components/CustomForm';
+import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@/enums';
+import { FormItemComponentProps, SelectComponentDatasourceModel, UmiComponentProps } from '@/interfaces/components';
+import { getOption } from '@/utils';
+import styles from './index.less';
 import { StateType } from '../../models';
-import { UmiComponentProps } from '@/interfaces/components';
-import TableTransfer from '@/components/TableTransfer';
 
 export interface QuestionDetailProps extends UmiComponentProps {
   teacherHomeworkEdit: StateType;
 }
 
-const QuestionDetail: React.FC<QuestionDetailProps> = ({ teacherHomeworkEdit, dispatch }) => {
-  const { questionList, targetKeys } = teacherHomeworkEdit;
+const QuestionDetail: React.FC<QuestionDetailProps> = ({
+  teacherHomeworkEdit
+}) => {
+  const { homeworkDetailFields } = teacherHomeworkEdit;
+  const list: any[] = [];
 
-  const leftTableColumns: ColumnProps<any>[] = [
-    {
-      dataIndex: 'questionName',
-      title: '题目名称',
-    },
-    {
-      dataIndex: 'courseName',
-      title: '所属课程',
-    },
-    // {
-    //   dataIndex: 'questionId',
-    //   title: '题目ID',
-    // },
-    {
-      dataIndex: 'questionType',
-      title: '题目类型',
-    },
-    {
-      dataIndex: 'questionScore',
-      title: '题目分值',
-    },
-    {
-      dataIndex: 'content',
-      title: '题目内容',
-    },
-  ];
+  const generateFormConfig = (): FormItemComponentProps[] => {
+    let formConfig: FormItemComponentProps[] = [];
 
-  const rightTableColumns: ColumnProps<any>[] = [
-    {
-      dataIndex: 'questionName',
-      title: '题目名称',
-    },
-    {
-      dataIndex: 'questionScore',
-      title: '题目分值',
-    },
-    {
-      dataIndex: 'questionType',
-      title: '题目类型',
-    },
-  ];
+    if (list && list.length) {
+      const formItems: FormItemComponentProps[] = [];
+      list.forEach((item: QuestionDetailModel) => {
+        const {
+          questionId,
+          content,
+          questionType,
+          options,
+          answer,
+          questionScore,
+          contentImage
+        } = item;
 
-  const handleChange = (nextTargetKeys: string[]) => {
-    dispatch({
-      type: 'teacherHomeworkEdit/changeTargetKeys',
-      payload: {
-        targetKeys: nextTargetKeys,
-      },
-    });
-  };
+        switch (questionType) {
+          case QUESTION_TYPE.judge:
+            {
+              const datasource: SelectComponentDatasourceModel[] = [
+                {
+                  value: JUDGE_VALUE.InCorrect,
+                  label: '错误',
+                },
+                {
+                  value: JUDGE_VALUE.Correct,
+                  label: '正确',
+                }
+              ];
+
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【判断题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
+                  </div>
+                ),
+                name: `judge${questionId}`,
+                component: FORM_COMPONENT.Radio,
+                datasource,
+                props: {
+                  disabled: true
+                },
+                required: false
+              }
+              formItems.push(result);
+
+              break;
+            }
+
+          case QUESTION_TYPE.single:
+            {
+              let datasource: SelectComponentDatasourceModel[] = [];
+              if (options && options.length) {
+                datasource = options.split('|').map((option: string, index: number) => ({
+                  value: getOption(index),
+                  label: `${getOption(index)}、${option}`,
+                }))
+              }
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【单选题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
+                  </div>
+                ),
+                name: `single${questionId}`,
+                component: FORM_COMPONENT.Radio,
+                datasource,
+                props: {
+                  disabled: true
+                },
+                required: false
+              }
+
+              formItems.push(result);
+
+              break;
+            }
+          case QUESTION_TYPE.multiple:
+            {
+              let datasource: SelectComponentDatasourceModel[] = [];
+              let initialValue: string[] = [];
+              if (answer && typeof answer === 'string' && answer.includes('|')) {
+                initialValue = answer.split('|')
+              }
+              if (options && options.length) {
+                datasource = options.split('|').map((option: string, index: number) => ({
+                  value: getOption(index),
+                  label: `${getOption(index)}、${option}`,
+                }))
+              }
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【多选题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
+                  </div>
+                ),
+                name: `multiple${questionId}`,
+                component: FORM_COMPONENT.Checkbox,
+                props: {
+                  disabled: true
+                },
+                initialValue,
+                datasource,
+                required: false
+              }
+
+              formItems.push(result);
+
+              break;
+            }
+          case QUESTION_TYPE.program:
+            {
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【编程题】{content}（{questionScore}分）</span>
+                    <div style={{ marginLeft: 70 }}>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
+                      <div>
+                        <img src={imgSrc} alt="questionImage" />
+                      </div>
+                    ))}
+                  </div>
+                ),
+                name: `program${item.questionId}`,
+                component: FORM_COMPONENT.CodeEditor,
+                // initialValue: submitAnswer,
+                props: {
+                  readOnly: true,
+                },
+                required: false
+              }
+              formItems.push(result);
+              break;
+            }
+          default:
+            break
+        }
+      })
+
+      formConfig = [...formConfig, ...formItems]
+    }
+
+    return formConfig;
+  }
 
   return (
-    <TableTransfer
-      dataSource={questionList}
-      targetKeys={targetKeys}
-      disabled={false}
-      showSearch={true}
-      rowKey={(record: QuestionDetailModel) => record.questionId}
-      onChange={handleChange}
-      filterOption={(inputValue, item) =>
-        item.courseName.indexOf(inputValue) !== -1 ||
-        // item.questionId.indexOf(inputValue) !== -1 ||
-        item.questionName.indexOf(inputValue) !== -1 ||
-        item.questionType.indexOf(inputValue) !== -1
-      }
-      leftColumns={leftTableColumns}
-      rightColumns={rightTableColumns}
+    <CustomForm
+      layout="vertical"
+      values={homeworkDetailFields}
+      formTypes={CUSTOM_FORM_TYPES.OneColumn}
+      onFieldsChange={() => { }}
+      formConfig={generateFormConfig()}
     />
-  );
-};
+  )
+}
 
 const mapStateToProps = ({
-  teacherHomeworkEdit,
-  loading,
+  teacherHomeworkEdit
 }: {
   teacherHomeworkEdit: StateType;
-  loading: any;
 }) => ({
-  teacherHomeworkEdit,
-  loading: loading.effects['teacherHomeworkEdit/fetchQuestionDetail'],
-});
+  teacherHomeworkEdit
+})
 
 export default connect(mapStateToProps)(QuestionDetail);

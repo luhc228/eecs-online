@@ -16,10 +16,10 @@ interface QuestionEditProps extends UmiComponentProps {
 }
 
 export const questionTypeMap = {
-  [QUESTION_TYPE.Judge]: '判断题',
-  [QUESTION_TYPE.Single]: '单选题',
-  [QUESTION_TYPE.Multiple]: '多选题',
-  [QUESTION_TYPE.Program]: '编程题',
+  [QUESTION_TYPE.judge]: '判断题',
+  [QUESTION_TYPE.single]: '单选题',
+  [QUESTION_TYPE.multiple]: '多选题',
+  [QUESTION_TYPE.program]: '编程题',
 }
 
 const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => {
@@ -57,20 +57,20 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
 
   const tabsContent: CardTabListType[] = [
     {
-      tab: questionTypeMap[QUESTION_TYPE.Single],
-      key: QUESTION_TYPE.Single.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.single],
+      key: QUESTION_TYPE.single.toString(),
     },
     {
-      tab: questionTypeMap[QUESTION_TYPE.Multiple],
-      key: QUESTION_TYPE.Multiple.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.multiple],
+      key: QUESTION_TYPE.multiple.toString(),
     },
     {
-      tab: questionTypeMap[QUESTION_TYPE.Judge],
-      key: QUESTION_TYPE.Judge.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.judge],
+      key: QUESTION_TYPE.judge.toString(),
     },
     {
-      tab: questionTypeMap[QUESTION_TYPE.Program],
-      key: QUESTION_TYPE.Program.toString(),
+      tab: questionTypeMap[QUESTION_TYPE.program],
+      key: QUESTION_TYPE.program.toString(),
     },
   ];
 
@@ -78,7 +78,7 @@ const QuestionLib: React.FC<QuestionEditProps> = ({ dispatch, questionLib }) => 
     <CustomCard
       tabList={tabsContent}
       tabBarExtraContent={<Button type="primary" onClick={handleCreate}>新增题目</Button>}
-      activeTabKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.Single.toString()}
+      activeTabKey={currentTabKey ? currentTabKey.toString() : QUESTION_TYPE.single.toString()}
       onTabChange={callback}
     >
       <LibFilter />

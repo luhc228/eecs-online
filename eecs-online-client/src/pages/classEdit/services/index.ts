@@ -1,13 +1,27 @@
 import request from '@/utils/request';
+import { StudentDetailModel, ClassDetailModel } from '@/interfaces/classEdit';
 
-export interface StudentDetailData {
-  college: string;
-  studentClass?: string;
+/**
+ * 获取学生信息列表
+ * @param data
+ */
+export function fetchStudentDetail(data: StudentDetailModel) {
+  return request.get('/student/detail', {
+    params: {
+      data,
+    }
+  })
 }
 
-export function fetchStudentClassList(params: { college: string }) {
-  return request.get('/student/class/detail', {
-    params
+/**
+ * 获取虚拟班级信息详情
+ * @param data
+ */
+export function fetchClassDetail(classId: number) {
+  return request.post('/vir_class/get', {
+    data: {
+      classId
+    }
   })
 }
 
@@ -15,28 +29,18 @@ export function fetchStudentClassList(params: { college: string }) {
  * 新增虚拟班级信息
  * @param data
  */
-export function createClass(data: any) {
+export function createClass(data: ClassDetailModel) {
   return request.post('/vir_class/add', {
     data,
   })
 }
 
 /**
- * 更新课程信息
+ * 更新虚拟班级信息
  * @param data
  */
-export function updateClass(data: any) {
+export function updateClass(data: ClassDetailModel) {
   return request.post('/vir_class/edit', {
-    data,
-  })
-}
-
-/**
- * 获取学生分页
- * @param data
- */
-export function fetchStudentDetail(data: StudentDetailData) {
-  return request.post('/student/detail', {
     data,
   })
 }

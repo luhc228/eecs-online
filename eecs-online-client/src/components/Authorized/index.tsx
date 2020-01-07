@@ -12,6 +12,7 @@ interface AuthorizedProps extends RoutingType {
  * 判断有没有权限，如果没有，则跳转至登录页面
  */
 const Anthorized: React.SFC<AuthorizedProps> = ({ dispatch, children, location }) => {
+  // TODO: bug-fix: Cannot read property 'type' of undefined
   if (!user.isLogin() && dispatch) {
     dispatch({
       type: 'login/logout',

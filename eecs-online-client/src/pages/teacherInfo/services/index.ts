@@ -1,12 +1,12 @@
-import { TeacherUserForm } from '@/interfaces/teacherInfo';
+import { TeacherInfoFieldsModel } from '@/interfaces/teacherInfo';
 import request from '@/utils/request';
 
 /**
  * 更新信息
  * @param data
  */
-export function updateInfo(data: TeacherUserForm) {
-    return request.post('/userInfo/update', {
-      data,
-    })
-  }
+export function updateTeacherInfo(data: TeacherInfoFieldsModel) {
+  return request.post('/teacher/edit', {
+    data,
+  });
+}
