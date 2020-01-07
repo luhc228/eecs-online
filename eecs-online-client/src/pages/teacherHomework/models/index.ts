@@ -1,4 +1,3 @@
-import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import {
   HomeworkTableData,
@@ -7,24 +6,13 @@ import {
 } from '@/interfaces/teacherHomework';
 import * as homeworkService from '../services';
 import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
-import { Effect } from '@/interfaces/reduxState';
 
 export interface StateType {
   data: HomeworkTableData;
   filterFields: HomeworkFieldsModel;
 }
 
-export interface ModelType {
-  namespace: string;
-  state: StateType;
-  reducers: { save: Reducer<StateType>; changeFilterFields: Reducer<StateType> };
-  effects: {
-    fetchHomeworkPagination: Effect<StateType>;
-    removeHomework: Effect<StateType>;
-  };
-}
-
-const Model: ModelType = {
+const Model = {
   namespace: 'homework',
 
   state: {
@@ -63,7 +51,7 @@ const Model: ModelType = {
     ) {
       const response = yield call(homeworkService.fetchHomeworkPagination, payload.data);
       const { data } = response;
-      console.log('data', data);
+
       yield put({
         type: 'save',
         payload: {

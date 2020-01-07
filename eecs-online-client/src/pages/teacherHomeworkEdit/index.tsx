@@ -33,7 +33,9 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
   const {
     when,
     homeworkDetailFields,
-    courseIdDataSource
+    homeworkFormFields,
+    courseIdDataSource,
+    selectQuestionList
   } = teacherHomeworkEdit;
 
   const { query } = location;
@@ -104,7 +106,7 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
 
   const handleFieldsChange = (allFields: Object) => {
     dispatch({
-      type: 'teacherHomeworkEdit/changeTeacherHomeworkDetailFields',
+      type: 'teacherHomeworkEdit/changeTeacherHomeworkFormFields',
       payload: {
         data: allFields
       }
@@ -115,35 +117,34 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
     const { startAt, endAt } = allFields;
     const newStartAt = moment(startAt).format('YYYY-MM-DD HH:mm:ss');
     const newEndAt = moment(endAt).format('YYYY-MM-DD HH:mm:ss');
-    console.log(newStartAt, newEndAt);
-    console.log(allFields);
-    // const isCreate = location.pathname.split('/')[3] === 'create';
-    // if (isCreate) {
-    //   dispatch({
-    //     type: 'teacherHomeworkEdit/createTeacherHomework',
-    //     payload: {
-    //       data: {
-    //         ...allFields,
-    //         questionIdList: targetKeys
-    //       }
-    //     },
-    //   })
-    // } else {
-    //   let { homeworkId } = query;
-    //   if (typeof homeworkId === 'string') {
-    //     homeworkId = Number(homeworkId)
-    //   }
-    //   dispatch({
-    //     type: 'teacherHomeworkEdit/updateTeacherHomework',
-    //     payload: {
-    //       data: {
-    //         ...allFields,
-    //         questionIdList: targetKeys,
-    //         homeworkId,
-    //       }
-    //     }
-    //   })
-    // }
+
+    const values = {
+      ...allFields,
+      startAt: newStartAt,
+      endAt: newEndAt,
+      homeworkQuestionList: selectQuestionList
+    };
+
+    const isCreate = location.pathname.split('/')[3] === 'create';
+    if (isCreate) {
+      dispatch({
+        type: 'teacherHomeworkEdit/createTeacherHomework',
+        payload: {
+          data: values
+        },
+      })
+    } else {
+      let { homeworkId } = query;
+      if (typeof homeworkId === 'string') {
+        homeworkId = Number(homeworkId)
+      }
+      dispatch({
+        type: 'teacherHomeworkEdit/updateTeacherHomework',
+        payload: {
+          data: values
+        }
+      })
+    }
   }
 
   return (
@@ -152,7 +153,7 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
       <CustomCard>
         <CustomForm
           layout="horizontal"
-          values={homeworkDetailFields}
+          values={homeworkFormFields}
           formTypes={CUSTOM_FORM_TYPES.TwoColumn}
           loading={false}
           // TODO: bug: when add this fieldsChange function the error will disappear

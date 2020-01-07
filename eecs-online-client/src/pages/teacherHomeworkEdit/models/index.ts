@@ -5,7 +5,8 @@ import { NOTIFICATION_TYPE } from '@/enums';
 import {
   QuestionDetailModel,
   TeacherHomeworkFormFields,
-  TeacherHomeworkEditDetail
+  TeacherHomeworkEditDetail,
+  SelectQuestionListItem
 } from '@/interfaces/teacherHomeworkEdit';
 import showNotification from '@/utils/showNotification';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -19,15 +20,20 @@ export interface StateType {
   // 题目详情列表
   questionList: QuestionDetailModel[];
   // 作业详情表单字段
+  homeworkFormFields: TeacherHomeworkFormFields;
+  // 作业详情
   homeworkDetailFields: TeacherHomeworkEditDetail;
+  // 选择的作业题目列表
+  selectQuestionList: SelectQuestionListItem[];
 }
 
 const initState = {
   questionList: [],
   targetKeys: [],
-  homeworkFields: {},
-  // homeworkDetailFields: {},
+  homeworkFormFields: {},
+  homeworkDetailFields: {},
   courseIdDataSource: [],
+  selectQuestionList: [],
 };
 
 const Model = {
@@ -64,13 +70,23 @@ const Model = {
       return { ...state, targetKeys };
     },
 
-    changeTeacherHomeworkDetailFields(
+    changeTeacherHomeworkFormFields(
       state: StateType,
-      { payload }: { payload: { data: TeacherHomeworkFormFields } }
+      { payload }: { payload: { data: TeacherHomeworkFormFields[] } }
     ) {
       return {
         ...state,
-        homeworkDetailFields: payload.data
+        homeworkFormFields: payload.data
+      }
+    },
+
+    changeSelectQuestionList(
+      state: StateType,
+      { payload }: { payload: { data: SelectQuestionListItem[] } }
+    ) {
+      return {
+        ...state,
+        selectQuestionList: payload.data
       }
     },
 

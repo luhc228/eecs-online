@@ -36,8 +36,13 @@ export interface TeacherHomeworkFormFields {
   endAt: string;
 }
 
+export interface SelectQuestionListItem {
+  questionId: number;
+  questionScore: number;
+}
+
 export interface TeacherHomeworkEditDetail {
   homeworkFields: TeacherHomeworkFormFields;
-  // 题目列表
-  list: QuestionDetailModel[];
+  // 选择的题目列表
+  list: SelectQuestionListItem[];
 }

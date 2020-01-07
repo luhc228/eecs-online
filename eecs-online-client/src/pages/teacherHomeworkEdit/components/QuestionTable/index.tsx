@@ -11,7 +11,7 @@ export interface QuestionTableProps extends UmiComponentProps {
 }
 
 const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, dispatch }) => {
-  const { questionList, targetKeys } = teacherHomeworkEdit;
+  const { questionList, targetKeys, homeworkFormFields } = teacherHomeworkEdit;
 
   const leftTableColumns: ColumnProps<any>[] = [
     {
@@ -46,11 +46,44 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, disp
   ];
 
   const handleChange = (nextTargetKeys: string[]) => {
+    let homeworkScore = 0;
+    const list: number[] = [];
+    nextTargetKeys.forEach((key: string) => {
+      const questionId = Number(key);
+      const result = questionList.find(
+        (questionItem: QuestionDetailModel) => questionItem.questionId === questionId
+      );
+      if (!result) {
+        return;
+      }
+      const { questionScore } = result;
+
+      homeworkScore += questionScore
+      list.push(questionId);
+    })
+
     dispatch({
       type: 'teacherHomeworkEdit/changeTargetKeys',
       payload: {
         targetKeys: nextTargetKeys,
       },
+    });
+
+    dispatch({
+      type: 'teacherHomeworkEdit/changeTeacherHomeworkFormFields',
+      payload: {
+        data: {
+          ...homeworkFormFields,
+          homeworkScore,
+        }
+      }
+    });
+
+    dispatch({
+      type: 'teacherHomeworkEdit/changeSelectQuestionList',
+      payload: {
+        data: list
+      }
     });
   };
 
