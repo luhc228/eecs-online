@@ -85,8 +85,11 @@ request.use(async (ctx, next) => {
   if (userUtils.isLogin) {
     if (options.method === 'post') {
       if (options.data) {
+        console.log(userInfo.userType);
         if (userInfo.userType) {
+          console.log(userInfo.userType);
           const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
+
           const newData = { ...options.data, [userIdName]: userInfo[userIdName] }
           const newOptions = { ...options, data: newData }
 
@@ -101,6 +104,7 @@ request.use(async (ctx, next) => {
     if (options.method === 'get') {
       if (options.params) {
         if (userInfo.userType) {
+          console.log(userInfo.userType);
           const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
           const newParams = { ...options.params, [userIdName]: userInfo[userIdName] }
           const newOptions = { ...options, params: newParams }

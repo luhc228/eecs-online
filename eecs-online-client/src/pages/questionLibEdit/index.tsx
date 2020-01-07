@@ -237,6 +237,7 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
   }
 
   const handleSubmit = (allFields: QuestionFieldsModel) => {
+    console.log(allFields);
     const isCreate = location.pathname.split('/')[3] === 'create';
     const { questionId } = location.query;
 
@@ -261,6 +262,8 @@ const QuestionLibEdit: React.FC<QuestionLibEditProps> = ({
 
       newContentImage = imageUrls.join('|')
     }
+
+    console.log(newContentImage);
 
     const newAllFields = {
       ...allFields,

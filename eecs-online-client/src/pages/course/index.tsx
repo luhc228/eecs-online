@@ -13,6 +13,7 @@ import { StateType } from './models';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import CustomCard from '@/components/CustomCard';
+import { removeEmpty } from '@/utils';
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -112,7 +113,7 @@ const Course: React.FC<CourseProps> = props => {
           onFieldsChange={(allFields: object) => {
             dispatch({
               type: 'course/changeFilterFields',
-              payload: { filterFields: allFields },
+              payload: { filterFields: removeEmpty(allFields) },
             })
           }}
           formConfig={filterFormConfig}

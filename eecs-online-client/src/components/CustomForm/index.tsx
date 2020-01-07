@@ -3,20 +3,23 @@
  * Filter component usually in the header of the table or the page.
  */
 import React, { createRef } from 'react';
-import { Form, Row, Col, Input, Select, Button, Radio, Checkbox } from 'antd';
+import { Form, Row, Col, Input, Select, Button, Radio, Checkbox, DatePicker } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import router from 'umi/router';
-import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES, NOTIFICATION_TYPE } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
-import styles from './index.less';
 import InputNumberWithUnit from '../InputNumberWithUnit';
 import ImageUpload from '../upload/ImageUpload';
 import CodeEditor from '../CodeEditor';
 import DynamicFieldSet from '../DynamicFieldSet';
+import styles from './index.less';
+import showNotification from '@/utils/showNotification';
 
 const { Option } = Select;
 const { TextArea } = Input;
+const { RangePicker } = DatePicker;
+
 interface CustomFormProps extends FormComponentProps {
   formTypes: CUSTOM_FORM_TYPES;
   layout?: 'horizontal' | 'inline' | 'vertical';
@@ -106,7 +109,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <DynamicFieldSet {...formItem.props} />
+              <DynamicFieldSet form={form} {...formItem.props} />
             )}
           </>
         )
@@ -181,11 +184,17 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               <Radio.Group {...formItem.props}>
                 {formItem.datasource &&
                   formItem.datasource.map((item: SelectComponentDatasourceModel) => (
-                    <Radio style={{
-                      display: 'block',
-                      height: '30px',
-                      lineHeight: '30px',
-                    }} value={item.value} key={item.label}>{item.label}</Radio>
+                    <Radio
+                      style={{
+                        display: 'block',
+                        height: '30px',
+                        lineHeight: '30px',
+                      }}
+                      value={item.value}
+                      key={item.label}
+                    >
+                      {item.label}
+                    </Radio>
                   ))}
               </Radio.Group>
             )}
@@ -207,6 +216,36 @@ const CustomForm: React.FC<CustomFormProps> = props => {
                 options={formItem.datasource}
                 {...formItem.props}
               />
+            )}
+          </>
+        )
+      case FORM_COMPONENT.RangePicker:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请选择日期和时间'
+              }],
+            },
+            )(
+              <RangePicker placeholder={['请选择', '请选择']} style={{ width: '100%' }} {...formItem.props} />,
+            )}
+          </>
+        )
+      case FORM_COMPONENT.DatePicker:
+        return (
+          <>
+            {getFieldDecorator(formItem.name, {
+              initialValue: formItem.initialValue,
+              rules: [{
+                required: formItem.required,
+                message: formItem.message ? formItem.message : '请选择日期和时间'
+              }],
+            },
+            )(
+              <DatePicker placeholder="请选择" style={{ width: '100%' }} {...formItem.props} />,
             )}
           </>
         )
@@ -235,6 +274,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (err) {
+        showNotification('错误', '请选择或输入内容', NOTIFICATION_TYPE.error)
         return;
       }
       if (onSubmit) {
