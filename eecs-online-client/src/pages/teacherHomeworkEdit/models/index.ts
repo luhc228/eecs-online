@@ -2,7 +2,11 @@ import { Dispatch, EffectsCommandMap } from 'dva';
 import router from 'umi/router';
 import * as teacherHomeworkEditService from '../services';
 import { NOTIFICATION_TYPE } from '@/enums';
-import { QuestionDetailModel, TeacherHomeworkFormFields, TeacherHomeworkEditDetail } from '@/interfaces/teacherHomeworkEdit';
+import {
+  QuestionDetailModel,
+  TeacherHomeworkFormFields,
+  TeacherHomeworkEditDetail
+} from '@/interfaces/teacherHomeworkEdit';
 import showNotification from '@/utils/showNotification';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
 import * as services from '@/services';
@@ -10,11 +14,12 @@ import userUtils from '@/utils/user-utils';
 
 export interface StateType {
   when: boolean;
-  questionList: QuestionDetailModel[];
   targetKeys: string[];
-  homeworkDetailFields: TeacherHomeworkEditDetail;
-  // homeworkFields: TeacherHomeworkEditData;
   courseIdDataSource: SelectComponentDatasourceModel[];
+  // 题目详情列表
+  questionList: QuestionDetailModel[];
+  // 作业详情表单字段
+  homeworkDetailFields: TeacherHomeworkEditDetail;
 }
 
 const initState = {
@@ -61,7 +66,7 @@ const Model = {
 
     changeTeacherHomeworkDetailFields(
       state: StateType,
-      { payload }: { payload: { data: { homeworkFields: TeacherHomeworkFormFields } } }
+      { payload }: { payload: { data: TeacherHomeworkFormFields } }
     ) {
       return {
         ...state,
@@ -102,24 +107,26 @@ const Model = {
     },
 
     /**
-     * 获取所有题目详情
+     * 获取该课程下的所有题目（包括四种题型）
      */
-    *fetchQuestionDetail(
-      { payload }: { type: string, payload: { values: any } },
+    *fetchCourseQuestionLib(
+      { payload }: { type: string, payload: { courseId: number } },
       { call, put }: EffectsCommandMap
     ) {
-      const response = yield call(teacherHomeworkEditService.fetchQuestionDetail, payload);
-      const { data } = response;
-      const { list } = data;
+      const response = yield call(
+        teacherHomeworkEditService.fetchCourseQuestionList,
+        payload.courseId
+      );
+
+      const { list } = response;
 
       yield put({
         type: 'changeQuestionList',
         payload: {
-          questionList: list,
-        },
+          questionList: list
+        }
       });
     },
-
     /**
      * 获取已存在的作业信息
      */
@@ -192,47 +199,49 @@ const Model = {
 
   subscriptions: {
     setup({ dispatch, history }: { dispatch: Dispatch<any>, history: any }) {
-      return history.listen(({ pathname, query }: { pathname: string, query: { homeworkId: number } }) => {
-        if (pathname === '/teacher/homework/create' || pathname === '/teacher/homework/edit') {
-          dispatch({
-            type: 'initState',
-            payload: {
-              state: initState
-            }
-          });
-
-          // dispatch({
-          //   type: 'fetchQuestionDetail',
-          //   payload: {
-
-          //     page: 1,
-          //     pageSize: 8
-
-          //   }
-          // });
-
-          const userInfo = userUtils.getUserInfo();
-          if (Object.keys(userInfo).length !== 0) {
+      return history.listen(
+        ({ pathname, query }: { pathname: string, query: { homeworkId: number } }) => {
+          if (pathname === '/teacher/homework/create' || pathname === '/teacher/homework/edit') {
             dispatch({
-              type: 'fetchCourseList',
+              type: 'initState',
               payload: {
-                teacherId: userInfo.teacherId
+                state: initState
               }
             });
-          }
 
-          const { homeworkId } = query;
-          if (homeworkId) {
-            dispatch({
-              type: 'fetchTeacherHomeworkDetail',
-              payload: {
-                homeworkId
-              }
-            })
+            // dispatch({
+            //   type: 'fetchQuestionDetail',
+            //   payload: {
+
+            //     page: 1,
+            //     pageSize: 8
+
+            //   }
+            // });
+
+            const userInfo = userUtils.getUserInfo();
+            if (Object.keys(userInfo).length !== 0) {
+              dispatch({
+                type: 'fetchCourseList',
+                payload: {
+                  teacherId: userInfo.teacherId
+                }
+              });
+            }
+
+            const { homeworkId } = query;
+            if (homeworkId) {
+              dispatch({
+                type: 'fetchTeacherHomeworkDetail',
+                payload: {
+                  homeworkId
+                }
+              })
+            }
           }
-        }
-      })
+        })
     },
   },
 }
+
 export default Model;

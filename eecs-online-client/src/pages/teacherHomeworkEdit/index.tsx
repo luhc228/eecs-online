@@ -25,15 +25,27 @@ interface TeacherHomeworkEditProps extends UmiComponentProps {
   location: Location
 }
 
-const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({ teacherHomeworkEdit, location, dispatch }) => {
+const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
+  teacherHomeworkEdit,
+  location,
+  dispatch
+}) => {
   const {
     when,
-    targetKeys,
     homeworkDetailFields,
     courseIdDataSource
   } = teacherHomeworkEdit;
 
   const { query } = location;
+
+  const handleCourseIdSelectChange = (courseId: number) => {
+    dispatch({
+      type: 'teacherHomeworkEdit/fetchCourseQuestionLib',
+      payload: {
+        courseId
+      }
+    })
+  };
 
   const formConfig: FormItemComponentProps[] = [
     {
@@ -47,7 +59,10 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({ teacherHomewo
       name: 'courseId',
       component: FORM_COMPONENT.Select,
       required: true,
-      datasource: courseIdDataSource
+      datasource: courseIdDataSource,
+      props: {
+        onChange: handleCourseIdSelectChange
+      }
     },
     {
       label: '作业描述',
@@ -86,6 +101,15 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({ teacherHomewo
       }
     }
   ];
+
+  const handleFieldsChange = (allFields: Object) => {
+    dispatch({
+      type: 'teacherHomeworkEdit/changeTeacherHomeworkDetailFields',
+      payload: {
+        data: allFields
+      }
+    })
+  }
 
   const handleSubmit = (allFields: any) => {
     const { startAt, endAt } = allFields;
@@ -132,7 +156,7 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({ teacherHomewo
           formTypes={CUSTOM_FORM_TYPES.TwoColumn}
           loading={false}
           // TODO: bug: when add this fieldsChange function the error will disappear
-          onFieldsChange={() => { }}
+          onFieldsChange={handleFieldsChange}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         >

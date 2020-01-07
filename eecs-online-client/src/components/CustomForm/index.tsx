@@ -6,7 +6,7 @@ import React, { createRef } from 'react';
 import { Form, Row, Col, Input, Select, Button, Radio, Checkbox, DatePicker } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import router from 'umi/router';
-import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
+import { FORM_COMPONENT, CUSTOM_FORM_TYPES, NOTIFICATION_TYPE } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { TWO_COLUMNS_FORM_LAYOUT, INLINE_FORM_LAYOUT, ONE_COLUMN_FORM_LAYOUT } from '@/constants';
 import InputNumberWithUnit from '../InputNumberWithUnit';
@@ -14,6 +14,7 @@ import ImageUpload from '../upload/ImageUpload';
 import CodeEditor from '../CodeEditor';
 import DynamicFieldSet from '../DynamicFieldSet';
 import styles from './index.less';
+import showNotification from '@/utils/showNotification';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -229,7 +230,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <RangePicker style={{ width: '100%' }} {...formItem.props} />,
+              <RangePicker placeholder={['请选择', '请选择']} style={{ width: '100%' }} {...formItem.props} />,
             )}
           </>
         )
@@ -244,7 +245,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
               }],
             },
             )(
-              <DatePicker style={{ width: '100%' }} {...formItem.props} />,
+              <DatePicker placeholder="请选择" style={{ width: '100%' }} {...formItem.props} />,
             )}
           </>
         )
@@ -273,6 +274,7 @@ const CustomForm: React.FC<CustomFormProps> = props => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (err) {
+        showNotification('错误', '请选择或输入内容', NOTIFICATION_TYPE.error)
         return;
       }
       if (onSubmit) {

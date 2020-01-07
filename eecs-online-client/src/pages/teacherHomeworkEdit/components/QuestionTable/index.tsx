@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { StateType } from '../../models';
 import { UmiComponentProps } from '@/interfaces/components';
 import TableTransfer from '@/components/TableTransfer';
+import { QuestionDetailModel } from '@/interfaces/teacherHomeworkEdit';
 
 export interface QuestionTableProps extends UmiComponentProps {
   teacherHomeworkEdit: StateType;
@@ -14,13 +15,14 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, disp
 
   const leftTableColumns: ColumnProps<any>[] = [
     {
-      dataIndex: 'questionName',
-      title: '题目名称',
+      dataIndex: 'questionTypeName',
+      title: '题目类型',
     },
-    // {
-    //   dataIndex: 'questionType',
-    //   title: '题目类型',
-    // },
+    {
+      dataIndex: 'content',
+      title: '题目内容',
+      width: 150,
+    },
     {
       dataIndex: 'questionScore',
       title: '题目分值',
@@ -29,16 +31,17 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, disp
 
   const rightTableColumns: ColumnProps<any>[] = [
     {
-      dataIndex: 'questionName',
-      title: '题目名称',
+      dataIndex: 'questionTypeName',
+      title: '题目类型',
+    },
+    {
+      dataIndex: 'content',
+      title: '题目内容',
+      width: 150,
     },
     {
       dataIndex: 'questionScore',
       title: '题目分值',
-    },
-    {
-      dataIndex: 'questionType',
-      title: '题目类型',
     },
   ];
 
@@ -57,13 +60,12 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, disp
       targetKeys={targetKeys}
       disabled={false}
       showSearch
-      rowKey={(record: QuestionDetailModel) => record.questionId}
+      rowKey={(record: QuestionDetailModel) => record.questionId.toString()}
       onChange={handleChange}
-      filterOption={(inputValue, item) =>
-        item.courseName.indexOf(inputValue) !== -1 ||
-        // item.questionId.indexOf(inputValue) !== -1 ||
-        item.questionName.indexOf(inputValue) !== -1 ||
-        item.questionType.indexOf(inputValue) !== -1
+      filterOption={(inputValue, item) => (
+        item.questionTypeName.indexOf(inputValue) !== -1 ||
+        item.content.indexOf(inputValue) !== -1
+      )
       }
       leftColumns={leftTableColumns}
       rightColumns={rightTableColumns}
@@ -79,7 +81,7 @@ const mapStateToProps = ({
   loading: any;
 }) => ({
   teacherHomeworkEdit,
-  loading: loading.effects['teacherHomeworkEdit/fetchQuestionDetail'],
+  loading: loading.effects['teacherHomeworkEdit/fetchCourseQuestionLib'],
 });
 
 export default connect(mapStateToProps)(QuestionTable);

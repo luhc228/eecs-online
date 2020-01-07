@@ -1,26 +1,24 @@
 import { QUESTION_TYPE } from '@/enums';
 
 export interface QuestionDetailModel {
-  // 所属课程名称
-  courseName: string;
-  // 所属课程Id
-  courseId: number;
-  // 问题类型
-  questionType: QUESTION_TYPE;
-  // 问题Id
+  // 试题id
   questionId: number;
-  // 问题名字
-  questionName: string;
-  // 选项
-  options?: string;
-  // 答案
-  answer: any;
+  // 课程id
+  courseId: number;
+  // 题目类型
+  questionType: QUESTION_TYPE;
   // 题目分数
   questionScore: number;
-  // 题目图片
-  contentImage?: string;
   // 题目内容
-  content?: string;
+  content: string;
+  // 题目图片
+  contentImage: string;
+  // 题目选项
+  options?: any;
+  // 题目正确答案
+  answer: string;
+
+  [k: string]: any;
 }
 
 export interface TeacherHomeworkFormFields {
@@ -29,7 +27,7 @@ export interface TeacherHomeworkFormFields {
   // 作业名称
   homeworkName: string;
   // 作业总分
-  homeworkScore: string;
+  homeworkScore: number;
   // 作业描述
   description?: string;
   // 发布时间
