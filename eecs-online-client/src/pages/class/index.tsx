@@ -13,6 +13,7 @@ import styles from './index.less';
 import FilterForm from '@/components/CustomForm';
 import CustomTable from '@/components/CustomTable';
 import CustomCard from '@/components/CustomCard';
+import { removeEmpty } from '@/utils';
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -98,7 +99,7 @@ const CourseClass: React.FC<ClassProps> = props => {
           onFieldsChange={(allFields: object) => {
             dispatch({
               type: 'courseClass/changeFilterFields',
-              payload: { filterFields: allFields },
+              payload: { filterFields: removeEmpty(allFields) },
             })
           }}
           formConfig={filterFormConfig}
