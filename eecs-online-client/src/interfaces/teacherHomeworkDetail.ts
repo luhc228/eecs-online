@@ -21,11 +21,22 @@ export interface HomeworkDetailListItem {
   score: number;
 }
 
-export interface HomeworkDetailData {
+export interface FilterFieldsModel {
+  studentId?: number;
+  homeworkId?: number;
+}
+
+export interface DetailEditModel {
+  studentId?: number;
+  homeworkId?: number;
+  questionId?: number;
+  questionScore?: string;
+}
+
+export interface HomeworkDetailData extends FilterFieldsModel {
   homeworkName: string;
   homeworkScore: number;
   finalScore: number;
   studentName: string;
-  studentId: number;
   list: HomeworkDetailListItem[];
 }

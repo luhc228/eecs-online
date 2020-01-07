@@ -9,6 +9,7 @@ export interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ teacherHomeworkDetail }) => {
   const { data } = teacherHomeworkDetail;
+  console.log(data);
   const { homeworkScore, homeworkName, studentName, studentId } = data;
 
   return (

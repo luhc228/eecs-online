@@ -1,18 +1,32 @@
 import { Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import umiRouter from 'umi/router';
 import {
   CompletionTableData,
-  CompletionFilterFieldsModel,
+  FilterFieldsModel,
   PaginationParamsModel,
 } from '@/interfaces/teacherHomeworkCompletion';
 import * as completionService from '../services';
 import { Effect } from '@/interfaces/reduxState';
-import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
+import { DEFAULT_TABLE_PAGINATION_STATE, TWO_COLUMNS_FORM_LAYOUT } from '@/constants';
 
 export interface StateType {
   data: CompletionTableData;
-  filterFields: CompletionFilterFieldsModel;
+  filterFields: FilterFieldsModel;
+  location: Location;
 }
+
+// const { query } = umiRouter;
+// console.log(query);
+
+const initState = {
+  filterFields: {
+    classId: 1,
+    homeworkId: 1,
+    courseId: 1,
+  },
+  data: DEFAULT_TABLE_PAGINATION_STATE,
+};
 
 export interface ModelType {
   namespace: string;
@@ -32,15 +46,7 @@ export interface ModelType {
 const Model = {
   namespace: 'teacherHomeworkCompletion',
 
-  state: {
-    data: DEFAULT_TABLE_PAGINATION_STATE,
-    filterFields: {
-      studentId: null,
-      studentName: null,
-      studentClass: null,
-      delay: 'not_delay',
-    },
-  },
+  state: initState,
 
   reducers: {
     save(state: StateType, { payload }: { type: string; payload: { data: CompletionTableData } }) {
@@ -48,7 +54,7 @@ const Model = {
     },
     changeFilterFields(
       state: StateType,
-      { payload }: { type: string; payload: { filterFields: CompletionFilterFieldsModel } },
+      { payload }: { type: string; payload: { filterFields: FilterFieldsModel } },
     ) {
       return { ...state, filterFields: payload.filterFields };
     },
@@ -65,12 +71,57 @@ const Model = {
     ) {
       const response = yield call(completionService.fetchCompletionPagination, payload.data);
       const { data } = response;
+      console.log(data);
+      const { list } = data;
+      console.log(list);
       yield put({
         type: 'save',
         payload: {
           data,
         },
       });
+    },
+  },
+
+  subscriptions: {
+    setup({
+      dispatch,
+      history,
+      data,
+    }: {
+      dispatch: Dispatch<any>;
+      history: any;
+      data: PaginationParamsModel;
+    }) {
+      return history.listen(
+        ({ pathname, query }: { pathname: string; query: { [k: string]: string } }) => {
+          if (pathname === '/teacher/homework/completion') {
+            dispatch({
+              type: 'initState',
+              payload: {
+                state: initState,
+              },
+            });
+
+            const { homeworkId, courseId } = query;
+            console.log(query);
+
+            dispatch({
+              type: 'fetchCompletionPagination',
+              payload: {
+                data: {
+                  homeworkId,
+                  courseId,
+                  page: 1,
+                  pageSize: 8,
+                  total: 10,
+                  classId: 1,
+                },
+              },
+            });
+          }
+        },
+      );
     },
   },
 };

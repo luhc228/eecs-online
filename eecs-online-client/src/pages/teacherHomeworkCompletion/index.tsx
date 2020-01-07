@@ -31,28 +31,9 @@ const filterFormConfig: FormItemComponentProps[] = [
   },
   {
     label: '班级',
-    name: 'studentClass',
+    name: 'classId',
     component: FORM_COMPONENT.Input,
     required: false,
-  },
-  {
-    label: '迟交',
-    name: 'delay',
-    component: FORM_COMPONENT.Select,
-    required: false,
-     props: {
-       selectMode: 'multilple',
-     },
-    datasource: [
-      {
-        value: 'delay',
-        label: '否',
-      },
-      {
-        value: 'not_delay',
-        label: '是',
-      }
-    ],
   },
 ]
 
@@ -73,11 +54,19 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
   } = props;
 
   useEffect(() => {
+    if (!filterFields.classId) {
+      return;
+    }
     dispatch({
       type: 'teacherHomeworkCompletion/fetchCompletionPagination',
-      payload: { data: { ...PAGINATION_CONFIGS } },
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...filterFields,
+        }
+      },
     })
-  }, []);
+  }, [!filterFields.classId]);
 
   const handleEdit = (record: CompletionListItem) => {
     umiRouter.push({
@@ -91,7 +80,9 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
   const columns: ColumnProps<CompletionListItem>[] = [
     { title: '姓名', dataIndex: 'studentName' },
     { title: '学号', dataIndex: 'studentId' },
-    { title: '是否迟交', dataIndex: 'delay' },
+    { title: '作业名称', dataIndex: 'homeworkName' },
+    { title: '课程名称', dataIndex: 'courseName' },
+    { title: '班级名称', dataIndex: 'className' },
     { title: '分数', dataIndex: 'homeworkScore' },
     {
       title: '操作',

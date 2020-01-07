@@ -1,8 +1,8 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import {
-  HomeworkTableData,
-  HomeworkFieldsModel,
+  TeacherHomeworkTableData,
+  TeacherHomeworkFilterFieldsModel,
   PaginationParamsModel,
 } from '@/interfaces/teacherHomework';
 import * as homeworkService from '../services';
@@ -10,8 +10,8 @@ import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
 import { Effect } from '@/interfaces/reduxState';
 
 export interface StateType {
-  data: HomeworkTableData;
-  filterFields: HomeworkFieldsModel;
+  data: TeacherHomeworkTableData;
+  filterFields: TeacherHomeworkFilterFieldsModel;
 }
 
 export interface ModelType {

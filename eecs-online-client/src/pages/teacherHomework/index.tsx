@@ -82,7 +82,8 @@ const Homework: React.FC<HomeworkProps> = props => {
     const handleCompletion = (record: TeacherHomeworkListItem) => {
         umiRouter.push({
             pathname: '/teacher/homework/completion',
-            query:{homeworkId: record.homeworkId},})
+            query:{homeworkId: record.homeworkId,
+              courseId: record.courseId},})
     }
 
     const columns: ColumnProps<TeacherHomeworkListItem>[] = [

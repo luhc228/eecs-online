@@ -1,4 +1,7 @@
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
+import { Dispatch } from 'redux';
+// import { Input } from 'antd';
 import { StateType } from '../../models';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@/enums';
@@ -6,14 +9,17 @@ import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interf
 import { getOption } from '@/utils';
 import styles from './index.less';
 import { HomeworkDetailListItem } from '@/interfaces/teacherHomeworkDetail';
-import { Input } from 'antd';
+import HomeworkFilter from '@/pages/studentHomework/components/HomeworkFilter';
 
 export interface QuestionFormProps {
   teacherHomeworkDetail: StateType;
 }
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail }) => {
-  const { data, homeworkFields } = teacherHomeworkDetail;
+  const { data, homeworkFields, filterFields } = teacherHomeworkDetail;
+  console.log(data);
+  console.log(HomeworkFilter);
+  console.log(filterFields);
   const { list } = data;
   const generateFormConfig = (): FormItemComponentProps[] => {
     let formConfig: FormItemComponentProps[] = [];

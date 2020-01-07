@@ -20,7 +20,7 @@ export default [
       { path: '/teacher/homework/create', component: './teacherHomeworkEdit' },
       { path: '/teacher/homework/edit', component: './teacherHomeworkEdit' },
       { path: '/teacher/homework/completion', component: './teacherHomeworkCompletion' },
-      // { path: '/teacher/homework/completion/edit', component: './teacherHomeworkDetail' },
+      { path: '/teacher/homework/completion/edit', component: './teacherHomeworkDetail' },
       { path: '/teacher/userInfo', component: './teacherInfo' },
       { path: '/teacher', redirect: '/teacher/class' },
     ],
