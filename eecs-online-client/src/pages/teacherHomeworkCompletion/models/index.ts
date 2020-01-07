@@ -1,6 +1,6 @@
-import { Reducer } from 'redux';
+import React from 'react';
+import { Reducer, Dispatch } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import umiRouter from 'umi/router';
 import {
   CompletionTableData,
   FilterFieldsModel,

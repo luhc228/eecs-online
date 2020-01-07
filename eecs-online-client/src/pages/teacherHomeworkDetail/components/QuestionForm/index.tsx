@@ -9,7 +9,6 @@ import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interf
 import { getOption } from '@/utils';
 import styles from './index.less';
 import { HomeworkDetailListItem } from '@/interfaces/teacherHomeworkDetail';
-import HomeworkFilter from '@/pages/studentHomework/components/HomeworkFilter';
 
 export interface QuestionFormProps {
   teacherHomeworkDetail: StateType;
