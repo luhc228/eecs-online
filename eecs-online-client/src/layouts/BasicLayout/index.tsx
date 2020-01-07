@@ -18,7 +18,7 @@ interface BasicLayoutProps extends RoutingType {
 
 const BasicLayout: React.FC<BasicLayoutProps> = ({ collapsed, children, location }) => (
   <Layout style={{ display: 'flex' }}>
-    <Sider trigger={null} collapsible width={250} collapsed={collapsed} collapsedWidth={80}>
+    <Sider trigger={null} collapsible={true} width={250} collapsed={collapsed} collapsedWidth={80}>
       <div className={styles.logo} />
       <NavMenu />
     </Sider>

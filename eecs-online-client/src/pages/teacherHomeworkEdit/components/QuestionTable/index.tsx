@@ -92,7 +92,7 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ teacherHomeworkEdit, disp
       dataSource={questionList}
       targetKeys={targetKeys}
       disabled={false}
-      showSearch
+      showSearch={true}
       rowKey={(record: QuestionDetailModel) => record.questionId.toString()}
       onChange={handleChange}
       filterOption={(inputValue, item) => (
