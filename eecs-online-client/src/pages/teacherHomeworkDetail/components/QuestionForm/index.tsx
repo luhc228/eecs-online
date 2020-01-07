@@ -16,9 +16,8 @@ export interface QuestionFormProps {
 }
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail }) => {
-  const { data, homeworkFields, filterFields } = teacherHomeworkDetail;
+  const { data, filterFields } = teacherHomeworkDetail;
   console.log(data);
-  console.log(HomeworkFilter);
   console.log(filterFields);
   const { list } = data;
   const generateFormConfig = (): FormItemComponentProps[] => {
@@ -217,7 +216,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail }) =>
   return (
     <CustomForm
       layout="vertical"
-      values={homeworkFields}
+      values={filterFields}
       formTypes={CUSTOM_FORM_TYPES.OneColumn}
       onFieldsChange={() => {}}
       formConfig={generateFormConfig()}

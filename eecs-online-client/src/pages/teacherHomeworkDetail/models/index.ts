@@ -11,7 +11,7 @@ import { Effect } from '@/interfaces/reduxState';
 
 export interface StateType {
   data: HomeworkDetailData;
-  homeworkFields: any;
+  // homeworkFields: any;
   filterFields: FilterFieldsModel;
 }
 
@@ -24,6 +24,10 @@ const initState = {
     studentId: null,
     homeworkId: null,
     list: [],
+  },
+  filterFields: {
+    studentId: 1,
+    homeworkId: 1,
   },
 };
 
@@ -48,18 +52,6 @@ const TeacherHomeworkDetail = {
     initState(state: StateType, { payload }: { type: string; payload: { state: StateType } }) {
       return { ...payload.state };
     },
-
-    // changeTeacherHomeworkDetailfoFields(
-    //   state: StateType,
-    //   { payload }: { type: string; payload: { data: HomeworkDetailData } },
-    // ) {
-    //   // console.log(payload.data);
-    //   return {
-    //     ...state,
-    //     studentInfoFields: payload.data,
-    //     when: true,
-    //   };
-    // },
 
     changePromptStatus(
       state: StateType,
@@ -94,36 +86,6 @@ const TeacherHomeworkDetail = {
       });
     },
 
-    // *homeworkScoreEdit(
-    //   {
-    //     payload,
-    //   }: {
-    //     type: string;
-    //     payload: {
-    //       homeworkId: number;
-    //       studentId: string;
-    //       questionId: string;
-    //       questionScore: string;
-    //     };
-    //   },
-    //   { call, put }: EffectsCommandMap,
-    // ) {
-    //   const response = yield call(
-    //     services.homeworkScoreEdit,
-    //     payload.homeworkId,
-    //     payload.studentId,
-    //     payload.questionId,
-    //     payload.questionScore,
-    //   );
-    //   const { data } = response;
-    //   yield put({
-    //     type: 'save',
-    //     payload: {
-    //       data,
-    //     },
-    //   });
-    // },
-
     /**
      * 更新试题
      */
@@ -156,19 +118,15 @@ const TeacherHomeworkDetail = {
               },
             });
 
-            const { homeworkId } = query;
-            const userInfo = userUtils.getUserInfo();
-            if (Object.keys(userInfo).length !== 0 && userInfo.studentId && homeworkId) {
-              const { studentId } = userInfo;
-
-              dispatch({
-                type: 'fetchHomeworkCondition',
-                payload: {
-                  homeworkId,
-                  studentId,
-                },
-              });
-            }
+            const { homeworkId, studentId } = query;
+            // console.log(query);
+            dispatch({
+              type: 'fetchHomeworkCondition',
+              payload: {
+                homeworkId,
+                studentId,
+              },
+            });
           }
         },
       );
