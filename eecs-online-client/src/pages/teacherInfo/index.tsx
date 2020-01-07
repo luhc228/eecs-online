@@ -73,7 +73,7 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={loading}
           // TODO: bug: when add this fieldsChange function the error will disappear
-          onFieldsChange={() => {}}
+          onFieldsChange={() => { }}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         />

@@ -25,6 +25,10 @@ export enum FORM_COMPONENT {
   Checkbox = 'Checkbox',
   // 代码组件
   CodeEditor = 'CodeEditor',
+  // RangePicker 日期范围选择 可通过添加showTime增加选择时间
+  RangePicker = 'RangePicker',
+  // DatePicker 选择日期
+  DatePicker = 'DatePicker',
 }
 
 export enum FORM_LAYOUTS {

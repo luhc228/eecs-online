@@ -23,7 +23,7 @@ const initState = {
   },
   when: true,
   classIdDataSource: [],
-}
+};
 
 export interface ModelType {
   namespace: string;
@@ -33,8 +33,8 @@ export interface ModelType {
     changePromptStatus: Reducer<StateType>;
   };
   effects: {
-    createCourse: Effect<StateType>,
-    updateCourse: Effect<StateType>,
+    createCourse: Effect<StateType>;
+    updateCourse: Effect<StateType>;
   };
 }
 
@@ -44,55 +44,54 @@ const Model = {
   state: initState,
 
   reducers: {
-    initState(
-      state: StateType,
-      { payload }: { type: string; payload: { state: StateType } }
-    ) {
-      return { ...payload.state }
+    initState(state: StateType, { payload }: { type: string; payload: { state: StateType } }) {
+      return { ...payload.state };
     },
 
     changeCourseFields(
       state: StateType,
-      { payload }: { type: string; payload: { data: CourseFieldsModel } }
+      { payload }: { type: string; payload: { data: CourseFieldsModel } },
     ) {
       return {
         ...state,
         courseFields: payload.data,
-        when: true
-      }
+        when: true,
+      };
     },
 
     changePromptStatus(
       state: StateType,
-      { payload }: { type: string; payload: { when: boolean } }
+      { payload }: { type: string; payload: { when: boolean } },
     ) {
-      return { ...state, when: payload.when }
+      return { ...state, when: payload.when };
     },
 
     saveClassIdDataSource(
       state: StateType,
-      { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } }
+      { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } },
     ) {
-      return { ...state, classIdDataSource: payload.data }
+      return { ...state, classIdDataSource: payload.data };
     },
   },
 
   effects: {
     /**
-    * 获取所有虚拟班级信息
-    */
+     * 获取所有虚拟班级信息
+     */
     *fetchvirClassList(
       { payload }: { type: string; payload: { teacherId: string } },
-      { call, put }: EffectsCommandMap
+      { call, put }: EffectsCommandMap,
     ) {
       const response = yield call(fetchVirClassList, payload.teacherId);
       if (!response) {
         return;
       }
-      const { data: { list } } = response;
+      const {
+        data: { list },
+      } = response;
       const classIdDataSource = list.map((item: any) => ({
         label: item.className,
-        value: item.classId
+        value: item.classId,
       }));
 
       yield put({
@@ -100,7 +99,7 @@ const Model = {
         payload: {
           data: classIdDataSource,
         },
-      })
+      });
     },
 
     /**
@@ -108,7 +107,7 @@ const Model = {
      */
     *createCourse(
       { payload }: { type: string; payload: { data: CourseFieldsModel } },
-      { call, put }: EffectsCommandMap
+      { call, put }: EffectsCommandMap,
     ) {
       yield call(courseEditService.createCourse, payload.data);
       yield put({
@@ -116,16 +115,16 @@ const Model = {
         payload: {
           when: false,
         },
-      })
+      });
       router.goBack();
     },
 
     /**
-    * 更新课程信息
-    */
+     * 更新课程信息
+     */
     *updateCourse(
       { payload }: { type: string; payload: { data: CourseFieldsModel } },
-      { call, put }: EffectsCommandMap
+      { call, put }: EffectsCommandMap,
     ) {
       yield call(courseEditService.updateCourse, payload.data);
       yield put({
@@ -133,22 +132,23 @@ const Model = {
         payload: {
           when: false,
         },
-      })
+      });
       router.goBack();
     },
   },
 
   subscriptions: {
-    setup(
-      { dispatch, history }: { dispatch: Dispatch<any>, history: any }
-    ) {
+    setup({ dispatch, history }: { dispatch: Dispatch<any>; history: any }) {
       return history.listen(({ pathname }: { pathname: string }) => {
-        if (pathname === '/teacher/course/create' || pathname === '/teacher/course/edit') {
+        if (
+          pathname === '/teacher/course/create'
+          // || pathname === '/teacher/course/edit'
+        ) {
           dispatch({
             type: 'initState',
             payload: {
-              state: initState
-            }
+              state: initState,
+            },
           });
 
           const userInfo = userUtils.getUserInfo();
@@ -156,14 +156,14 @@ const Model = {
             dispatch({
               type: 'fetchvirClassList',
               payload: {
-                teacherId: userInfo.teacherId
-              }
+                teacherId: userInfo.teacherId,
+              },
             });
           }
         }
       });
     },
   },
-}
+};
 
 export default Model;

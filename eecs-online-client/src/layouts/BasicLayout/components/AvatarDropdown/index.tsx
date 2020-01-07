@@ -71,10 +71,17 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
   );
 };
 
-const mapStateToProps = ({ user }: ConnectState) =>
-  // TODO:
-  ({
+// const mapStateToProps = ({ user }: ConnectState) =>
+//   // TODO:
+//   ({
+//     currentUser: user.currentUser,
+//   });
+
+const mapStateToProps = ({ user }: ConnectState) => {
+  console.log(user);
+  return {
     currentUser: user.currentUser,
-  });
+  };
+};
 
 export default connect(mapStateToProps)(AvatarDropdown);

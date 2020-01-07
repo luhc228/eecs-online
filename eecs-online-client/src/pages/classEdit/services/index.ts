@@ -6,13 +6,15 @@ import { StudentDetailModel, ClassDetailModel } from '@/interfaces/classEdit';
  * @param data
  */
 export function fetchStudentDetail(data: StudentDetailModel) {
-  return request.post('/student/detail', {
-    data,
+  return request.get('/student/detail', {
+    params: {
+      data,
+    }
   })
 }
 
 /**
- * 获取学生信息列表
+ * 获取虚拟班级信息详情
  * @param data
  */
 export function fetchClassDetail(classId: number) {

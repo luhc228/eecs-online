@@ -1,10 +1,12 @@
+import { QUESTION_TYPE } from '@/enums';
+
 export interface QuestionFieldsModel {
   // 试题id
   questionId?: number;
   // 课程id
   courseId: number;
   // 题目类型
-  questionType: number;
+  questionType: QUESTION_TYPE;
   // 题目分数
   questionScore: number;
   // 题目内容

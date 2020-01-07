@@ -1,13 +1,14 @@
 import request from '@/utils/request';
-import { QuestionDetailModel } from '@/interfaces/teacherHomeworkEdit';
 
 /**
  * 获取题目信息列表
- * @param data
+ * @param courseId
  */
-export function fetchQuestionDetail(data: QuestionDetailModel) {
-  return request.post('/question_lib/teacher/pagination', {
-    data,
+export function fetchCourseQuestionList(courseId: number) {
+  return request.get('/question_lib/question/teacher/get', {
+    params: {
+      courseId
+    },
   });
 }
 
@@ -16,8 +17,8 @@ export function fetchQuestionDetail(data: QuestionDetailModel) {
  * @param data
  */
 export function fetchTeacherHomeworkDetail(homeworkId: number) {
-  return request.post('/homework/teacher/get', {
-    data: {
+  return request.get('/homework/teacher/get', {
+    params: {
       homeworkId,
     },
   });
