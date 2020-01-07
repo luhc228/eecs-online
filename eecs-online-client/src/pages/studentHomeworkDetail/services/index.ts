@@ -8,6 +8,6 @@ export function fetchHomeworkCondition(homeworkId: number, studentId: string) {
     params: {
       homeworkId,
       studentId,
-    }
-  })
+    },
+  });
 }

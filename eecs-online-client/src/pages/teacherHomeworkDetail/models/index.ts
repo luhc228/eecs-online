@@ -40,6 +40,7 @@ export interface ModelType {
   };
   effects: {
     updateStudentInfo: Effect<StateType>;
+    fetchHomeworkCondition: Effect<StateType>;
   };
 }
 

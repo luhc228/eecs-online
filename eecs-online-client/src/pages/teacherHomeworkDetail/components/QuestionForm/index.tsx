@@ -12,13 +12,26 @@ import { HomeworkDetailListItem } from '@/interfaces/teacherHomeworkDetail';
 
 export interface QuestionFormProps {
   teacherHomeworkDetail: StateType;
+  dispatch: Dispatch<any>;
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, dispatch }) => {
   const { data, filterFields } = teacherHomeworkDetail;
   console.log(data);
   console.log(filterFields);
   const { list } = data;
+
+  useEffect(() => {
+    dispatch({
+      type: 'teacherHomeworkDetail/fetchHomeworkCondition',
+      payload: {
+        data: {
+          ...filterFields,
+        },
+      },
+    });
+  }, []);
+
   const generateFormConfig = (): FormItemComponentProps[] => {
     let formConfig: FormItemComponentProps[] = [];
 
@@ -33,8 +46,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail }) =>
           answer,
           submitAnswer,
           questionScore,
-          score,
           contentImage,
+          questionState,
         } = item;
         switch (questionType) {
           case QUESTION_TYPE.judge: {

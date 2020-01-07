@@ -17,8 +17,8 @@ export interface HomeworkDetailListItem {
   submitAnswer?: any;
   // 题目分数
   questionScore: number;
-  // 学生得分
-  score: number;
+  // 题目状态
+  questionState: boolean;
 }
 
 export interface FilterFieldsModel {
@@ -33,10 +33,10 @@ export interface DetailEditModel {
   questionScore?: string;
 }
 
-export interface HomeworkDetailData extends FilterFieldsModel {
+export interface HomeworkDetailData {
   homeworkName: string;
   homeworkScore: number;
-  finalScore: number;
+  studentId: number;
   studentName: string;
   list: HomeworkDetailListItem[];
 }
