@@ -1,7 +1,7 @@
 /**
  * 教师编辑作业信息题目——题目列表
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import RouterPrompt from '@/components/RouterPrompt';
@@ -32,7 +32,6 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
 }) => {
   const {
     when,
-    homeworkDetailFields,
     homeworkFormFields,
     courseIdDataSource,
     selectQuestionList
@@ -62,9 +61,6 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
       component: FORM_COMPONENT.Select,
       required: true,
       datasource: courseIdDataSource,
-      props: {
-        onChange: handleCourseIdSelectChange
-      }
     },
     {
       label: '作业描述',
@@ -141,12 +137,20 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
       dispatch({
         type: 'teacherHomeworkEdit/updateTeacherHomework',
         payload: {
-          data: values
+          data: {
+            homeworkId,
+            ...values
+          }
         }
       })
     }
   }
 
+  useEffect(() => {
+    if (homeworkFormFields.courseId) {
+      handleCourseIdSelectChange(homeworkFormFields.courseId);
+    }
+  }, [homeworkFormFields.courseId])
   return (
     <>
       <RouterPrompt when={when} />

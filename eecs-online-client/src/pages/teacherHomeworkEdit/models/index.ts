@@ -1,5 +1,6 @@
 import { Dispatch, EffectsCommandMap } from 'dva';
 import router from 'umi/router';
+import moment from 'moment';
 import * as teacherHomeworkEditService from '../services';
 import { NOTIFICATION_TYPE } from '@/enums';
 import {
@@ -72,7 +73,7 @@ const Model = {
 
     changeTeacherHomeworkFormFields(
       state: StateType,
-      { payload }: { payload: { data: TeacherHomeworkFormFields[] } }
+      { payload }: { payload: { data: TeacherHomeworkFormFields } }
     ) {
       return {
         ...state,
@@ -150,18 +151,25 @@ const Model = {
       { payload }: { type: string, payload: { homeworkId: number } },
       { call, put }: EffectsCommandMap
     ) {
-      const response = yield call(teacherHomeworkEditService.fetchTeacherHomeworkDetail, payload.homeworkId);
-      const { homeworkName, questionList } = response.data;
+      const response = yield call(
+        teacherHomeworkEditService.fetchTeacherHomeworkDetail,
+        payload.homeworkId
+      );
+      const { homework: { homeworkQuestionList, ...homeworkFormFields } } = response.data;
+      const newHomeworkFormFields = {
+        ...homeworkFormFields,
+        startAt: moment(homeworkFormFields.startAt, 'YYYY-MM-DD HH:mm:ss'),
+        endAt: moment(homeworkFormFields.endAt, 'YYYY-MM-DD HH:mm:ss')
+      };
 
       yield put({
-        type: 'changeTeacherHomeworkDetailFields',
+        type: 'changeTeacherHomeworkFormFields',
         payload: {
-          data: {
-            homeworkName
-          }
+          data: newHomeworkFormFields
         }
       });
-      const targetKeys = questionList.map((item: any) => item.questionId);
+      const targetKeys = homeworkQuestionList.map((item: any) => String(item));
+      console.log(targetKeys);
       yield put({
         type: 'changeTargetKeys',
         payload: {
@@ -224,16 +232,6 @@ const Model = {
                 state: initState
               }
             });
-
-            // dispatch({
-            //   type: 'fetchQuestionDetail',
-            //   payload: {
-
-            //     page: 1,
-            //     pageSize: 8
-
-            //   }
-            // });
 
             const userInfo = userUtils.getUserInfo();
             if (Object.keys(userInfo).length !== 0) {

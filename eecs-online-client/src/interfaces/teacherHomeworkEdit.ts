@@ -24,6 +24,8 @@ export interface QuestionDetailModel {
 export interface TeacherHomeworkFormFields {
   // 作业id
   homeworkId?: number;
+  // 课程id
+  courseId: number;
   // 作业名称
   homeworkName: string;
   // 作业总分
