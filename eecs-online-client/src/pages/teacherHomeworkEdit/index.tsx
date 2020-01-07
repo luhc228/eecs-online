@@ -3,7 +3,7 @@
  */
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import RouterPrompt from '@/components/RouterPrompt';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT, QUESTION_TYPE } from '@/enums';
@@ -48,6 +48,10 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
     })
   };
 
+  function disabledDate(current: Moment) {
+    return current && current < moment().subtract(1, 'day').endOf('day');
+  }
+
   const formConfig: FormItemComponentProps[] = [
     {
       label: '作业名称',
@@ -74,7 +78,9 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
       component: FORM_COMPONENT.DatePicker,
       props: {
         showTime: true,
-        format: 'YYYY-MM-DD HH:mm:ss'
+        format: 'YYYY-MM-DD HH:mm:ss',
+        disabledDate,
+        // disabledTime: disabledDateTime
       },
       required: true,
     },
@@ -84,7 +90,9 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
       component: FORM_COMPONENT.DatePicker,
       props: {
         showTime: true,
-        format: 'YYYY-MM-DD HH:mm:ss'
+        format: 'YYYY-MM-DD HH:mm:ss',
+        disabledDate,
+        // disabledTime: disabledDateTime
       },
       required: true,
     },

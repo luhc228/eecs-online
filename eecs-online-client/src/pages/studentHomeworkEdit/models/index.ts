@@ -129,7 +129,10 @@ const studentHomeworkEdit = {
         payload.studentId
       );
 
-      const { data } = response;
+      const { data, success } = response;
+      if (!success) {
+        return;
+      }
       yield put({
         type: 'saveHomeworkDetail',
         payload: {
@@ -155,7 +158,10 @@ const studentHomeworkEdit = {
         payload.studentId
       );
 
-      const { data } = response;
+      const { data, success } = response;
+      if (!success) {
+        return;
+      }
       const { list } = data;
       const submitAnswerField: { [k: string]: any } = {};
 
