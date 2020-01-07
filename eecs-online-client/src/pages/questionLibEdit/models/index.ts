@@ -126,7 +126,15 @@ const questionLibEdit = {
     ) {
       const response = yield call(questionLibEditServices.fetchQuestionDetail, payload.questionId);
       const { data } = response;
-      const { answer, options }: { answer: string, options: string } = data;
+      const {
+        answer,
+        options,
+        contentImage
+      }: {
+        answer: string,
+        options: string,
+        contentImage: string
+      } = data;
 
       let newQuestionFields = data;
       if (answer) {
@@ -134,6 +142,20 @@ const questionLibEdit = {
         newQuestionFields = {
           ...newQuestionFields,
           answer: newAnswer,
+        }
+      }
+
+      if (contentImage && contentImage !== '') {
+        const newContentImage = contentImage.split('|').map((item: string) => ({
+          url: item,
+          uid: item,
+          status: 'done',
+          response: { success: true, imageUrl: item },
+        }))
+
+        newQuestionFields = {
+          ...newQuestionFields,
+          contentImage: newContentImage,
         }
       }
 

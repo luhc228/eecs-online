@@ -7,7 +7,6 @@ import {
   QuestionDetailModel,
   TeacherHomeworkFormFields,
   TeacherHomeworkEditDetail,
-  SelectQuestionListItem
 } from '@/interfaces/teacherHomeworkEdit';
 import showNotification from '@/utils/showNotification';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -25,7 +24,7 @@ export interface StateType {
   // 作业详情
   homeworkDetailFields: TeacherHomeworkEditDetail;
   // 选择的作业题目列表
-  selectQuestionList: SelectQuestionListItem[];
+  selectQuestionList: number[];
 }
 
 const initState = {
@@ -83,7 +82,7 @@ const Model = {
 
     changeSelectQuestionList(
       state: StateType,
-      { payload }: { payload: { data: SelectQuestionListItem[] } }
+      { payload }: { payload: { data: number[] } }
     ) {
       return {
         ...state,
@@ -169,11 +168,18 @@ const Model = {
         }
       });
       const targetKeys = homeworkQuestionList.map((item: any) => String(item));
-      console.log(targetKeys);
+
       yield put({
         type: 'changeTargetKeys',
         payload: {
           targetKeys
+        }
+      })
+
+      yield put({
+        type: 'changeSelectQuestionList',
+        payload: {
+          data: homeworkQuestionList
         }
       })
     },

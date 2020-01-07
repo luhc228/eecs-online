@@ -7,6 +7,8 @@ export interface ImageUploadProps extends FormComponentProps {
   name?: string;
   multiple?: boolean;
   action?: string;
+  values?: any;
+  fileList?: any;
   onChange?: () => void;
 }
 
@@ -36,6 +38,7 @@ const ImageUpload = forwardRef<FormComponentProps, ImageUploadProps>(
     return (
       <Spin tip="Uoloading..." spinning={loading}>
         <Upload
+          fileList={props.fileList}
           onChange={handleChange}
           listType="picture"
           {...props}

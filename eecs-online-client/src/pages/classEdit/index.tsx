@@ -59,16 +59,16 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
     }
   }
 
-  // const handleFieldsChange = (allFields: object) => {
-  //   dispatch({
-  //     type: 'classEdit/changeClassDetailFields',
-  //     payload: {
-  //       data: {
-  //         ...allFields
-  //       }
-  //     }
-  //   })
-  // }
+  const handleFieldsChange = (allFields: object) => {
+    dispatch({
+      type: 'classEdit/changeClassDetailFields',
+      payload: {
+        data: {
+          ...allFields
+        }
+      }
+    })
+  }
 
   return (
     <>
@@ -80,7 +80,7 @@ const ClassEdit: React.FC<ClassEditProps> = ({ classEdit, location, dispatch }) 
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={false}
           // TODO: bug: when add this fieldsChange function the error will disappear
-          onFieldsChange={() => { }}
+          onFieldsChange={handleFieldsChange}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         >
