@@ -17,8 +17,8 @@ export function fetchCourseQuestionList(courseId: number) {
  * @param data
  */
 export function fetchTeacherHomeworkDetail(homeworkId: number) {
-  return request.post('/homework/teacher/get', {
-    data: {
+  return request.get('/homework/teacher/get', {
+    params: {
       homeworkId,
     },
   });
