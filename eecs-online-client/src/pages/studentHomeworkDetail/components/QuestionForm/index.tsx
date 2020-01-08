@@ -53,12 +53,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 label: (
                   <div className={styles.label}>
                     <span>【判断题】{content}（{questionScore}分）</span>
-                    <div style={{ marginLeft: 70 }}>
-                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                    <div>
+                      <span style={{ color: 'red' }}>正确答案：{answer === JUDGE_VALUE.InCorrect ? '错误' : '正确'}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
-                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
@@ -92,12 +92,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 label: (
                   <div className={styles.label}>
                     <span>【单选题】{content}（{questionScore}分）</span>
-                    <div style={{ marginLeft: 70 }}>
+                    <div>
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
-                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
@@ -134,12 +134,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 label: (
                   <div className={styles.label}>
                     <span>【多选题】{content}（{questionScore}分）</span>
-                    <div style={{ marginLeft: 70 }}>
+                    <div>
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
-                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
@@ -165,12 +165,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 label: (
                   <div className={styles.label}>
                     <span>【编程题】{content}（{questionScore}分）</span>
-                    <div style={{ marginLeft: 70 }}>
+                    <div>
                       <span style={{ color: 'red' }}>正确答案：{answer}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
-                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
