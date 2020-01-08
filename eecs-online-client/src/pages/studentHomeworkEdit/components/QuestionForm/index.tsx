@@ -45,8 +45,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           label: (
             <>
               <div>【判断题】 {item.content} （{item.questionScore}分）</div>
-              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
-                <div>
+              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string, index: number) => (
+                <div key={String(index)}>
                   <img src={imgSrc} alt="questionImage" />
                 </div>
               ))}
@@ -75,8 +75,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           label: (
             <>
               <div>【单选题】 {item.content} （{item.questionScore}分）</div>
-              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
-                <div>
+              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string, index: number) => (
+                <div key={String(index)}>
                   <img src={imgSrc} alt="questionImage" />
                 </div>
               ))}
@@ -105,11 +105,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           label: (
             <>
               <div>【多选题】 {item.content} （{item.questionScore}分）</div>
-              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
-                <div>
+              {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string, index: number) => (
+                <div key={String(index)}>
                   <img src={imgSrc} alt="questionImage" />
                 </div>
-              ))}
+              ))
+              }
             </>
           ),
           name: `multiple${item.questionId}`,
@@ -127,8 +128,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         label: (
           <>
             <div>【编程题】 {item.content} （{item.questionScore}分）</div>
-            {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string) => (
-              <div>
+            {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string, index: number) => (
+              <div key={String(index)}>
                 <img src={imgSrc} alt="questionImage" />
               </div>
             ))}
@@ -155,6 +156,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   }
 
   const handleSubmit = (allFields: object) => {
+    console.log(allFields);
     dispatch({
       type: 'studentHomeworkEdit/submitHomeworkAnswer',
       payload: {

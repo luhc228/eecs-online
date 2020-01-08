@@ -179,6 +179,8 @@ const studentHomeworkEdit = {
             let formatAnswer;
             if (typeof submitAnswer === 'string' && submitAnswer.includes('|')) {
               formatAnswer = submitAnswer.split('|');
+            } else if (questionType === QUESTION_TYPE.judge) {
+              formatAnswer = Number(submitAnswer)
             } else {
               formatAnswer = submitAnswer;
             }
@@ -294,7 +296,7 @@ const studentHomeworkEdit = {
       const response = yield call(
         services.submitAnswer,
         {
-          homeworkId,
+          homeworkId: Number(homeworkId),
           studentId,
           list,
         }
