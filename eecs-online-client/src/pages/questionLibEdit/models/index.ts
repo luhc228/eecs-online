@@ -234,7 +234,7 @@ const questionLibEdit = {
           },
         })
 
-        showNotification('通知', '添加题目成功', NOTIFICATION_TYPE.success);
+        showNotification('通知', '更新题目成功', NOTIFICATION_TYPE.success);
 
         router.goBack();
       }
