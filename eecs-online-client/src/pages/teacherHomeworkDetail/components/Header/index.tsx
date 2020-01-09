@@ -10,20 +10,20 @@ export interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ teacherHomeworkDetail }) => {
   const { data } = teacherHomeworkDetail;
   console.log(data);
-  const { homeworkScore, homeworkName, studentName, studentId } = data;
+  const { homeworkName, homeworkScore, finalScore } = data;
 
   return (
     <div className={styles.header}>
       <div>
         <span>作业名称：{homeworkName}</span>
       </div>
-      <div>
+      {/* <div>
         <span>学生姓名：{studentName}</span>
         <span>学生学号：{studentId}</span>
-      </div>
+      </div> */}
       <div>
         <span>作业总分：{homeworkScore}分</span>
-        <span style={{ marginLeft: 20 }}>学生得分：{homeworkScore}分</span>
+        <span style={{ marginLeft: 20 }}>学生得分：{finalScore}分</span>
       </div>
     </div>
   );

@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 // import { Input } from 'antd';
+import { Input, Button } from 'antd';
 import { StateType } from '../../models';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@/enums';
 import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
 import { getOption } from '@/utils';
 import styles from './index.less';
-import { HomeworkDetailListItem } from '@/interfaces/teacherHomeworkDetail';
+import { HomeworkDetailListItem, DetailEditModel } from '@/interfaces/teacherHomeworkDetail';
 
 export interface QuestionFormProps {
   teacherHomeworkDetail: StateType;
@@ -17,20 +18,27 @@ export interface QuestionFormProps {
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, dispatch }) => {
   const { data, filterFields } = teacherHomeworkDetail;
-  console.log(data);
-  console.log(filterFields);
+  // console.log(data);
+  // console.log(filterFields);
   const { list } = data;
 
-  useEffect(() => {
+  function handleEdit(allFields: StateType) {
     dispatch({
-      type: 'teacherHomeworkDetail/fetchHomeworkCondition',
+      type: 'teacherHomeworkDetail/updateTeacherHomeworkDetail',
       payload: {
-        data: {
-          ...filterFields,
-        },
+        allFields,
       },
     });
-  }, []);
+  }
+
+  function handleSubmit() {
+    dispatch({
+      type: 'teacherHomeworkDetail/changeHomeworkFields',
+      payload: {
+        data,
+      },
+    });
+  }
 
   const generateFormConfig = (): FormItemComponentProps[] => {
     let formConfig: FormItemComponentProps[] = [];
@@ -47,7 +55,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
           submitAnswer,
           questionScore,
           contentImage,
-          questionState,
+          status,
+          score,
         } = item;
         switch (questionType) {
           case QUESTION_TYPE.judge: {
@@ -70,9 +79,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    {/* <Input>学生得分: {score}分</Input> */}
                     <span style={{ marginLeft: 10, color: 'red' }}>学生得分：{score}分</span>
                   </div>
+                  <Input placeholder='score'>修改得分</Input>
                   {contentImage &&
                     contentImage !== '' &&
                     contentImage.split('|').map((imgSrc: string) => (
@@ -232,6 +241,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
       formTypes={CUSTOM_FORM_TYPES.OneColumn}
       onFieldsChange={() => {}}
       formConfig={generateFormConfig()}
+      onSubmit={handleSubmit}
     />
   );
 };

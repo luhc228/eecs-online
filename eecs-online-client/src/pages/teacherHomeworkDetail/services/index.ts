@@ -3,9 +3,12 @@ import { FilterFieldsModel, DetailEditModel } from '@/interfaces/teacherHomework
 /**
  * 获取学生题目情况信息
  */
-export function fetchHomeworkCondition(data: FilterFieldsModel) {
+export function fetchHomeworkCondition(filterFields: FilterFieldsModel) {
+  console.log('services', filterFields);
   return request.get('/homework_condition/teacher/detail', {
-    data,
+    params: {
+      filterFields,
+    },
   });
 }
 

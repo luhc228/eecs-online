@@ -8,27 +8,32 @@ import {
   DetailEditModel,
 } from '@/interfaces/teacherHomeworkDetail';
 import { Effect } from '@/interfaces/reduxState';
+import { HomeworkDetailListItem } from '@/interfaces/studentHomeworkDetail';
 
 export interface StateType {
   data: HomeworkDetailData;
   // homeworkFields: any;
   filterFields: FilterFieldsModel;
+  when: boolean;
 }
 
 const initState = {
   data: {
+    total: null,
     homeworkName: '',
     homeworkScore: null,
     finalScore: null,
-    studentName: null,
-    studentId: null,
-    homeworkId: null,
+    // studentName: null,
+    // studentId: null,
+    // homeworkId: null,
     list: [],
+    questionScoreList: [],
   },
   filterFields: {
-    studentId: 1,
-    homeworkId: 1,
+    studentId: null,
+    homeworkId: null,
   },
+  when: false,
 };
 
 export interface ModelType {
@@ -54,6 +59,18 @@ const TeacherHomeworkDetail = {
       return { ...payload.state };
     },
 
+    changeHomeworkFields(
+      state: StateType,
+      { payload }: { type: string; payload: { data: StateType } },
+    ) {
+      console.log(payload.data);
+      return {
+        ...state,
+        data: payload.data,
+        when: true,
+      };
+    },
+
     changePromptStatus(
       state: StateType,
       { payload }: { type: string; payload: { when: boolean } },
@@ -77,8 +94,11 @@ const TeacherHomeworkDetail = {
       { payload }: { type: string; payload: { filterFields: FilterFieldsModel } },
       { call, put }: EffectsCommandMap,
     ) {
+      console.log('filterFields', payload.filterFields);
       const response = yield call(services.fetchHomeworkCondition, payload.filterFields);
+      console.log('response', response);
       const { data } = response;
+      console.log('data', data);
       yield put({
         type: 'save',
         payload: {
@@ -111,7 +131,7 @@ const TeacherHomeworkDetail = {
     setup({ dispatch, history }: { dispatch: Dispatch<any>; history: any }) {
       return history.listen(
         ({ pathname, query }: { pathname: string; query: { [k: string]: string } }) => {
-          if (pathname === '/teacher/homework/completion/detail') {
+          if (pathname === '/teacher/homework/completion/edit') {
             dispatch({
               type: 'initState',
               payload: {
@@ -120,12 +140,11 @@ const TeacherHomeworkDetail = {
             });
 
             const { homeworkId, studentId } = query;
-            // console.log(query);
+            const filterFields = { homeworkId, studentId };
             dispatch({
               type: 'fetchHomeworkCondition',
               payload: {
-                homeworkId,
-                studentId,
+                filterFields,
               },
             });
           }

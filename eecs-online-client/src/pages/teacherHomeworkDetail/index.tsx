@@ -6,7 +6,7 @@ import CustomCard from '@/components/CustomCard';
 import Header from './components/Header';
 import QuestionForm from './components/QuestionForm';
 
-const studentHomeworkDetail: React.FC<{}> = () => (
+const teacherHomeworkDetail: React.FC<{}> = () => (
   <>
     <CustomCard>
       <Header />
@@ -17,4 +17,4 @@ const studentHomeworkDetail: React.FC<{}> = () => (
   </>
 );
 
-export default studentHomeworkDetail;
+export default teacherHomeworkDetail;
