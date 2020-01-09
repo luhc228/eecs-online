@@ -135,7 +135,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   <div className={styles.label}>
                     <span>【多选题】{content}（{questionScore}分）</span>
                     <div>
-                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ color: 'red' }}>正确答案：{answer.split('|').sort().join('、')}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
                     {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
