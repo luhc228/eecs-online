@@ -129,7 +129,10 @@ const studentHomeworkEdit = {
         payload.studentId
       );
 
-      const { data } = response;
+      const { data, success } = response;
+      if (!success) {
+        return;
+      }
       yield put({
         type: 'saveHomeworkDetail',
         payload: {
@@ -155,7 +158,10 @@ const studentHomeworkEdit = {
         payload.studentId
       );
 
-      const { data } = response;
+      const { data, success } = response;
+      if (!success) {
+        return;
+      }
       const { list } = data;
       const submitAnswerField: { [k: string]: any } = {};
 
@@ -173,6 +179,8 @@ const studentHomeworkEdit = {
             let formatAnswer;
             if (typeof submitAnswer === 'string' && submitAnswer.includes('|')) {
               formatAnswer = submitAnswer.split('|');
+            } else if (questionType === QUESTION_TYPE.judge) {
+              formatAnswer = Number(submitAnswer)
             } else {
               formatAnswer = submitAnswer;
             }
@@ -288,7 +296,7 @@ const studentHomeworkEdit = {
       const response = yield call(
         services.submitAnswer,
         {
-          homeworkId,
+          homeworkId: Number(homeworkId),
           studentId,
           list,
         }

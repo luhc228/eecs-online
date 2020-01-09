@@ -36,32 +36,29 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
           contentImage,
         } = item;
         switch (questionType) {
-          case QUESTION_TYPE.judge: {
-            const datasource: SelectComponentDatasourceModel[] = [
-              {
-                value: JUDGE_VALUE.InCorrect,
-                label: '错误',
-              },
-              {
-                value: JUDGE_VALUE.Correct,
-                label: '正确',
-              },
-            ];
+          case QUESTION_TYPE.judge:
+            {
+              const datasource: SelectComponentDatasourceModel[] = [
+                {
+                  value: JUDGE_VALUE.InCorrect,
+                  label: '错误',
+                },
+                {
+                  value: JUDGE_VALUE.Correct,
+                  label: '正确',
+                }
+              ];
 
-            const result = {
-              label: (
-                <div className={styles.label}>
-                  <span>
-                    【判断题】{content}（{questionScore}分）
-                  </span>
-                  <div style={{ marginLeft: 70 }}>
-                    <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
-                  </div>
-                  {contentImage &&
-                    contentImage !== '' &&
-                    contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【判断题】{content}（{questionScore}分）</span>
+                    <div>
+                      <span style={{ color: 'red' }}>正确答案：{answer === JUDGE_VALUE.InCorrect ? '错误' : '正确'}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
@@ -89,21 +86,27 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                 label: `${getOption(index)}、${option}`,
               }));
             }
+          }
+          case QUESTION_TYPE.single:
+            {
+              let datasource: SelectComponentDatasourceModel[] = [];
+              if (options && options.length) {
+                datasource = options.split('|').map((option: string, index: number) => ({
+                  value: getOption(index),
+                  label: `${getOption(index)}、${option}`,
+                }))
+              }
 
-            const result = {
-              label: (
-                <div className={styles.label}>
-                  <span>
-                    【单选题】{content}（{questionScore}分）
-                  </span>
-                  <div style={{ marginLeft: 70 }}>
-                    <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
-                  </div>
-                  {contentImage &&
-                    contentImage !== '' &&
-                    contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【单选题】{content}（{questionScore}分）</span>
+                    <div>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
@@ -135,20 +138,30 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                 label: `${getOption(index)}、${option}`,
               }));
             }
-            const result = {
-              label: (
-                <div className={styles.label}>
-                  <span>
-                    【多选题】{content}（{questionScore}分）
-                  </span>
-                  <div style={{ marginLeft: 70 }}>
-                    <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
-                  </div>
-                  {contentImage &&
-                    contentImage !== '' &&
-                    contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+          }
+          case QUESTION_TYPE.multiple:
+            {
+              let datasource: SelectComponentDatasourceModel[] = [];
+              let initialValue: string[] = [];
+              if (answer && typeof answer === 'string' && answer.includes('|')) {
+                initialValue = answer.split('|')
+              }
+              if (options && options.length) {
+                datasource = options.split('|').map((option: string, index: number) => ({
+                  value: getOption(index),
+                  label: `${getOption(index)}、${option}`,
+                }))
+              }
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【多选题】{content}（{questionScore}分）</span>
+                    <div>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
@@ -179,10 +192,34 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
                     <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                   </div>
-                  {contentImage &&
-                    contentImage !== '' &&
-                    contentImage.split('|').map((imgSrc: string) => (
-                      <div>
+                </div>
+                ),
+                name: `multiple${questionId}`,
+                component: FORM_COMPONENT.Checkbox,
+                props: {
+                  disabled: true
+                },
+                initialValue,
+                datasource,
+                required: false
+              }
+
+              formItems.push(result);
+
+              break;
+            }
+          case QUESTION_TYPE.program:
+            {
+              const result = {
+                label: (
+                  <div className={styles.label}>
+                    <span>【编程题】{content}（{questionScore}分）</span>
+                    <div>
+                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
+                    </div>
+                    {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
+                      <div key={String(index)}>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}

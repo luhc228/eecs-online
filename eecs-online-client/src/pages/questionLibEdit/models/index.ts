@@ -103,7 +103,10 @@ const questionLibEdit = {
     ) {
       const response = yield call(fetchCourseList, payload.teacherId);
 
-      const { data: { list } } = response;
+      const { data: { list }, success } = response;
+      if (!success) {
+        return;
+      }
       const courseIdDataSource = list.map((item: any) => ({
         label: item.courseName,
         value: item.courseId
@@ -125,7 +128,10 @@ const questionLibEdit = {
       { call, put }: EffectsCommandMap
     ) {
       const response = yield call(questionLibEditServices.fetchQuestionDetail, payload.questionId);
-      const { data } = response;
+      const { data, success } = response;
+      if (!success) {
+        return;
+      }
       const {
         answer,
         options,
