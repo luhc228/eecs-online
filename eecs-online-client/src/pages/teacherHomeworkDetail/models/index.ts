@@ -1,18 +1,15 @@
 import { EffectsCommandMap, Dispatch } from 'dva';
 import { Reducer } from 'redux';
 import * as services from '../services';
-import userUtils from '@/utils/user-utils';
 import {
   HomeworkDetailData,
   FilterFieldsModel,
   DetailEditModel,
 } from '@/interfaces/teacherHomeworkDetail';
 import { Effect } from '@/interfaces/reduxState';
-import { HomeworkDetailListItem } from '@/interfaces/studentHomeworkDetail';
 
 export interface StateType {
   data: HomeworkDetailData;
-  // homeworkFields: any;
   filterFields: FilterFieldsModel;
   when: boolean;
 }
@@ -23,14 +20,13 @@ const initState = {
     homeworkName: '',
     homeworkScore: null,
     finalScore: null,
-    // studentName: null,
-    // studentId: null,
-    // homeworkId: null,
+    studentName: null,
+    studentId: null,
     list: [],
     questionScoreList: [],
   },
   filterFields: {
-    studentId: null,
+    studentId: '',
     homeworkId: null,
   },
   when: false,
@@ -94,11 +90,15 @@ const TeacherHomeworkDetail = {
       { payload }: { type: string; payload: { filterFields: FilterFieldsModel } },
       { call, put }: EffectsCommandMap,
     ) {
-      console.log('filterFields', payload.filterFields);
+      // console.log('filterFields', payload.filterFields);
       const response = yield call(services.fetchHomeworkCondition, payload.filterFields);
-      console.log('response', response);
-      const { data } = response;
-      console.log('data', data);
+      // console.log('response', response);
+      const { data, success } = response;
+      const { list, questionScoreList } = data;
+      if (!success) {
+        return;
+      }
+      // console.log('data', data);
       yield put({
         type: 'save',
         payload: {
@@ -128,9 +128,17 @@ const TeacherHomeworkDetail = {
   },
 
   subscriptions: {
-    setup({ dispatch, history }: { dispatch: Dispatch<any>; history: any }) {
+    setup({
+      dispatch,
+      history,
+      filterFields,
+    }: {
+      dispatch: Dispatch<any>;
+      history: any;
+      filterFields: FilterFieldsModel;
+    }) {
       return history.listen(
-        ({ pathname, query }: { pathname: string; query: { [k: string]: string } }) => {
+        ({ pathname, query }: { pathname: string; query: { [k: string]: number } }) => {
           if (pathname === '/teacher/homework/completion/edit') {
             dispatch({
               type: 'initState',
@@ -139,8 +147,11 @@ const TeacherHomeworkDetail = {
               },
             });
 
-            const { homeworkId, studentId } = query;
-            const filterFields = { homeworkId, studentId };
+            const filterFields = {
+              homeworkId: Number(query.homeworkId),
+              studentId: query.studentId,
+            };
+            console.log(filterFields);
             dispatch({
               type: 'fetchHomeworkCondition',
               payload: {

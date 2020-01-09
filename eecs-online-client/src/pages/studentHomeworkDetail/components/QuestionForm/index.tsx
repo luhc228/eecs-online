@@ -15,7 +15,7 @@ export interface QuestionFormProps {
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) => {
   const { data, homeworkFields } = studentHomeworkDetail;
-  console.log(data);
+  // console.log(data);
   const { list } = data;
 
   const generateFormConfig = (): FormItemComponentProps[] => {

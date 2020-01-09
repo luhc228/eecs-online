@@ -6,14 +6,14 @@ export interface FilterFieldsModel {
   // 课程Id
   courseId?: number;
   //
-  homeworkId?: number;
+  homeworkId: number;
 }
 
 export interface CompletionListItem extends FilterFieldsModel {
   courseName: string;
   className: string;
   homeworkName: string;
-  studentId: number;
+  studentId: string;
   studentName: string;
   homeworkScore: string;
 }

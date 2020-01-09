@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 // import { Input } from 'antd';
-import { Input, Button } from 'antd';
+import { Input, Button, Form } from 'antd';
 import { StateType } from '../../models';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@/enums';
@@ -10,6 +10,7 @@ import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interf
 import { getOption } from '@/utils';
 import styles from './index.less';
 import { HomeworkDetailListItem, DetailEditModel } from '@/interfaces/teacherHomeworkDetail';
+import { questionListItem } from '@/interfaces/questionLib';
 
 export interface QuestionFormProps {
   teacherHomeworkDetail: StateType;
@@ -18,11 +19,11 @@ export interface QuestionFormProps {
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, dispatch }) => {
   const { data, filterFields } = teacherHomeworkDetail;
-  // console.log(data);
+  console.log('QuestionForm', data);
   // console.log(filterFields);
-  const { list } = data;
+  const { list, questionScoreList } = data;
 
-  function handleEdit(allFields: StateType) {
+  function handleEdit(allFields: DetailEditModel) {
     dispatch({
       type: 'teacherHomeworkDetail/updateTeacherHomeworkDetail',
       payload: {
@@ -45,6 +46,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
 
     if (list && list.length) {
       const formItems: FormItemComponentProps[] = [];
+      const { homeworkId, studentId } = filterFields;
       list.forEach((item: HomeworkDetailListItem) => {
         const {
           questionId,
@@ -71,6 +73,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
               },
             ];
 
+            const allFields = {
+              questionId,
+              score,
+              studentId,
+              homeworkId,
+            };
+
             const result = {
               label: (
                 <div className={styles.label}>
@@ -79,9 +88,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>学生得分：{score}分</span>
+                    <span
+                      style={{ marginLeft: 10, color: 'red' }}
+                      onClick={() => handleEdit(allFields)}
+                    >
+                      学生得分：{score}分
+                    </span>
                   </div>
-                  <Input placeholder='score'>修改得分</Input>
                   {contentImage &&
                     contentImage !== '' &&
                     contentImage.split('|').map((imgSrc: string) => (

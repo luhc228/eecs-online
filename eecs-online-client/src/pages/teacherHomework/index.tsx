@@ -93,6 +93,7 @@ const Homework: React.FC<HomeworkProps> = props => {
   const columns: ColumnProps<TeacherHomeworkListItem>[] = [
     { title: '作业名称', dataIndex: 'homeworkName' },
     // { title: '发布时间', dataIndex: 'startAt'},
+    { title: '所属课程', dataIndex: 'courseName'},
     { title: '截止时间', dataIndex: 'endAt' },
     { title: '作业描述', dataIndex: 'description' },
     { title: '总分', dataIndex: 'homeworkScore' },
