@@ -1,20 +1,13 @@
 /**
  * 教师作业管理首页
  */
-
-// import { FormItemComponentProps } from '@/interfaces/components';
-// import { Dispatch } from 'redux';
-// import { PAGINATION_CONFIGS } from '@/constants';
-// import { TeacherHomeworkListItem } from '@/interfaces/teacherHomework';
-import umiRouter from 'umi/router';
-// import { StateType } from './models';
-// import styles from './index.less';
 import React, { useEffect } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { Button, Popconfirm } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import router from 'umi/router';
+import umiRouter from 'umi/router';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { PAGINATION_CONFIGS } from '@/constants';
 import { TeacherHomeworkListItem } from '@/interfaces/teacherHomework';
@@ -93,7 +86,7 @@ const Homework: React.FC<HomeworkProps> = props => {
   const columns: ColumnProps<TeacherHomeworkListItem>[] = [
     { title: '作业名称', dataIndex: 'homeworkName' },
     // { title: '发布时间', dataIndex: 'startAt'},
-    { title: '所属课程', dataIndex: 'courseName'},
+    { title: '所属课程', dataIndex: 'courseName' },
     { title: '截止时间', dataIndex: 'endAt' },
     { title: '作业描述', dataIndex: 'description' },
     { title: '总分', dataIndex: 'homeworkScore' },
