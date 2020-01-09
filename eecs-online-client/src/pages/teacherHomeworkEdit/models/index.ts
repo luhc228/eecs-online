@@ -108,18 +108,20 @@ const Model = {
     ) {
       const response = yield call(services.fetchCourseList, payload.teacherId);
 
-      const { data: { list } } = response;
-      const courseIdDataSource = list.map((item: any) => ({
-        label: item.courseName,
-        value: item.courseId
-      }));
+      const { data: { list }, success } = response;
+      if (success) {
+        const courseIdDataSource = list.map((item: any) => ({
+          label: item.courseName,
+          value: item.courseId
+        }));
 
-      yield put({
-        type: 'saveCourseIdDataSource',
-        payload: {
-          data: courseIdDataSource,
-        },
-      });
+        yield put({
+          type: 'saveCourseIdDataSource',
+          payload: {
+            data: courseIdDataSource,
+          },
+        });
+      }
     },
 
     /**
@@ -134,14 +136,15 @@ const Model = {
         payload.courseId
       );
 
-      const { list } = response;
-
-      yield put({
-        type: 'changeQuestionList',
-        payload: {
-          questionList: list
-        }
-      });
+      const { list, success } = response;
+      if (success) {
+        yield put({
+          type: 'changeQuestionList',
+          payload: {
+            questionList: list
+          }
+        });
+      }
     },
     /**
      * 获取已存在的作业信息
@@ -154,34 +157,36 @@ const Model = {
         teacherHomeworkEditService.fetchTeacherHomeworkDetail,
         payload.homeworkId
       );
-      const { homework: { homeworkQuestionList, ...homeworkFormFields } } = response.data;
-      const newHomeworkFormFields = {
-        ...homeworkFormFields,
-        startAt: moment(homeworkFormFields.startAt, 'YYYY-MM-DD HH:mm:ss'),
-        endAt: moment(homeworkFormFields.endAt, 'YYYY-MM-DD HH:mm:ss')
-      };
+      const { homework: { homeworkQuestionList, ...homeworkFormFields }, success } = response.data;
+      if (success) {
+        const newHomeworkFormFields = {
+          ...homeworkFormFields,
+          startAt: moment(homeworkFormFields.startAt, 'YYYY-MM-DD HH:mm:ss'),
+          endAt: moment(homeworkFormFields.endAt, 'YYYY-MM-DD HH:mm:ss')
+        };
 
-      yield put({
-        type: 'changeTeacherHomeworkFormFields',
-        payload: {
-          data: newHomeworkFormFields
-        }
-      });
-      const targetKeys = homeworkQuestionList.map((item: any) => String(item));
+        yield put({
+          type: 'changeTeacherHomeworkFormFields',
+          payload: {
+            data: newHomeworkFormFields
+          }
+        });
+        const targetKeys = homeworkQuestionList.map((item: any) => String(item));
 
-      yield put({
-        type: 'changeTargetKeys',
-        payload: {
-          targetKeys
-        }
-      })
+        yield put({
+          type: 'changeTargetKeys',
+          payload: {
+            targetKeys
+          }
+        })
 
-      yield put({
-        type: 'changeSelectQuestionList',
-        payload: {
-          data: homeworkQuestionList
-        }
-      })
+        yield put({
+          type: 'changeSelectQuestionList',
+          payload: {
+            data: homeworkQuestionList
+          }
+        })
+      }
     },
 
     /**

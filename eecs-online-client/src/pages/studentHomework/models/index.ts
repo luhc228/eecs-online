@@ -60,7 +60,10 @@ const studentHomeworkModel = {
     ) {
       const response = yield call(fetchCourseList, undefined, payload.studentId);
 
-      const { data: { list } } = response;
+      const { data: { list }, success } = response;
+      if (!success) {
+        return;
+      }
       const courseIdDataSource = list.map((item: any) => ({
         label: item.courseName,
         value: item.courseId
