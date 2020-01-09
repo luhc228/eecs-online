@@ -11,7 +11,7 @@ const Header: React.FC<HeaderProps> = ({
   studentHomeworkDetail
 }) => {
   const { data } = studentHomeworkDetail;
-  const { homeworkScore, homeworkName } = data;
+  const { homeworkScore, homeworkName, finalScore } = data;
 
   return (
     <div className={styles.header}>
@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({
 
       <div>
         <span>作业总分：{homeworkScore}分</span>
-        <span style={{ marginLeft: 20 }}>你的得分：{homeworkScore}分</span>
+        <span style={{ marginLeft: 20 }}>你的得分：{finalScore}分</span>
       </div>
     </div>
   )
