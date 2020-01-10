@@ -4,6 +4,7 @@ import React from 'react';
 import { USER_TYPE } from '@/enums';
 import styles from './index.less';
 import PasswordEditForm from './components/EditForm';
+import CustomCard from '@/components/CustomCard';
 
 interface PasswordProps {
   dispatch: Dispatch<any>;
@@ -11,9 +12,11 @@ interface PasswordProps {
 }
 
 const Password: React.FC<PasswordProps> = props => (
-  <div className={styles.main}>
-    <PasswordEditForm />
-  </div>
+  <CustomCard title="用户密码修改">
+    <div className={styles.main}>
+      <PasswordEditForm />
+    </div>
+  </CustomCard>
 );
 
 const mapStateToProps = (state: any) => {
