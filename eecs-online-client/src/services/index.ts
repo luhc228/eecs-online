@@ -13,12 +13,8 @@ export function fetchCollegeList() {
 /**
  * 获取虚拟班级信息列表
  */
-export function fetchVirClassList(homeworkId: number) {
-  return request.get('/vir_class/list', {
-    params: {
-      homeworkId,
-    },
-  });
+export function fetchVirClassList() {
+  return request.get('/vir_class/list');
 }
 
 /**

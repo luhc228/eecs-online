@@ -104,7 +104,7 @@ request.use(
 
       if (options.method === 'get') {
         if (options.params) {
-          if (!(userInfo.userType == undefined)) {
+          if ((userInfo.userType !== undefined)) {
             const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]];
 
             // console.log(userInfo.userType, userIdName);

@@ -21,6 +21,7 @@ interface CourseEditProps {
 const CourseEdit: React.FC<CourseEditProps> = ({ courseEdit, dispatch, location, loading }) => {
   const { courseFields, when, classIdDataSource } = courseEdit;
 
+  console.log(classIdDataSource);
   const formConfig: FormItemComponentProps[] = [
     {
       label: '课程名称',
