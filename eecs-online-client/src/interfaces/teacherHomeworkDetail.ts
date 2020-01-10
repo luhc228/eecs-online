@@ -27,6 +27,7 @@ export interface HomeworkDetailData {
   total?: number;
   homeworkName?: string;
   homeworkScore?: string;
+  // status?: string;
   finalScore?: string;
   studentId: number;
   studentName: string;
@@ -39,4 +40,5 @@ export interface DetailEditModel {
   homeworkId?: number;
   questionId?: number;
   score?: number;
+  status?: number;
 }

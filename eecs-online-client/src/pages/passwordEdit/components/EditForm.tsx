@@ -4,8 +4,10 @@ import { connect } from 'dva';
 import { FormComponentProps } from 'antd/es/form';
 import { Dispatch } from 'redux';
 import router from 'umi/router';
-import { passwordForm } from '@/interfaces/passwordEdit';
+import { StudentPasswordForm, TeacherPasswordForm } from '@/interfaces/passwordEdit';
 import styles from './EditForm.less';
+import { USER_TYPE } from '@/enums';
+import userUtils from '@/utils/user-utils';
 
 interface PasswordProps extends FormComponentProps {
   dispatch: Dispatch<any>;
@@ -15,15 +17,40 @@ interface PasswordProps extends FormComponentProps {
 const PasswordEditForm: React.FC<PasswordProps> = ({ form, submitting, dispatch }) => {
   const [confirmDirty, setconfirmDirty] = useState(false);
 
+  const { userType } = userUtils.getUserInfo();
+  console.log('userInfo', userUtils.getUserInfo());
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    form.validateFields((err: Error, values: passwordForm) => {
+    form.validateFields((err: Error, values: StudentPasswordForm | TeacherPasswordForm) => {
       if (!err) {
-        dispatch({
-          type: 'passwordEdit/userPasswordEdit',
-          payload: { values },
-        });
-        router.goBack();
+        console.log('values', values);
+        if (userType === USER_TYPE.Student) {
+          dispatch({
+            type: 'passwordEdit/userPasswordEdit',
+            payload: {
+              userType,
+              values: {
+                password: values.password,
+                studentId: userUtils.getUserInfo().studentId,
+              },
+            },
+          });
+          router.goBack();
+        }
+        if (userType === USER_TYPE.Teacher) {
+          dispatch({
+            type: 'passwordEdit/userPasswordEdit',
+            payload: {
+              userType,
+              values: {
+                password: values.password,
+                studentId: userUtils.getUserInfo().teacherId,
+              },
+            },
+          });
+          router.goBack();
+        }
       }
     });
   };
@@ -78,7 +105,7 @@ const PasswordEditForm: React.FC<PasswordProps> = ({ form, submitting, dispatch 
       </Form.Item>
       <Form.Item>
         <Button loading={submitting} type="primary" htmlType="submit" className={styles.submit}>
-          注 册
+          确 认 修 改
         </Button>
       </Form.Item>
     </Form>
@@ -86,7 +113,7 @@ const PasswordEditForm: React.FC<PasswordProps> = ({ form, submitting, dispatch 
 };
 
 const mapStateToProps = (state: any) => ({
-  loading: state.loading.models.register,
+  loading: state.loading.models.passwordEdit,
 });
 export default Form.create({ name: 'passwordEdit_form' })(
   connect(mapStateToProps)(PasswordEditForm),
