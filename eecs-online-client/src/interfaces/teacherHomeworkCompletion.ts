@@ -2,11 +2,18 @@ import { TableListPaginationProps, PaginationProps } from './components';
 
 export interface FilterFieldsModel {
   //
-  classId?: number;
+  // classId?: number;
+  // className?: string;
   // 课程Id
   courseId?: number;
   //
   homeworkId: number;
+}
+
+export interface FieldsProps {
+  studentId?: string;
+  studentName?: string;
+  className?: string;
 }
 
 export interface CompletionListItem extends FilterFieldsModel {

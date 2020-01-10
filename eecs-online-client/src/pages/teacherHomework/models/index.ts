@@ -28,13 +28,13 @@ const Model = {
   },
 
   reducers: {
-    save(state: any, { payload }: { type: string; payload: { data: HomeworkTableData } }) {
+    save(state: any, { payload }: { type: string; payload: { data: TeacherHomeworkTableData } }) {
       return { ...state, data: payload.data };
     },
 
     changeFilterFields(
       state: any,
-      { payload }: { type: string; payload: { filterFields: HomeworkFieldsModel } },
+      { payload }: { type: string; payload: { filterFields: TeacherHomeworkFilterFieldsModel } },
     ) {
       return { ...state, filterFields: payload.filterFields };
     },
@@ -49,6 +49,7 @@ const Model = {
       { payload }: { type: string; payload: { data: PaginationParamsModel } },
       { call, put }: EffectsCommandMap,
     ) {
+      console.log(payload.data);
       const response = yield call(homeworkService.fetchHomeworkPagination, payload.data);
       const { data } = response;
 

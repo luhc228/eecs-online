@@ -32,24 +32,24 @@ const Model: ModelType = {
     userType: userUtils.getUserInfo().userType,
     userForm: {
       id: undefined,
-      password: userUtils.getToken(),
+      password: undefined,
     },
     when: true,
   },
 
   effects: {
     *PasswordEdit({ payload: { userType, values } }: any, { call, put }: any) {
-      let userRegister;
+      let passwordEdit;
       if (typeof userType === 'string') {
         userType = Number(userType);
       }
       console.log(values);
       switch (userType) {
         case USER_TYPE.Student:
-          userRegister = service.studentRegister;
+          passwordEdit = service.studentPasswordEdit;
           break;
         case USER_TYPE.Teacher:
-          userRegister = service.teacherRegister;
+          passwordEdit = service.teacherPasswordEdit;
           break;
         default:
           return;

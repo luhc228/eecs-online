@@ -16,30 +16,10 @@ import { ColumnProps } from 'antd/es/table';
 import { FormItemComponentProps } from '@/interfaces/components';
 import umiRouter from 'umi/router';
 
-const filterFormConfig: FormItemComponentProps[] = [
-  {
-    label: '学号',
-    name: 'studentId',
-    component: FORM_COMPONENT.Input,
-    required: false,
-  },
-  {
-    label: '姓名',
-    name: 'studentName',
-    component: FORM_COMPONENT.Input,
-    required: false,
-  },
-  {
-    label: '班级',
-    name: 'classId',
-    component: FORM_COMPONENT.Input,
-    required: false,
-  },
-]
-
 interface CompletionProps {
   dispatch: Dispatch<any>;
   fetchCompletionPaginationLoading: boolean;
+  location: Location;
   teacherHomeworkCompletion: StateType;
 }
 
@@ -48,13 +28,40 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
     teacherHomeworkCompletion: {
       data: {page, total, list },
       filterFields,
+      classIdDataSource
     },
     fetchCompletionPaginationLoading,
+    location,
     dispatch,
   } = props;
 
+  const filterFormConfig: FormItemComponentProps[] = [
+    {
+      label: '学号',
+      name: 'studentId',
+      component: FORM_COMPONENT.Input,
+      required: false,
+    },
+    {
+      label: '姓名',
+      name: 'studentName',
+      component: FORM_COMPONENT.Input,
+      required: false,
+    },
+    {
+      label: '班级',
+      name: 'className',
+      component: FORM_COMPONENT.Select,
+      required: true,
+      props: {
+        selectMode: 'multiple',
+      },
+      datasource: classIdDataSource,
+    },
+  ];
+
   useEffect(() => {
-    if (!filterFields.classId) {
+    if (!filterFormConfig) {
       return;
     }
     dispatch({
@@ -62,11 +69,13 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
       payload: {
         data: {
           ...PAGINATION_CONFIGS,
-          ...filterFields,
+          // classId: Number(filterFields.className),
+          courseId: Number(filterFields.courseId),
+          homeworkId: Number(filterFields.homeworkId)
         }
       },
     })
-  }, [!filterFields.classId]);
+  }, [!filterFormConfig]);
 
   const handleEdit = (record: CompletionListItem) => {
     umiRouter.push({
@@ -110,15 +119,18 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
             })
           }}
           formConfig={filterFormConfig}
-          // onSubmit={value => dispatch({
-          //   type: 'teacherHomeworkCompletion/fetchCompletionPagination',
-          //   payload: {
-          //     data: {
-          //       ...PAGINATION_CONFIGS,
-          //       ...value
-          //     }
-          //   },
-          // })}
+          onSubmit={value =>
+            dispatch({
+              type: 'teacherHomeworkCompletion/fetchCompletionPagination',
+              payload: {
+                data: {
+                  ...PAGINATION_CONFIGS,
+                  ...value,
+                  ...location.query,
+                },
+              },
+            })
+          }
         />
       </CustomCard>
 
@@ -150,6 +162,7 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
 const mapStateToProps = ({
   teacherHomeworkCompletion,
   loading,
+  router,
 }: {
   teacherHomeworkCompletion: StateType;
   loading: {
@@ -157,9 +170,13 @@ const mapStateToProps = ({
       [key: string]: boolean;
     };
   };
+  router: {
+    location: Location;
+  };
 }) => ({
   teacherHomeworkCompletion,
   fetchCompletionPaginationLoading: loading.effects['teacherHomeworkCompletion/fetchCompletionPagination'],
+  location: router.location,
 })
 
 export default connect(mapStateToProps)(TeacherHomeworkCompletion);
