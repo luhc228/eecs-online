@@ -5,7 +5,7 @@ export default {
   /**
    * 判断是否登录
    */
-  isLogin: () => localStorage.getItem('accesstoken'),
+  isLogin: () => localStorage.getItem('userInfo'),
 
   /**
    * 保存用户accesstoken

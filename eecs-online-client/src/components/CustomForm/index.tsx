@@ -27,7 +27,7 @@ interface CustomFormProps extends FormComponentProps {
   values: any;
   loading?: boolean;
   children?: React.ReactNode;
-  onFieldsChange: (allFields: any, changedFields?: any) => void;
+  onFieldsChange: (values: any, changedFields: any, allFields: any) => void;
   onSubmit?: (value: any) => void;
   resetFieldsVisible?: boolean;
 }
@@ -395,14 +395,14 @@ export default Form.create<CustomFormProps>({
     return result;
   },
 
-  onFieldsChange(props: CustomFormProps, changedFields: any, allFields: object) {
-    const result: { [key: string]: any } = {}
+  onFieldsChange(props: CustomFormProps, changedFields: any, allFields: any) {
+    const values: { [key: string]: any } = {}
     if (allFields) {
       Object.entries(allFields).forEach(formField => {
-        const [key, field] = formField;
-        result[key] = field.value;
+        const [key, field]: [string, any] = formField;
+        values[key] = field.value;
       });
     }
-    props.onFieldsChange(result, changedFields);
+    props.onFieldsChange(values, changedFields, allFields);
   },
 })(CustomForm);
