@@ -157,13 +157,16 @@ const Model = {
         teacherHomeworkEditService.fetchTeacherHomeworkDetail,
         payload.homeworkId
       );
-      const { homework: { homeworkQuestionList, ...homeworkFormFields }, success } = response.data;
-      if (success) {
+
+      const { homework: { homeworkQuestionList, ...homeworkFormFields } } = response.data;
+
+      if (response.success) {
         const newHomeworkFormFields = {
           ...homeworkFormFields,
           startAt: moment(homeworkFormFields.startAt, 'YYYY-MM-DD HH:mm:ss'),
           endAt: moment(homeworkFormFields.endAt, 'YYYY-MM-DD HH:mm:ss')
         };
+
 
         yield put({
           type: 'changeTeacherHomeworkFormFields',
@@ -171,6 +174,7 @@ const Model = {
             data: newHomeworkFormFields
           }
         });
+
         const targetKeys = homeworkQuestionList.map((item: any) => String(item));
 
         yield put({

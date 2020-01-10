@@ -159,6 +159,7 @@ const TeacherHomeworkEdit: React.FC<TeacherHomeworkEditProps> = ({
       handleCourseIdSelectChange(homeworkFormFields.courseId);
     }
   }, [homeworkFormFields.courseId])
+
   return (
     <>
       <RouterPrompt when={when} />

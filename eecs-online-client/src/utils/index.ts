@@ -14,11 +14,6 @@ export function setAuthority(authority: string | string[]) {
  * @return option A - Z
  */
 export function getOption(index: number) {
-  // const optionsDataSource: string[] = [];
-  // for (let i = 65; i < 91;) {
-  //   optionsDataSource.push(String.fromCharCode(i));
-  //   i += 1;
-  // }
   const option = String.fromCharCode(index + 65);
   return option;
 }

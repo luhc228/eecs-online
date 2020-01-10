@@ -8,6 +8,7 @@ const config: IConfig = {
   treeShaking: true,
   routes: routeConfig,
   history: 'hash',
+  hash: true,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
