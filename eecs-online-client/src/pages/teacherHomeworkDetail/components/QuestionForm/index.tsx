@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-// import { Input } from 'antd';
+import umiRouter from 'umi/router';
 import { Input, Button, Form } from 'antd';
 import { StateType } from '../../models';
 import CustomForm from '@/components/CustomForm';
@@ -10,7 +10,6 @@ import { FormItemComponentProps, SelectComponentDatasourceModel } from '@/interf
 import { getOption } from '@/utils';
 import styles from './index.less';
 import { HomeworkDetailListItem, DetailEditModel } from '@/interfaces/teacherHomeworkDetail';
-import { questionListItem } from '@/interfaces/questionLib';
 
 export interface QuestionFormProps {
   teacherHomeworkDetail: StateType;
@@ -23,13 +22,36 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
   // console.log(filterFields);
   const { list, questionScoreList } = data;
 
-  function handleEdit(allFields: DetailEditModel) {
+  useEffect(() => {
+    if (!questionScoreList) {
+      return;
+    }
     dispatch({
-      type: 'teacherHomeworkDetail/updateTeacherHomeworkDetail',
+      type: 'teacherHomeworkDetail/fetchHomeworkCondition',
       payload: {
-        allFields,
+        data: {
+          ...filterFields,
+        }
       },
-    });
+    })
+  }, [!questionScoreList]);
+
+  function handleEdit(allFields: DetailEditModel) {
+    // dispatch({
+    //   type: 'teacherHomeworkDetail/updateTeacherHomeworkDetail',
+    //   payload: {
+    //     allFields,
+    //   },
+    // });
+    umiRouter.push({
+      pathname: '/teacher/homework/completion/detail/edit',
+      query: {
+        homeworkId: allFields.homeworkId,
+        studentId: allFields.studentId,
+        score: allFields.score,
+        questionId: allFields.questionId,
+      }
+    })
   }
 
   function handleSubmit() {

@@ -30,6 +30,9 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
       name: 'teacherId',
       component: FORM_COMPONENT.Input,
       required: true,
+      props: {
+        disabled: true,
+      },
     },
     {
       label: '学院',
@@ -57,6 +60,7 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
   ];
 
   const handleSubmit = (allFields: object) => {
+    console.log('submit', allFields);
     dispatch({
       type: 'teacherInfo/updateTeacherInfo',
       payload: { data: { ...allFields, teacherId: teacherInfoFields.teacherId } },
@@ -73,7 +77,7 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
           formTypes={CUSTOM_FORM_TYPES.OneColumn}
           loading={loading}
           // TODO: bug: when add this fieldsChange function the error will disappear
-          onFieldsChange={() => { }}
+          onFieldsChange={() => {}}
           formConfig={formConfig}
           onSubmit={handleSubmit}
         />

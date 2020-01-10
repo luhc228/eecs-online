@@ -7,7 +7,6 @@ import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import RouterPrompt from '@/components/RouterPrompt';
 import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
-import userUtils from '@/utils/user-utils';
 
 interface StudentInfoProps {
   studentInfo: StateType;

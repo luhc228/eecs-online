@@ -70,7 +70,7 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
 
   const handleEdit = (record: CompletionListItem) => {
     umiRouter.push({
-      pathname: '/teacher/homework/completion/edit',
+      pathname: '/teacher/homework/completion/detail',
       query:{
         homeworkId: record.homeworkId,
         studentId: record.studentId,

@@ -107,24 +107,24 @@ const TeacherHomeworkDetail = {
       });
     },
 
-    /**
-     * 更新试题
-     */
-    *updateTeacherHomeworkDetail(
-      { payload }: { type: string; payload: { allFileds: DetailEditModel } },
-      { call, put }: EffectsCommandMap,
-    ) {
-      const response = yield call(services.updateTeacherHomeworkDetail, payload.allFileds);
-      const { success } = response;
-      if (success) {
-        yield put({
-          type: 'changePromptStatus',
-          payload: {
-            when: false,
-          },
-        });
-      }
-    },
+    // /**
+    //  * 更新试题
+    //  */
+    // *updateTeacherHomeworkDetail(
+    //   { payload }: { type: string; payload: { allFileds: DetailEditModel } },
+    //   { call, put }: EffectsCommandMap,
+    // ) {
+    //   const response = yield call(services.updateTeacherHomeworkDetail, payload.allFileds);
+    //   const { success } = response;
+    //   if (success) {
+    //     yield put({
+    //       type: 'changePromptStatus',
+    //       payload: {
+    //         when: false,
+    //       },
+    //     });
+    //   }
+    // },
   },
 
   subscriptions: {
@@ -139,7 +139,7 @@ const TeacherHomeworkDetail = {
     }) {
       return history.listen(
         ({ pathname, query }: { pathname: string; query: { [k: string]: number } }) => {
-          if (pathname === '/teacher/homework/completion/edit') {
+          if (pathname === '/teacher/homework/completion/detail') {
             dispatch({
               type: 'initState',
               payload: {

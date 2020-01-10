@@ -1,6 +1,6 @@
 export interface StudentInfoFieldsModel {
   // 学号
-  studentId?: number;
+  studentId?: string;
   // 学生姓名
   studentName?: string;
   // 性别
