@@ -78,7 +78,7 @@ const PasswordEditForm: React.FC<PasswordProps> = ({ form, submitting, dispatch 
       </Form.Item>
       <Form.Item>
         <Button loading={submitting} type="primary" htmlType="submit" className={styles.submit}>
-          注 册
+          确 认 修 改
         </Button>
       </Form.Item>
     </Form>

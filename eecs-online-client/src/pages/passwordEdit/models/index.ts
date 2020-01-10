@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import router from 'umi/router';
+import umiRouter from 'umi/router';
 import { USER_TYPE } from '@/enums';
 import { Effect } from '@/interfaces/reduxState';
 import * as service from '../services';
@@ -18,10 +18,10 @@ export interface ModelType {
   namespace: string;
   state: StateType;
   reducers: {
-    changeUserType: Reducer<StateType>;
+    // changeUserType: Reducer<StateType>;
   };
   effects: {
-    userRegister: Effect<StateType>;
+    PasswordEdit: Effect<StateType>;
   };
 }
 
@@ -36,6 +36,8 @@ const Model: ModelType = {
     },
     when: true,
   },
+
+  reducers: {},
 
   effects: {
     *PasswordEdit({ payload: { userType, values } }: any, { call, put }: any) {
@@ -55,9 +57,9 @@ const Model: ModelType = {
           return;
       }
 
-      const response = yield call(userRegister, values);
+      const response = yield call(passwordEdit, values);
       // const { accessToken, ...userInfo } = response.data;
-      yield put(router.push('/login'));
+      yield put(umiRouter.goBack);
     },
   },
 };
