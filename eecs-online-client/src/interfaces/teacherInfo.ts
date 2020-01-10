@@ -1,10 +1,10 @@
 export interface TeacherInfoFieldsModel {
   // 工号
-  teacherId?: number;
+  teacherId?: string;
   // 姓名
   teacherName?: string;
   // 性别
-  teacherGenderg?: number;
+  teacherGenderg?: string;
   // 学院名称
-  teacherCollege?: number[];
+  teacherCollege?: string;
 }

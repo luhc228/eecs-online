@@ -17,15 +17,14 @@ export interface StateType {
 }
 
 const initState = {
-  studentInfoFields: userUtils.getUserInfo(),
-  // password: userUtils.getToken(),
-  // {
-  // studentId: undefined,
-  // studentName: undefined,
-  // studentGender: undefined,
-  // studentCollege: undefined,
-  // studentClass: undefined,
-  // },
+  // studentInfoFields: userUtils.getUserInfo(),
+  studentInfoFields: {
+    studentId: '',
+    studentName: '',
+    studentGender: '',
+    studentCollege: '',
+    studentClass: '',
+  },
   when: true,
   collegeIdDataSource: [],
   classIdDataSource: [],
@@ -36,10 +35,12 @@ export interface ModelType {
   state: StateType;
   reducers: {
     changeStudentInfoFields: Reducer<StateType>;
+    fetchStudentInfoFields: Reducer<StateType>;
     changePromptStatus: Reducer<StateType>;
   };
   effects: {
     updateStudentInfo: Effect<StateType>;
+    fetchInfoFields: Effect<StateType>;
   };
 }
 
@@ -62,6 +63,17 @@ const Model = {
         ...state,
         studentInfoFields: payload.data,
         when: true,
+      };
+    },
+
+    fetchStudentInfoFields(
+      state: StateType,
+      { payload }: { type: string; payload: { data: StudentInfoFieldsModel } },
+    ) {
+      // console.log(payload.data);
+      return {
+        ...state,
+        studentInfoFields: payload.data,
       };
     },
 
@@ -90,6 +102,21 @@ const Model = {
   },
 
   effects: {
+    *fetchInfoFields(
+      { payload }: { type: string; payload: { data: StudentInfoFieldsModel } },
+      { call, put }: EffectsCommandMap,
+    ) {
+      const response = yield call(studentInfoService.fetchStudentInfo, payload.data);
+      const { data } = response;
+      console.log('data', data);
+      yield put({
+        type: 'fetchStudentInfoFields',
+        payload: {
+          data,
+        },
+      });
+    },
+
     *fetchClassList({ payload }: { type: string; payload: {} }, { call, put }: EffectsCommandMap) {
       const response = yield call(fetchClassList, payload);
       if (!response) {
@@ -100,7 +127,7 @@ const Model = {
       } = response;
       const classIdDataSource = list.map((item: any) => ({
         label: item.class,
-        value: item.classId,
+        value: item.class,
       }));
 
       yield put({
@@ -124,7 +151,7 @@ const Model = {
       } = response;
       const collegeIdDataSource = list.map((item: any) => ({
         label: item.college,
-        value: item.collegeId,
+        value: item.college,
       }));
 
       yield put({
@@ -136,7 +163,7 @@ const Model = {
     },
 
     /**
-     * 更新课程信息
+     * 更新学生信息
      */
     *updateStudentInfo(
       { payload }: { type: string; payload: { data: StudentInfoFieldsModel } },
@@ -165,7 +192,19 @@ const Model = {
           });
 
           const studentInfo = userUtils.getUserInfo();
+          const { studentInfoFields } = initState;
+          studentInfoFields.studentId = studentInfo.studentId;
+          studentInfoFields.studentName = studentInfo.studentName;
           if (Object.keys(studentInfo).length !== 0) {
+            // console.log(studentInfo);
+            console.log('studentInfoFields', initState.studentInfoFields);
+            dispatch({
+              type: 'fetchInfoFields',
+              // payload: { ...initState.studentInfoFields },
+              payload: {
+                data: studentInfoFields,
+              },
+            });
             dispatch({
               type: 'fetchCollegeList',
               payload: {},

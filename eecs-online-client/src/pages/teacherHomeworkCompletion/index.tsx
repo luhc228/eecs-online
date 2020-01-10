@@ -4,7 +4,6 @@
 import React, { useEffect } from 'react';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import { StateType } from './models';
-import router from 'umi/router';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import CustomCard from '@/components/CustomCard';
@@ -15,6 +14,7 @@ import styles from './index.less';
 import FilterForm from '@/components/CustomForm';
 import { ColumnProps } from 'antd/es/table';
 import { FormItemComponentProps } from '@/interfaces/components';
+import umiRouter from 'umi/router';
 
 const filterFormConfig: FormItemComponentProps[] = [
   {
@@ -31,28 +31,9 @@ const filterFormConfig: FormItemComponentProps[] = [
   },
   {
     label: '班级',
-    name: 'studentClass',
+    name: 'classId',
     component: FORM_COMPONENT.Input,
     required: false,
-  },
-  {
-    label: '迟交',
-    name: 'delay',
-    component: FORM_COMPONENT.Select,
-    required: false,
-     props: {
-       selectMode: 'multilple',
-     },
-    datasource: [
-      {
-        value: 'delay',
-        label: '否',
-      },
-      {
-        value: 'not_delay',
-        label: '是',
-      }
-    ],
   },
 ]
 
@@ -73,24 +54,35 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
   } = props;
 
   useEffect(() => {
+    if (!filterFields.classId) {
+      return;
+    }
     dispatch({
-      type: 'completion/fetchCpletionPagination',
-      payload: { data: { ...PAGINATION_CONFIGS } },
+      type: 'teacherHomeworkCompletion/fetchCompletionPagination',
+      payload: {
+        data: {
+          ...PAGINATION_CONFIGS,
+          ...filterFields,
+        }
+      },
     })
-  }, []);
+  }, [!filterFields.classId]);
 
-  const handleEdit = (allFields: CompletionListItem) => {
-    dispatch({
-      type: 'completion/studentCompletionEdit',
-      payload: { data: allFields },
-    })
-    router.push('/teacher/homework/completion/edit');
+  const handleEdit = (record: CompletionListItem) => {
+    umiRouter.push({
+      pathname: '/teacher/homework/completion/detail',
+      query:{
+        homeworkId: record.homeworkId,
+        studentId: record.studentId,
+      },})
   }
 
   const columns: ColumnProps<CompletionListItem>[] = [
     { title: '姓名', dataIndex: 'studentName' },
     { title: '学号', dataIndex: 'studentId' },
-    { title: '是否迟交', dataIndex: 'delay' },
+    { title: '作业名称', dataIndex: 'homeworkName' },
+    { title: '课程名称', dataIndex: 'courseName' },
+    { title: '班级名称', dataIndex: 'className' },
     { title: '分数', dataIndex: 'homeworkScore' },
     {
       title: '操作',
@@ -113,20 +105,20 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
           formTypes={CUSTOM_FORM_TYPES.Filter}
           onFieldsChange={(allFields: object) => {
             dispatch({
-              type: '/changeFilterFields',
+              type: 'teacherHomeworkCompletion/changeFilterFields',
               payload: { filterFields: allFields },
             })
           }}
           formConfig={filterFormConfig}
-          onSubmit={value => dispatch({
-            type: 'completion/fetchCompletionPagination',
-            payload: {
-              data: {
-                ...PAGINATION_CONFIGS,
-                ...value
-              }
-            },
-          })}
+          // onSubmit={value => dispatch({
+          //   type: 'teacherHomeworkCompletion/fetchCompletionPagination',
+          //   payload: {
+          //     data: {
+          //       ...PAGINATION_CONFIGS,
+          //       ...value
+          //     }
+          //   },
+          // })}
         />
       </CustomCard>
 
@@ -140,7 +132,7 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
           rowKey={(record: CompletionListItem) => record.studentName}
           onPagination={(current: number) => {
             dispatch({
-              type: 'completion/fetchCompletionPagination',
+              type: 'teacherHomeworkCompletion/fetchCompletionPagination',
               payload: {
                 data: {
                   ...PAGINATION_CONFIGS,
@@ -167,7 +159,7 @@ const mapStateToProps = ({
   };
 }) => ({
   teacherHomeworkCompletion,
-  fetchCompletionPaginationLoading: loading.effects['completion/fetchCompletionPagination'],
+  fetchCompletionPaginationLoading: loading.effects['teacherHomeworkCompletion/fetchCompletionPagination'],
 })
 
 export default connect(mapStateToProps)(TeacherHomeworkCompletion);

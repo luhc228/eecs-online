@@ -7,6 +7,7 @@ import { connect } from 'dva';
 import { Button, Popconfirm } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import router from 'umi/router';
+import umiRouter from 'umi/router';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { PAGINATION_CONFIGS } from '@/constants';
 import { TeacherHomeworkListItem } from '@/interfaces/teacherHomework';
@@ -30,7 +31,7 @@ const filterFormConfig: FormItemComponentProps[] = [
     component: FORM_COMPONENT.Input,
     required: false,
   },
-]
+];
 
 interface HomeworkProps {
   dispatch: Dispatch<any>;
@@ -52,15 +53,15 @@ const Homework: React.FC<HomeworkProps> = props => {
     dispatch({
       type: 'homework/fetchHomeworkPagination',
       payload: { data: { ...PAGINATION_CONFIGS } },
-    })
+    });
   }, []);
 
   const handleEdit = (record: TeacherHomeworkListItem) => {
     router.push({
       pathname: '/teacher/homework/edit',
       query: {
-        homeworkId: record.homeworkId
-      }
+        homeworkId: record.homeworkId,
+      },
     });
   };
 
@@ -72,22 +73,20 @@ const Homework: React.FC<HomeworkProps> = props => {
     dispatch({
       type: 'homework/removeHomework',
       payload: { homeworkId },
-    })
+    });
   };
 
   const handleCompletion = (record: TeacherHomeworkListItem) => {
-    router.push({
+    umiRouter.push({
       pathname: '/teacher/homework/completion',
-      query: {
-        homeworkId: record.homeworkId
-      }
-    }
-    )
-  }
+      query: { homeworkId: record.homeworkId, courseId: record.courseId },
+    });
+  };
 
   const columns: ColumnProps<TeacherHomeworkListItem>[] = [
     { title: '作业名称', dataIndex: 'homeworkName' },
     // { title: '发布时间', dataIndex: 'startAt'},
+    { title: '所属课程', dataIndex: 'courseName' },
     { title: '截止时间', dataIndex: 'endAt' },
     { title: '作业描述', dataIndex: 'description' },
     { title: '总分', dataIndex: 'homeworkScore' },
@@ -104,8 +103,9 @@ const Homework: React.FC<HomeworkProps> = props => {
           <Popconfirm
             title="确定删除此作业"
             onConfirm={() => {
-              handleDelete(record.homeworkId)
-            }}>
+              handleDelete(record.homeworkId);
+            }}
+          >
             <a href="">删除</a>
           </Popconfirm>
         </span>
@@ -124,26 +124,31 @@ const Homework: React.FC<HomeworkProps> = props => {
             dispatch({
               type: 'homework/changeFilterFields',
               payload: { filterFields: allFields },
-            })
+            });
           }}
           formConfig={filterFormConfig}
-          onSubmit={value => dispatch({
-            type: 'homework/fetchHomeworkPagination',
-            payload: {
-              data:
-              {
-                ...PAGINATION_CONFIGS,
-                ...value,
-              }
-            },
-          })}
+          onSubmit={value =>
+            dispatch({
+              type: 'homework/fetchHomeworkPagination',
+              payload: {
+                data: {
+                  ...PAGINATION_CONFIGS,
+                  ...value,
+                },
+              },
+            })
+          }
         />
       </CustomCard>
 
       <CustomCard
         title="作业信息列表"
         extra={
-          <Button type="primary" onClick={handleCreate}>新增作业</Button>}>
+          <Button type="primary" onClick={handleCreate}>
+            新增作业
+          </Button>
+        }
+      >
         <CustomTable
           loading={fetchHomeworkPaginationLoading}
           columns={columns}
@@ -158,16 +163,16 @@ const Homework: React.FC<HomeworkProps> = props => {
                 data: {
                   ...PAGINATION_CONFIGS,
                   ...filterFields,
-                  page: current
-                }
+                  page: current,
+                },
               },
-            })
+            });
           }}
         />
       </CustomCard>
     </>
-  )
-}
+  );
+};
 
 const mapStateToProps = ({
   homework,
@@ -182,6 +187,6 @@ const mapStateToProps = ({
 }) => ({
   homework,
   fetchHomeworkPaginationLoading: loading.effects['homework/fetchHomeworkPagination'],
-})
+});
 
 export default connect(mapStateToProps)(Homework);

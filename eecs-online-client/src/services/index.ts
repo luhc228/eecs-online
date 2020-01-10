@@ -25,7 +25,7 @@ export function fetchVirClassList(teacherId: string) {
  * 获取真实班级信息列表
  */
 export function fetchClassList() {
-  return request.get('/student/class/list');
+  return request.get('/student/true_class');
 }
 
 /**

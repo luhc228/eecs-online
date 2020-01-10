@@ -7,7 +7,6 @@ import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
 import RouterPrompt from '@/components/RouterPrompt';
 import { StateType } from './models';
 import CustomCard from '@/components/CustomCard';
-import userUtils from '@/utils/user-utils';
 
 interface StudentInfoProps {
   studentInfo: StateType;
@@ -19,8 +18,6 @@ interface StudentInfoProps {
 const StudentInfo: React.FC<StudentInfoProps> = ({ studentInfo, dispatch, location, loading }) => {
   const { studentInfoFields, when, collegeIdDataSource, classIdDataSource } = studentInfo;
 
-  // console.log(password);
-  // console.log(userUtils.getUserInfo());
   const formConfig: FormItemComponentProps[] = [
     {
       label: '用户名',
@@ -40,7 +37,7 @@ const StudentInfo: React.FC<StudentInfoProps> = ({ studentInfo, dispatch, locati
       component: FORM_COMPONENT.Select,
       required: true,
       props: {
-        mode: 'multiple',
+        selectMode: 'multiple',
       },
       datasource: collegeIdDataSource,
     },
@@ -50,7 +47,7 @@ const StudentInfo: React.FC<StudentInfoProps> = ({ studentInfo, dispatch, locati
       component: FORM_COMPONENT.Select,
       required: true,
       props: {
-        mode: 'multiple',
+        selectMode: 'multiple',
       },
       datasource: classIdDataSource,
     },

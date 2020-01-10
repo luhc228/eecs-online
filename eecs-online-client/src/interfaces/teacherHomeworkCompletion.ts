@@ -1,27 +1,27 @@
 import { TableListPaginationProps, PaginationProps } from './components';
 
-export interface CompletionFilterFieldsModel {
+export interface FilterFieldsModel {
   //
-  studentName?: string;
+  classId?: number;
+  // 课程Id
+  courseId?: number;
   //
-  studentId?: string;
-  //
-  studentClass?: string;
-  //
-  delay?: boolean;
-  //
-  homeworkScore: number;
+  homeworkId: number;
+}
+
+export interface CompletionListItem extends FilterFieldsModel {
+  courseName: string;
+  className: string;
+  homeworkName: string;
+  studentId: string;
+  studentName: string;
+  homeworkScore: string;
 }
 
 /**
  * 作业完成情况分页请求参数接口
  */
-export interface PaginationParamsModel extends CompletionFilterFieldsModel, PaginationProps {}
-
-export interface CompletionListItem extends CompletionFilterFieldsModel {
-  //
-  homeworkId: string;
-}
+export interface PaginationParamsModel extends FilterFieldsModel, PaginationProps {}
 
 /**
  * 完成情况分页接口

@@ -1,15 +1,15 @@
 import { EffectsCommandMap } from 'dva';
 import {
-  HomeworkTableData,
-  HomeworkFieldsModel,
+  TeacherHomeworkTableData,
+  TeacherHomeworkFilterFieldsModel,
   PaginationParamsModel,
 } from '@/interfaces/teacherHomework';
 import * as homeworkService from '../services';
 import { DEFAULT_TABLE_PAGINATION_STATE } from '@/constants';
 
 export interface StateType {
-  data: HomeworkTableData;
-  filterFields: HomeworkFieldsModel;
+  data: TeacherHomeworkTableData;
+  filterFields: TeacherHomeworkFilterFieldsModel;
 }
 
 const Model = {

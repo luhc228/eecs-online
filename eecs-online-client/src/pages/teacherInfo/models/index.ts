@@ -15,13 +15,12 @@ export interface StateType {
 }
 
 const initState = {
-  teacherInfoFields: userUtils.getUserInfo(),
-  // {
-  //   teacherId: undefined,
-  //   teacherName: undefined,
-  //   teacherGender: undefined,
-  //   teacherCollege: undefined,
-  // },
+  teacherInfoFields: {
+    teacherId: '',
+    teacherName: '',
+    teacherGender: '',
+    teacherCollege: '',
+  },
   when: true,
   collegeIdDataSource: [],
 };
@@ -31,10 +30,12 @@ export interface ModelType {
   state: StateType;
   reducers: {
     changeTeacherInfoFields: Reducer<StateType>;
+    fetchTeacherInfoFields: Reducer<StateType>;
     changePromptStatus: Reducer<StateType>;
   };
   effects: {
     updateTeacherInfo: Effect<StateType>;
+    fetchInfoFields: Effect<StateType>;
   };
 }
 
@@ -52,7 +53,7 @@ const Model = {
       state: StateType,
       { payload }: { type: string; payload: { data: TeacherInfoFieldsModel } },
     ) {
-      console.log(payload.data);
+      console.log('payload.data', payload.data);
       return {
         ...state,
         teacherInfoFields: payload.data,
@@ -67,6 +68,17 @@ const Model = {
       return { ...state, when: payload.when };
     },
 
+    fetchTeacherInfoFields(
+      state: StateType,
+      { payload }: { type: string; payload: { data: TeacherInfoFieldsModel } },
+    ) {
+      console.log('payload.data', payload.data);
+      return {
+        ...state,
+        teacherInfoFields: payload.data,
+      };
+    },
+
     saveCollegeIdDataSource(
       state: StateType,
       { payload }: { type: string; payload: { data: SelectComponentDatasourceModel[] } },
@@ -77,6 +89,24 @@ const Model = {
   },
 
   effects: {
+    *fetchInfoFields(
+      { payload }: { type: string; payload: { data: TeacherInfoFieldsModel } },
+      { call, put }: EffectsCommandMap,
+    ) {
+      const response = yield call(teacherInfoService.fetchTeacherInfo, payload.data);
+      if (!response) {
+        return;
+      }
+      const { data } = response;
+      console.log('data', data);
+      yield put({
+        type: 'fetchTeacherInfoFields',
+        payload: {
+          data,
+        },
+      });
+    },
+
     *fetchCollegeList(
       { payload }: { type: string; payload: {} },
       { call, put }: EffectsCommandMap,
@@ -90,7 +120,7 @@ const Model = {
       } = response;
       const collegeIdDataSource = list.map((item: any) => ({
         label: item.college,
-        value: item.collegeId,
+        value: item.college,
       }));
       // console.log(collegeIdDataSource);
 
@@ -110,12 +140,14 @@ const Model = {
       { call, put }: EffectsCommandMap,
     ) {
       yield call(teacherInfoService.updateTeacherInfo, payload.data);
+      console.log('payload.data', payload.data);
       yield put({
         type: 'changePromptStatus',
         payload: {
           when: false,
         },
       });
+      console.log('payload.data', payload.data);
       router.goBack();
     },
   },
@@ -132,7 +164,13 @@ const Model = {
           });
 
           const userInfo = userUtils.getUserInfo();
+          const { teacherInfoFields } = initState;
           if (Object.keys(userInfo).length !== 0) {
+            dispatch({
+              type: 'fetchInfoFields',
+              payload: { data: teacherInfoFields },
+            });
+
             dispatch({
               type: 'fetchCollegeList',
               payload: {},

@@ -67,7 +67,7 @@ request.interceptors.request.use((url: string, options: any) => {
 });
 
 // response 拦截器
-request.interceptors.response.use((response) => {
+request.interceptors.response.use(response => {
   if (response.status !== 200) {
     showNotification(response.status, codeMessage[response.status], NOTIFICATION_TYPE.error);
   }
@@ -76,50 +76,56 @@ request.interceptors.response.use((response) => {
 });
 
 // 使用中间件对请求前后做处理
-request.use(async (ctx, next) => {
-  const { req } = ctx;
-  const { options } = req;
+request.use(
+  async (ctx, next) => {
+    const { req } = ctx;
+    const { options } = req;
 
-  const userInfo = userUtils.getUserInfo();
+    const userInfo = userUtils.getUserInfo();
 
-  if (userUtils.isLogin) {
-    if (options.method === 'post') {
-      if (options.data) {
-        if (userInfo.userType !== undefined) {
-          const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
-          const newData = { ...options.data, [userIdName]: userInfo[userIdName] }
-          const newOptions = { ...options, data: newData }
+    if (userUtils.isLogin) {
+      if (options.method === 'post') {
+        if (options.data) {
+          console.log(userInfo.userType);
+          if (userInfo.userType) {
+            console.log(userInfo.userType);
+            const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]];
 
-          ctx.req.options = {
-            ...newOptions,
-          };
+            const newData = { ...options.data, [userIdName]: userInfo[userIdName] };
+            const newOptions = { ...options, data: newData };
+
+            ctx.req.options = {
+              ...newOptions,
+            };
+          }
+        }
+      }
+
+      if (options.method === 'get') {
+        if (options.params) {
+          if (userInfo.userType) {
+            console.log(userInfo.userType);
+            const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]];
+            const newParams = { ...options.params, [userIdName]: userInfo[userIdName] };
+            const newOptions = { ...options, params: newParams };
+
+            ctx.req.options = {
+              ...newOptions,
+            };
+          }
         }
       }
     }
 
+    await next();
 
-    if (options.method === 'get') {
-      if (options.params) {
-        if (userInfo.userType !== undefined) {
-          const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]]
-          const newParams = { ...options.params, [userIdName]: userInfo[userIdName] }
-          const newOptions = { ...options, params: newParams }
-
-          ctx.req.options = {
-            ...newOptions,
-          };
-        }
-      }
+    const { res } = ctx;
+    const { success = false, message = '请求失败' } = res;
+    if (!success) {
+      showNotification('请求错误', message, NOTIFICATION_TYPE.error);
     }
-  }
-
-  await next();
-
-  const { res } = ctx;
-  const { success = false, message = '请求失败' } = res;
-  if (!success) {
-    showNotification('请求错误', message, NOTIFICATION_TYPE.error);
-  }
-}, { global: true })
+  },
+  { global: true },
+);
 
 export default request;
