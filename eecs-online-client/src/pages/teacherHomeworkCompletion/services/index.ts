@@ -6,6 +6,7 @@ import { PaginationParamsModel } from '@/interfaces/teacherHomeworkCompletion';
  * @param data
  */
 export function fetchCompletionPagination(data: PaginationParamsModel) {
+  console.log(data);
   return request.post('/homework_condition/teacher/pagination', {
     data,
   });
