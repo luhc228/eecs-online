@@ -101,17 +101,22 @@ const studentHomeworkModel = {
 
   subscriptions: {
     setup(
-      { dispatch }: { dispatch: Dispatch<any> }
+      { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
-      const userInfo = userUtils.getUserInfo();
-      if (Object.keys(userInfo).length !== 0) {
-        dispatch({
-          type: 'fetchCourseList',
-          payload: {
-            studentId: userInfo.studentId
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/student/homework') {
+          const userInfo = userUtils.getUserInfo();
+
+          if (Object.keys(userInfo).length !== 0) {
+            dispatch({
+              type: 'fetchCourseList',
+              payload: {
+                studentId: userInfo.studentId
+              }
+            })
           }
-        })
-      }
+        }
+      })
     },
   }
 }

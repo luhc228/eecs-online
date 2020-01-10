@@ -62,17 +62,17 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
-                </div>
-              ),
-              name: `judge${questionId}`,
-              component: FORM_COMPONENT.Radio,
-              initialValue: Number(submitAnswer),
-              datasource,
-              props: {
-                disabled: true,
-              },
-              required: false,
-            };
+                  </div>
+                ),
+                name: `judge${questionId}`,
+                component: FORM_COMPONENT.Radio,
+                initialValue: submitAnswer ? Number(submitAnswer) : '',
+                datasource,
+                props: {
+                  disabled: true
+                },
+                required: false
+              }
 
             formItems.push(result);
 
@@ -110,17 +110,17 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
-                </div>
-              ),
-              name: `single${questionId}`,
-              component: FORM_COMPONENT.Radio,
-              initialValue: submitAnswer,
-              datasource,
-              props: {
-                disabled: true,
-              },
-              required: false,
-            };
+                  </div>
+                ),
+                name: `single${questionId}`,
+                component: FORM_COMPONENT.Radio,
+                initialValue: submitAnswer || '',
+                datasource,
+                props: {
+                  disabled: true
+                },
+                required: false
+              }
 
             formItems.push(result);
 
@@ -143,8 +143,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
             {
               let datasource: SelectComponentDatasourceModel[] = [];
               let initialValue: string[] = [];
-              if (answer && typeof answer === 'string' && answer.includes('|')) {
-                initialValue = answer.split('|')
+              if (submitAnswer && typeof submitAnswer === 'string' && submitAnswer.includes('|')) {
+                initialValue = submitAnswer.split('|')
               }
               if (options && options.length) {
                 datasource = options.split('|').map((option: string, index: number) => ({
@@ -157,7 +157,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                   <div className={styles.label}>
                     <span>【多选题】{content}（{questionScore}分）</span>
                     <div>
-                      <span style={{ color: 'red' }}>正确答案：{answer}</span>
+                      <span style={{ color: 'red' }}>正确答案：{answer && answer.split('|').sort().join('、')}</span>
                       <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                     </div>
                     {contentImage && contentImage !== '' && contentImage.split('|').map((imgSrc: string, index: number) => (
@@ -223,19 +223,19 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
-                </div>
-              ),
-              name: `program${item.questionId}`,
-              component: FORM_COMPONENT.CodeEditor,
-              initialValue: submitAnswer,
-              props: {
-                readOnly: true,
-              },
-              required: false,
-            };
-            formItems.push(result);
-            break;
-          }
+                  </div>
+                ),
+                name: `program${item.questionId}`,
+                component: FORM_COMPONENT.CodeEditor,
+                initialValue: submitAnswer || '',
+                props: {
+                  readOnly: true,
+                },
+                required: false
+              }
+              formItems.push(result);
+              break;
+            }
           default:
             break;
         }

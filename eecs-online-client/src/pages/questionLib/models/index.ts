@@ -141,17 +141,21 @@ const questionLibModel = {
 
   subscriptions: {
     setup(
-      { dispatch }: { dispatch: Dispatch<any> }
+      { dispatch, history }: { dispatch: Dispatch<any>, history: any }
     ) {
-      const userInfo = userUtils.getUserInfo();
-      if (Object.keys(userInfo).length !== 0) {
-        dispatch({
-          type: 'fetchCourseList',
-          payload: {
-            teacherId: userInfo.teacherId
+      return history.listen(({ pathname }: { pathname: string }) => {
+        if (pathname === '/teacher/question-lib') {
+          const userInfo = userUtils.getUserInfo();
+          if (Object.keys(userInfo).length !== 0) {
+            dispatch({
+              type: 'fetchCourseList',
+              payload: {
+                teacherId: userInfo.teacherId
+              }
+            });
           }
-        });
-      }
+        }
+      })
     },
   }
 }
