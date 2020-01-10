@@ -21,7 +21,7 @@ export interface ModelType {
     // changeUserType: Reducer<StateType>;
   };
   effects: {
-    PasswordEdit: Effect<StateType>;
+    userPasswordEdit: Effect<StateType>;
   };
 }
 
@@ -40,7 +40,7 @@ const Model: ModelType = {
   reducers: {},
 
   effects: {
-    *PasswordEdit({ payload: { userType, values } }: any, { call, put }: any) {
+    *userPasswordEdit({ payload: { userType, values } }: any, { call, put }: any) {
       let passwordEdit;
       if (typeof userType === 'string') {
         userType = Number(userType);

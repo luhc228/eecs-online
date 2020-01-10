@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import umiRouter from 'umi/router';
-import { Input, Button, Form } from 'antd';
+import { Input, Button, Form, message } from 'antd';
 import { StateType } from '../../models';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@/enums';
@@ -37,15 +37,20 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
   // }, [!questionScoreList]);
 
   function handleEdit(allFields: DetailEditModel) {
-    umiRouter.push({
-      pathname: '/teacher/homework/completion/detail/edit',
-      query: {
-        homeworkId: allFields.homeworkId,
-        studentId: allFields.studentId,
-        questionScore: allFields.score,
-        questionId: allFields.questionId,
-      }
-    })
+    if (allFields.status === 1) {
+      umiRouter.push({
+        pathname: '/teacher/homework/completion/detail/edit',
+        query: {
+          homeworkId: allFields.homeworkId,
+          studentId: allFields.studentId,
+          questionScore: allFields.score,
+          questionId: allFields.questionId,
+        },
+      });
+    }
+    if (allFields.status === 0) {
+      message.info('此学生未提交此次作业，不可修改成绩');
+    }
   }
 
   function handleSubmit() {
@@ -81,6 +86,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
           score,
           studentId,
           homeworkId,
+          status,
         };
         switch (questionType) {
           case QUESTION_TYPE.judge: {
@@ -148,7 +154,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }} onClick={() => handleEdit(allFields)}>学生得分：{score}分</span>
+                    <span
+                      style={{ marginLeft: 10, color: 'red' }}
+                      onClick={() => handleEdit(allFields)}
+                    >
+                      学生得分：{score}分
+                    </span>
                   </div>
                   {contentImage &&
                     contentImage !== '' &&
@@ -193,7 +204,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }} onClick={() => handleEdit(allFields)}>学生得分：{score}分</span>
+                    <span
+                      style={{ marginLeft: 10, color: 'red' }}
+                      onClick={() => handleEdit(allFields)}
+                    >
+                      学生得分：{score}分
+                    </span>
                   </div>
                   {contentImage &&
                     contentImage !== '' &&
@@ -227,7 +243,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }} onClick={() => handleEdit(allFields)}>学生得分：{score}分</span>
+                    <span
+                      style={{ marginLeft: 10, color: 'red' }}
+                      onClick={() => handleEdit(allFields)}
+                    >
+                      学生得分：{score}分
+                    </span>
                   </div>
                   {contentImage &&
                     contentImage !== '' &&

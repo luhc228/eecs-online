@@ -52,7 +52,7 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
       label: '班级',
       name: 'className',
       component: FORM_COMPONENT.Select,
-      required: true,
+      required: false,
       props: {
         selectMode: 'multiple',
       },

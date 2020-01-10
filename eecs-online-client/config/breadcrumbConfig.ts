@@ -15,7 +15,9 @@ const teacherBreadcrumbConfig: breadcrumbConfigProps = {
   '/teacher/homework': '作业管理',
   '/teacher/homework/create': '创建作业',
   '/teacher/homework/edit': '编辑作业',
-  '/teacher/homework-completion': '作业完成情况',
+  '/teacher/homework/completion': '作业完成情况',
+  '/teacher/homework/completion/detail': '学生作业完成详情',
+  '/teacher/homework/completion/detail/edit': '学生分数更改',
   '/teacher/userInfo': '个人信息',
 };
 
