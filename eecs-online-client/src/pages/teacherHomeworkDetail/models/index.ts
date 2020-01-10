@@ -27,7 +27,7 @@ const initState = {
   },
   filterFields: {
     studentId: '',
-    homeworkId: null,
+    homeworkId: 0,
   },
   when: false,
 };
@@ -95,6 +95,7 @@ const TeacherHomeworkDetail = {
       // console.log('response', response);
       const { data, success } = response;
       const { list, questionScoreList } = data;
+      // console.log('list', list)
       if (!success) {
         return;
       }
@@ -106,25 +107,6 @@ const TeacherHomeworkDetail = {
         },
       });
     },
-
-    // /**
-    //  * 更新试题
-    //  */
-    // *updateTeacherHomeworkDetail(
-    //   { payload }: { type: string; payload: { allFileds: DetailEditModel } },
-    //   { call, put }: EffectsCommandMap,
-    // ) {
-    //   const response = yield call(services.updateTeacherHomeworkDetail, payload.allFileds);
-    //   const { success } = response;
-    //   if (success) {
-    //     yield put({
-    //       type: 'changePromptStatus',
-    //       payload: {
-    //         when: false,
-    //       },
-    //     });
-    //   }
-    // },
   },
 
   subscriptions: {
@@ -138,7 +120,7 @@ const TeacherHomeworkDetail = {
       filterFields: FilterFieldsModel;
     }) {
       return history.listen(
-        ({ pathname, query }: { pathname: string; query: { [k: string]: number } }) => {
+        ({ pathname, query }: { pathname: string; query: { [k: string]: string } }) => {
           if (pathname === '/teacher/homework/completion/detail') {
             dispatch({
               type: 'initState',
@@ -146,12 +128,10 @@ const TeacherHomeworkDetail = {
                 state: initState,
               },
             });
-
-            const filterFields = {
-              homeworkId: Number(query.homeworkId),
-              studentId: query.studentId,
-            };
-            console.log(filterFields);
+            const { filterFields } = initState;
+            filterFields.homeworkId = Number(query.homeworkId);
+            filterFields.studentId = query.studentId;
+            // console.log(filterFields);
             dispatch({
               type: 'fetchHomeworkCondition',
               payload: {

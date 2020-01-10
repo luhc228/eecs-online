@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
+import QueryString from 'qs';
 import CustomForm from '@/components/CustomForm';
 import { FormItemComponentProps } from '@/interfaces/components';
 import { FORM_COMPONENT, CUSTOM_FORM_TYPES } from '@/enums';
@@ -23,6 +24,10 @@ const TeacherHomeworkDetailEdit: React.FC<DetailEditProps> = ({
 }) => {
   const { detailFields, when } = teacherHomeworkDetailEdit;
 
+  // console.log('location', location);
+  const { query } = location;
+  // console.log('query', query);
+
   const formConfig: FormItemComponentProps[] = [
     {
       label: '学生得分',
@@ -36,20 +41,22 @@ const TeacherHomeworkDetailEdit: React.FC<DetailEditProps> = ({
     // console.log('allFields', questionScore)
     dispatch({
       type: 'teacherHomeworkDetailEdit/changeDetailFields',
-      payload: { data: allFields },
+      payload: { data: { ...allFields } },
     });
   };
 
   const handleSubmit = (allFields: object) => {
     console.log(allFields);
+    // Number(allFields)
     dispatch({
       type: 'teacherHomeworkDetailEdit/updateTeacherHomeworkDetail',
       payload: {
         data: {
-          allFields,
-          questionId: detailFields.questionId,
-          homeworkId: detailFields.homeworkId,
-          studentId: detailFields.studentId,
+          // ...allFields,
+          questionScore: Number(allFields.questionScore),
+          questionId: Number(query.questionId),
+          homeworkId: Number(query.homeworkId),
+          studentId: query.studentId,
         },
       },
     });

@@ -12,6 +12,7 @@ import studentAvatar from '@/assets/student.png';
 import teacherAvatar from '@/assets/teacher.png';
 import userAvatar from '@/assets/user.png';
 import { USER_TYPE } from '@/enums';
+import userUtils from '@/utils/user-utils';
 
 const avatar = {
   [USER_TYPE.Student]: studentAvatar,
@@ -34,6 +35,18 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
         });
       }
     }
+
+    const userInfo = userUtils.getUserInfo();
+    const { userType } = userInfo;
+    console.log(userType)
+    if (key === 'passwordEdit') {
+      if (userType === USER_TYPE.Student){
+        router.push('/student/passwordEdit');
+      }
+      if (userType === USER_TYPE.Teacher) {
+        router.push('/teacher/passwordEdit');
+      }
+    }
   };
 
   const menuHeaderDropdown = (
@@ -41,6 +54,10 @@ const AvatarDropdown: React.SFC<AvatarDropdownProps> = props => {
       <Menu.Item key="logout">
         <Icon type="logout" />
         <span>退出登录</span>
+      </Menu.Item>
+      <Menu.Item key='passwordEdit'>
+        <Icon type="key" />
+        <span>修改密码</span>
       </Menu.Item>
     </Menu>
   );

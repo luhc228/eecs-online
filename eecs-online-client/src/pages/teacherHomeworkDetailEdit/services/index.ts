@@ -6,6 +6,7 @@ import request from '@/utils/request';
  * @param data
  */
 export function updateTeacherHomeworkDetail(data: DetailEditModel) {
+  console.log('data', data);
   return request.post('/homework_condition/teacher/question/score/edit', {
     data,
   });

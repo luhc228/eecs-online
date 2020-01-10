@@ -18,37 +18,31 @@ export interface QuestionFormProps {
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, dispatch }) => {
   const { data, filterFields } = teacherHomeworkDetail;
-  console.log('QuestionForm', data);
+  // console.log('QuestionForm', data);
   // console.log(filterFields);
   const { list, questionScoreList } = data;
 
-  useEffect(() => {
-    if (!questionScoreList) {
-      return;
-    }
-    dispatch({
-      type: 'teacherHomeworkDetail/fetchHomeworkCondition',
-      payload: {
-        data: {
-          ...filterFields,
-        }
-      },
-    })
-  }, [!questionScoreList]);
+  // useEffect(() => {
+  //   if (!questionScoreList) {
+  //     return;
+  //   }
+  //   dispatch({
+  //     type: 'teacherHomeworkDetail/fetchHomeworkCondition',
+  //     payload: {
+  //       data: {
+  //         ...filterFields,
+  //       }
+  //     },
+  //   })
+  // }, [!questionScoreList]);
 
   function handleEdit(allFields: DetailEditModel) {
-    // dispatch({
-    //   type: 'teacherHomeworkDetail/updateTeacherHomeworkDetail',
-    //   payload: {
-    //     allFields,
-    //   },
-    // });
     umiRouter.push({
       pathname: '/teacher/homework/completion/detail/edit',
       query: {
         homeworkId: allFields.homeworkId,
         studentId: allFields.studentId,
-        score: allFields.score,
+        questionScore: allFields.score,
         questionId: allFields.questionId,
       }
     })
@@ -82,6 +76,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
           status,
           score,
         } = item;
+        const allFields = {
+          questionId,
+          score,
+          studentId,
+          homeworkId,
+        };
         switch (questionType) {
           case QUESTION_TYPE.judge: {
             const datasource: SelectComponentDatasourceModel[] = [
@@ -94,14 +94,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                 label: '正确',
               },
             ];
-
-            const allFields = {
-              questionId,
-              score,
-              studentId,
-              homeworkId,
-            };
-
             const result = {
               label: (
                 <div className={styles.label}>
@@ -148,7 +140,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                 label: `${getOption(index)}、${option}`,
               }));
             }
-
             const result = {
               label: (
                 <div className={styles.label}>
@@ -157,7 +148,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>学生得分：{score}分</span>
+                    <span style={{ marginLeft: 10, color: 'red' }} onClick={() => handleEdit(allFields)}>学生得分：{score}分</span>
                   </div>
                   {contentImage &&
                     contentImage !== '' &&
@@ -202,7 +193,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>学生得分：{score}分</span>
+                    <span style={{ marginLeft: 10, color: 'red' }} onClick={() => handleEdit(allFields)}>学生得分：{score}分</span>
                   </div>
                   {contentImage &&
                     contentImage !== '' &&
@@ -236,7 +227,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
                   </span>
                   <div style={{ marginLeft: 70 }}>
                     <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>学生得分：{score}分</span>
+                    <span style={{ marginLeft: 10, color: 'red' }} onClick={() => handleEdit(allFields)}>学生得分：{score}分</span>
                   </div>
                   {contentImage &&
                     contentImage !== '' &&

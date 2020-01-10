@@ -5,7 +5,7 @@ import { FormComponentProps } from 'antd/es/form';
 import { Dispatch } from 'redux';
 import router from 'umi/router';
 import { passwordForm } from '@/interfaces/passwordEdit';
-import styles from './index.less';
+import styles from './EditForm.less';
 
 interface PasswordProps extends FormComponentProps {
   dispatch: Dispatch<any>;

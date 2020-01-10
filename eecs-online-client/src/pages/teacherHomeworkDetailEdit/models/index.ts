@@ -13,9 +13,9 @@ export interface StateType {
 const initState = {
   detailFields: {
     studentId: '',
-    questionId: null,
-    homeworkId: null,
-    questionScore: null,
+    questionId: 0,
+    homeworkId: 0,
+    questionScore: 0,
   },
   when: true,
 };
@@ -89,7 +89,7 @@ const Model = {
       detailFields: DetailEditModel;
     }) {
       return history.listen(
-        ({ pathname, query }: { pathname: string; query: { [k: string]: number } }) => {
+        ({ pathname, query }: { pathname: string; query: { [k: string]: string } }) => {
           if (pathname === '/teacher/homework/completion/detail/edit') {
             dispatch({
               type: 'initState',
@@ -98,15 +98,7 @@ const Model = {
               },
             });
 
-            // const detailFields = {
-            //   homeworkId: Number(query.homeworkId),
-            //   studentId: query.studentId,
-            //   questionId: Number(query.questionId),
-            //   questionScore: Number(query.score),
-            // };
-            // console.log('detailFields', detailFields);
-            const questionScore = Number(query.score);
-            console.log(questionScore);
+            const questionScore = Number(query.questionScore);
             dispatch({
               type: 'changeDetailFields',
               payload: {
