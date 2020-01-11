@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import appConfig from '@/appConfig';
@@ -80,16 +81,16 @@ request.use(
   async (ctx, next) => {
     const { req } = ctx;
     const { options } = req;
+    // console.log('ddddd', userUtils.isLogin());
+    if (userUtils.isLogin()) {
+      const userInfo = userUtils.getUserInfo();
 
-    const userInfo = userUtils.getUserInfo();
-
-    if (userUtils.isLogin) {
       if (options.method === 'post') {
         if (options.data) {
-          console.log(userInfo.userType);
-          if (userInfo.userType) {
-            console.log(userInfo.userType);
+          if (!(userInfo.userType == undefined)) {
             const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]];
+
+            // console.log(userInfo.userType, userIdName);
 
             const newData = { ...options.data, [userIdName]: userInfo[userIdName] };
             const newOptions = { ...options, data: newData };
@@ -103,9 +104,11 @@ request.use(
 
       if (options.method === 'get') {
         if (options.params) {
-          if (userInfo.userType) {
-            console.log(userInfo.userType);
+          if ((userInfo.userType !== undefined)) {
             const userIdName: string = usernameToFormFieldName[USER_TYPE[userInfo.userType]];
+
+            // console.log(userInfo.userType, userIdName);
+
             const newParams = { ...options.params, [userIdName]: userInfo[userIdName] };
             const newOptions = { ...options, params: newParams };
 

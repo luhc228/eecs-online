@@ -43,9 +43,9 @@ export default {
       if (!response.success) {
         return;
       }
-      const { accessToken, ...userInfo } = response.data;
+      const userInfo = response.data;
 
-      userUtils.saveToken(accessToken);
+      // userUtils.saveToken(accessToken);
       userUtils.saveUserInfo({ ...userInfo, userType });
 
       const urlParams = new URL(window.location.href);

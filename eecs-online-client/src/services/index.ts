@@ -22,12 +22,12 @@ export function fetchVirClassList(homeworkId: number, teacherId: number) {
   });
 }
 
-export function fetchVirClassHomework( homeworkId: number) {
+export function fetchVirClassHomework(homeworkId: number) {
   return request.get('/vir_class/homework', {
-    params:{
+    params: {
       homeworkId,
-    }
-  })
+    },
+  });
 }
 
 /**

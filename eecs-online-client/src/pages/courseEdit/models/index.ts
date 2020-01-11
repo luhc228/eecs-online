@@ -79,10 +79,10 @@ const Model = {
      * 获取所有虚拟班级信息
      */
     *fetchvirClassList(
-      { payload }: { type: string; payload: { teacherId: string } },
+      _: object,
       { call, put }: EffectsCommandMap,
     ) {
-      const response = yield call(fetchVirClassList, payload.teacherId);
+      const response = yield call(fetchVirClassList);
       if (!response) {
         return;
       }
@@ -142,17 +142,20 @@ const Model = {
       return history.listen(({ pathname }: { pathname: string }) => {
         if (
           pathname === '/teacher/course/create'
-          // || pathname === '/teacher/course/edit'
+          || pathname === '/teacher/course/edit'
         ) {
-          dispatch({
-            type: 'initState',
-            payload: {
-              state: initState,
-            },
-          });
-
+          if (pathname === '/teacher/course/create') {
+            dispatch({
+              type: 'initState',
+              payload: {
+                state: initState,
+              },
+            });
+          }
+          console.log(333);
           const userInfo = userUtils.getUserInfo();
           if (Object.keys(userInfo).length !== 0) {
+            console.log(2222);
             dispatch({
               type: 'fetchvirClassList',
               payload: {
