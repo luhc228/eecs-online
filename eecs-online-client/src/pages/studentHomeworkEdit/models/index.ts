@@ -311,7 +311,13 @@ const studentHomeworkEdit = {
           },
         })
         showNotification('通知', '提交答案成功', NOTIFICATION_TYPE.success);
-        router.goBack();
+
+        router.push({
+          pathname: '/student/homework/detail',
+          query: {
+            homeworkId
+          }
+        });
       }
     },
   },

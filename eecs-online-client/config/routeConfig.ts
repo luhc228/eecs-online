@@ -38,7 +38,6 @@ export default [
       { path: '/student/homework', component: './studentHomework' },
       { path: '/student/homework/edit', component: './studentHomeworkEdit' },
       { path: '/student/homework/detail', component: './studentHomeworkDetail' },
-      // { path: '/student/homework-completion', component: './studentHomeworkCompletion' },
       { path: '/student/userInfo', component: './studentInfo' },
       { path: '/student/passwordEdit', component: './passwordEdit' },
       { path: '/student', redirect: '/student/homework' },
