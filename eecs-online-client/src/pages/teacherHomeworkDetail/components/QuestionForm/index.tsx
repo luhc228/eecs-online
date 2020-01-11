@@ -60,6 +60,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ teacherHomeworkDetail, disp
         data,
       },
     });
+    umiRouter.goBack();
   }
 
   const generateFormConfig = (): FormItemComponentProps[] => {

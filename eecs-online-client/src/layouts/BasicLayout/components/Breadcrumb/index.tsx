@@ -5,11 +5,11 @@ import breadcrumbConfig, { excludePaths } from '../../../../../config/breadcrumb
 import styles from './index.less';
 
 interface BreadcrumbProps {
-  location: Location
+  location: Location;
 }
 
 const HeaderBreadcrumb: React.SFC<BreadcrumbProps> = props => {
-  const { location } = props
+  const { location } = props;
   const pathSnippets = location.pathname.split('/').filter(i => i);
 
   const breadcrumbItems: React.ReactNode[] = pathSnippets.map((_, index) => {
@@ -25,6 +25,19 @@ const HeaderBreadcrumb: React.SFC<BreadcrumbProps> = props => {
         </Breadcrumb.Item>
       );
     }
+    console.log('location', location);
+    console.log('path', path);
+    if (location.pathname === '/teacher/homework/completion/detail') {
+      // const { query } = location;
+      // const pathname = `${path}?${location.search}`;
+      // console.log('pathname', `${location.pathname}?${location.search}`);
+      // return (
+      //   <Breadcrumb.Item key={path}>
+      //     <Link to={`${pathname}`}>{breadcrumbConfig[path]}</Link>
+      //   </Breadcrumb.Item>
+      // );
+    }
+
     return (
       <Breadcrumb.Item key={path}>
         <Link to={`${path}`}>{breadcrumbConfig[path]}</Link>
@@ -36,7 +49,7 @@ const HeaderBreadcrumb: React.SFC<BreadcrumbProps> = props => {
     <div className={styles.breadcrumb}>
       <Breadcrumb separator=">">{breadcrumbItems}</Breadcrumb>
     </div>
-  )
-}
+  );
+};
 
 export default HeaderBreadcrumb;

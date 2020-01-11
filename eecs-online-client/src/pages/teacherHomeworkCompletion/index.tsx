@@ -92,6 +92,7 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
     { title: '作业名称', dataIndex: 'homeworkName' },
     { title: '课程名称', dataIndex: 'courseName' },
     { title: '班级名称', dataIndex: 'className' },
+    { title: '完成情况', dataIndex: 'status' },
     { title: '分数', dataIndex: 'homeworkScore' },
     {
       title: '操作',
