@@ -68,7 +68,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({
       dataSource={studentList}
       targetKeys={targetKeys}
       disabled={false}
-      showSearch={true}
+      showSearch
       rowKey={(record: StudentDetailModel) => record.studentId}
       onChange={handleChange}
       filterOption={(inputValue, item) =>

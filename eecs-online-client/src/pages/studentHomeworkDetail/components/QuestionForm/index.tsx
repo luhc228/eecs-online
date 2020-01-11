@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Input } from 'antd';
 import { StateType } from '../../models';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, QUESTION_TYPE, JUDGE_VALUE, FORM_COMPONENT } from '@/enums';
@@ -74,19 +73,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                 required: false
               }
 
-            formItems.push(result);
+              formItems.push(result);
 
-            break;
-          }
-          case QUESTION_TYPE.single: {
-            let datasource: SelectComponentDatasourceModel[] = [];
-            if (options && options.length) {
-              datasource = options.split('|').map((option: string, index: number) => ({
-                value: getOption(index),
-                label: `${getOption(index)}、${option}`,
-              }));
+              break;
             }
-          }
           case QUESTION_TYPE.single:
             {
               let datasource: SelectComponentDatasourceModel[] = [];
@@ -122,23 +112,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                 required: false
               }
 
-            formItems.push(result);
+              formItems.push(result);
 
-            break;
-          }
-          case QUESTION_TYPE.multiple: {
-            let datasource: SelectComponentDatasourceModel[] = [];
-            let initialValue: string[] = [];
-            if (answer && typeof answer === 'string' && answer.includes('|')) {
-              initialValue = answer.split('|');
+              break;
             }
-            if (options && options.length) {
-              datasource = options.split('|').map((option: string, index: number) => ({
-                value: getOption(index),
-                label: `${getOption(index)}、${option}`,
-              }));
-            }
-          }
           case QUESTION_TYPE.multiple:
             {
               let datasource: SelectComponentDatasourceModel[] = [];
@@ -165,44 +142,17 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
                         <img src={imgSrc} alt="questionImage" />
                       </div>
                     ))}
-                </div>
-              ),
-              name: `multiple${questionId}`,
-              component: FORM_COMPONENT.Checkbox,
-              props: {
-                disabled: true,
-              },
-              initialValue,
-              datasource,
-              required: false,
-            };
-
-            formItems.push(result);
-
-            break;
-          }
-          case QUESTION_TYPE.program: {
-            const result = {
-              label: (
-                <div className={styles.label}>
-                  <span>
-                    【编程题】{content}（{questionScore}分）
-                  </span>
-                  <div style={{ marginLeft: 70 }}>
-                    <span style={{ color: 'red' }}>正确答案：{answer}</span>
-                    <span style={{ marginLeft: 10, color: 'red' }}>你的得分：{score}分</span>
                   </div>
-                </div>
                 ),
                 name: `multiple${questionId}`,
                 component: FORM_COMPONENT.Checkbox,
                 props: {
-                  disabled: true
+                  disabled: true,
                 },
                 initialValue,
                 datasource,
-                required: false
-              }
+                required: false,
+              };
 
               formItems.push(result);
 
@@ -252,7 +202,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ studentHomeworkDetail }) =>
       layout="vertical"
       values={homeworkFields}
       formTypes={CUSTOM_FORM_TYPES.OneColumn}
-      onFieldsChange={() => {}}
+      onFieldsChange={() => { }}
       formConfig={generateFormConfig()}
     />
   );
