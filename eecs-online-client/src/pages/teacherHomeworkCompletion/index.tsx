@@ -149,7 +149,8 @@ const TeacherHomeworkCompletion: React.FC<CompletionProps> = props => {
               payload: {
                 data: {
                   ...PAGINATION_CONFIGS,
-                  page: current
+                  page: current,
+                  ...location.query,
                 }
               },
             })

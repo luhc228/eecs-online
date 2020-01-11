@@ -38,4 +38,4 @@ export default breadcrumbConfig;
 /**
  * 不可点击的面包屑
  */
-export const excludePaths = ['/teacher', '/student', '/teacher/homework/completion'];
+export const excludePaths = ['/teacher', '/student'];
