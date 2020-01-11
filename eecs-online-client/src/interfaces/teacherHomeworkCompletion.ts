@@ -23,6 +23,7 @@ export interface CompletionListItem extends FilterFieldsModel {
   studentId: string;
   studentName: string;
   homeworkScore: string;
+  status: number;
 }
 
 /**

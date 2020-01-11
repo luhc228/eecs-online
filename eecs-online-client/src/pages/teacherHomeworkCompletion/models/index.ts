@@ -9,7 +9,7 @@ import {
 import * as completionService from '../services';
 import { Effect } from '@/interfaces/reduxState';
 import { DEFAULT_TABLE_PAGINATION_STATE, PAGINATION_CONFIGS } from '@/constants';
-import { fetchVirClassList } from '@/services';
+import { fetchVirClassHomework } from '@/services';
 import { SelectComponentDatasourceModel } from '@/interfaces/components';
 
 export interface StateType {
@@ -78,7 +78,7 @@ const Model = {
       { payload }: { type: string; payload: { homeworkId: number } },
       { call, put }: EffectsCommandMap,
     ) {
-      const response = yield call(fetchVirClassList, payload.homeworkId);
+      const response = yield call(fetchVirClassHomework, payload.homeworkId);
       if (!response) {
         return;
       }
