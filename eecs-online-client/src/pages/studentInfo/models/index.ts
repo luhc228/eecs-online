@@ -171,13 +171,18 @@ const Model = {
     ) {
       yield call(studentInfoService.updateStudentInfo, payload.data);
       yield put({
-        // type: 'changePromptStatus',
+        // type: 'fetchStudentInfoFields',
         type: 'changeStudentInfoFields',
+        payload: {
+          data: payload.data,
+        },
+      });
+      yield put({
+        type: 'changePromptStatus',
         payload: {
           when: false,
         },
       });
-      // router.goBack();
     },
   },
 

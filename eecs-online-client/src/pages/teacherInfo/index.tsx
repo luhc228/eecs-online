@@ -65,14 +65,15 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
       type: 'teacherInfo/updateTeacherInfo',
       payload: { data: { ...allFields, teacherId: teacherInfoFields.teacherId } },
     });
-    dispatch({
-      type: 'teacherInfo/fetchInfoFields',
-      payload: {
-        data: {
-          ...teacherInfoFields,
-        },
-      },
-    });
+    // console.log('teacherInfoFields', teacherInfoFields)
+    // dispatch({
+    //   type: 'teacherInfo/fetchInfoFields',
+    //   payload: {
+    //     data: {
+    //       ...teacherInfoFields,
+    //     },
+    //   },
+    // });
   };
 
   return (

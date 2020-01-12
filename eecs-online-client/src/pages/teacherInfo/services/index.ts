@@ -17,6 +17,7 @@ export function updateTeacherInfo(data: TeacherInfoFieldsModel) {
  * @param data
  */
 export function fetchTeacherInfo(params: TeacherInfoFieldsModel) {
+  console.log('params', params);
   return request.get('/teacher/get', {
     params,
   });
