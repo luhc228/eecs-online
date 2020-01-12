@@ -53,7 +53,7 @@ const Model = {
       state: StateType,
       { payload }: { type: string; payload: { data: TeacherInfoFieldsModel } },
     ) {
-      console.log('payload.data', payload.data);
+      console.log('changeinfo-data', payload.data);
       return {
         ...state,
         teacherInfoFields: payload.data,
@@ -72,7 +72,7 @@ const Model = {
       state: StateType,
       { payload }: { type: string; payload: { data: TeacherInfoFieldsModel } },
     ) {
-      console.log('payload.data', payload.data);
+      console.log('fetchinfo', payload.data);
       return {
         ...state,
         teacherInfoFields: payload.data,
@@ -140,7 +140,14 @@ const Model = {
       { call, put }: EffectsCommandMap,
     ) {
       yield call(teacherInfoService.updateTeacherInfo, payload.data);
-      console.log('payload.data', payload.data);
+      console.log('update', payload.data);
+      yield put({
+        // type: 'fetchTeacherInfoFields',
+        type: 'changeTeacherInfoFields',
+        payload: {
+          data: payload.data,
+        },
+      });
       yield put({
         type: 'changePromptStatus',
         payload: {
@@ -148,7 +155,6 @@ const Model = {
         },
       });
       console.log('payload.data', payload.data);
-      // router.goBack();
     },
   },
 
