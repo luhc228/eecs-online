@@ -108,7 +108,7 @@ const Model = {
       { payload }: { type: string; payload: { data: PaginationParamsModel } },
       { put, call }: EffectsCommandMap,
     ) {
-      console.log(payload.data);
+      console.log('data', payload.data);
       const response = yield call(completionService.fetchCompletionPagination, payload.data);
       const { data } = response;
       console.log(data);
