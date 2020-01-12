@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import CustomForm from '@/components/CustomForm';
@@ -64,6 +64,14 @@ const TeacherInfo: React.FC<TeacherInfoProps> = ({ teacherInfo, dispatch, locati
     dispatch({
       type: 'teacherInfo/updateTeacherInfo',
       payload: { data: { ...allFields, teacherId: teacherInfoFields.teacherId } },
+    });
+    dispatch({
+      type: 'teacherInfo/fetchInfoFields',
+      payload: {
+        data: {
+          ...teacherInfoFields,
+        },
+      },
     });
   };
 
