@@ -77,7 +77,16 @@ Introduction to EECS I课程以Python为教学语言，其中每周一次的Soft
 
 - install backend dependencies
 
-  TODO...
+  ```shell
+  cd eecs-online-server
+  pip install -r requirements.txt
+  ```
+  
+  - start backend project
+  
+  ```shell
+  python manage.py runserver
+  ```
 
 ### Contributing
 
