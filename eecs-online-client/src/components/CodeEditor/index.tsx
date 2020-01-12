@@ -24,7 +24,7 @@ const CodeEditor = forwardRef<FormComponentProps, CodeEditorProps>(
     }
 
     return (
-      <div style={{ display: 'block', }}>
+      <div style={{ display: 'block' }}>
         <AceEditor
           readOnly={readOnly}
           mode="python"
