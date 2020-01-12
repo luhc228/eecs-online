@@ -6,26 +6,33 @@ from login.models import User
 
 class TeacherManage(models.Manager):
 
-    def teacher_edit(self, id, name, college, gender, password):
-        user = User.objects.get(user_id=id)
-        user.password = password
-        user.save()
+    def teacher_edit(self, id, name, college, gender):
+        # user = User.objects.get(user_id=id)
+        # user.password = password
+        # user.save()
 
-        teacher = Teacher.teacher_manage.get(id=id)
+        teacher = Teacher.teacher_manage.get(id=str(id))
         teacher.teacher_name = name
         teacher.teacher_gender = gender
         teacher.teacher_college = college
         teacher.save()
         return teacher
 
+    def get_teacher(self, teacher_id):
+        teacher = Teacher.teacher_manage.get(id=teacher_id)
+        teacher_information = {}
+        teacher_information['teacherId'] = teacher.id
+        teacher_information['teacherName'] = teacher.teacher_name
+        teacher_information['teacherCollege'] = teacher.teacher_college
+        teacher_information['teacherGender'] = teacher.teacher_gender
+        return teacher_information
+
 
 class Teacher(models.Model):
     id = models.CharField(max_length=128, primary_key=True, blank=False, unique=True)
     teacher_name = models.CharField(max_length=128)
     teacher_gender = models.CharField(max_length=128, default="男")
-    teacher_college = models.IntegerField(
-        choices=((0, '信息科学与工程学院'), (1, '法学院'), (2, '政治学与公共管理学院'), (3, '计算机科学与技术学院'), (4, '生命科学学院'), (5, '环境科学与工程学院')),
-        default=0)
+    teacher_college = models.CharField(max_length=128)
 
     creat_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

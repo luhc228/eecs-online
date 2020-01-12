@@ -7,4 +7,6 @@ from teacher import views
 urlpatterns = [
     url('edit', views.edit),
     url('college', views.list_college),
+    url('password', views.edit_password),
+    url('get', views.get),
 ]

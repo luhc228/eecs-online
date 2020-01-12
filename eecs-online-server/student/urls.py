@@ -8,5 +8,7 @@ urlpatterns = [
     url('detail/pagination', views.paginator_student),
     url('edit', views.edit),
     url('detail', views.detail),
-    url('college', views.list_college)
+    url('true_class', views.list_class),
+    url('password', views.edit_password),
+    url('get', views.get),
 ]

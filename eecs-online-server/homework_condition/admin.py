@@ -4,3 +4,4 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.QuestionCondition)
+admin.site.register(models.HomeworkCondition)

@@ -1,5 +1,7 @@
 from django.shortcuts import HttpResponse
 import json
+
+from college.models import College
 from student.models import Student
 from teacher.models import Teacher
 from login.models import User
@@ -8,10 +10,11 @@ from login.models import User
 # Create your views here.
 def teacher(request):
     if request.method == "POST":
-        user_id = request.POST.get('teacherId')
-        password = request.POST.get('password')
+        data = json.loads(request.body.decode())
+        user_id = data['teacherId']
+        password = data['password']
         try:
-            teacher = Teacher.objects.get(id=user_id)
+            teacher = Teacher.teacher_manage.get(id=user_id)
             user = User.objects.get(user_id=user_id)
         except:
             content = {
@@ -30,8 +33,8 @@ def teacher(request):
                 'data': {
                     'teacherName': teacher.teacher_name,
                     'teacherId': teacher.id,
-                    'teacherGender': teacher.teacher_gender,
-                    'teacherCollege': teacher.teacher_college,
+                    # 'teacherGender': teacher.teacher_gender,
+                    # 'teacherCollege': College.objects.get(id=teacher.teacher_college).college,
                 },
             }
             return HttpResponse(content=json.dumps(content, ensure_ascii=False),
@@ -55,10 +58,11 @@ def teacher(request):
 
 def student(request):
     if request.method == "POST":
-        user_id = request.POST.get('studentId')
-        password = request.POST.get('password')
+        data = json.loads(request.body.decode())
+        user_id = data['studentId']
+        password = data['password']
         try:
-            student = Student.objects.get(id=user_id)
+            student = Student.student_manage.get(id=user_id)
             user = User.objects.get(user_id=user_id)
         except:
             content = {
@@ -77,9 +81,9 @@ def student(request):
                 'data': {
                     'studentName': student.student_name,
                     'studentId': student.id,
-                    'studentGender': student.student_gender,
-                    'studentCollege': student.student_college,
-                    'studentClass': student.student_class,
+                    # 'studentGender': student.student_gender,
+                    # 'studentCollege': College.objects.get(id=student.student_college).college,
+                    # 'studentClass': student.student_class,
                 },
             }
             return HttpResponse(content=json.dumps(content, ensure_ascii=False),

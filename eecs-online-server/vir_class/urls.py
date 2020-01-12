@@ -11,4 +11,5 @@ urlpatterns = [
     url('edit', views.edit),
     url('delete', views.delete),
     url('list', views.list),
+    url('homework', views.list_2),
 ]
