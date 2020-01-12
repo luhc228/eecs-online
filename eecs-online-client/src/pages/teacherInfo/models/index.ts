@@ -148,7 +148,7 @@ const Model = {
         },
       });
       console.log('payload.data', payload.data);
-      router.goBack();
+      // router.goBack();
     },
   },
 

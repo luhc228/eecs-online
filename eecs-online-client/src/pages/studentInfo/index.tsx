@@ -30,6 +30,9 @@ const StudentInfo: React.FC<StudentInfoProps> = ({ studentInfo, dispatch, locati
       name: 'studentId',
       component: FORM_COMPONENT.Input,
       required: true,
+      props: {
+        disabled: true,
+      }
     },
     {
       label: '学院',
@@ -70,6 +73,14 @@ const StudentInfo: React.FC<StudentInfoProps> = ({ studentInfo, dispatch, locati
     dispatch({
       type: 'studentInfo/updateStudentInfo',
       payload: { data: { ...allFields, studentId: studentInfoFields.studentId } },
+    });
+    dispatch({
+      type: 'studentInfo/fetchInfoFields',
+      payload: {
+        data: {
+          ...studentInfoFields,
+        },
+      },
     });
   };
 

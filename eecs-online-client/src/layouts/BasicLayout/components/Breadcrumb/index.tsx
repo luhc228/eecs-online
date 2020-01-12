@@ -27,15 +27,12 @@ const HeaderBreadcrumb: React.SFC<BreadcrumbProps> = props => {
     }
     console.log('location', location);
     console.log('path', path);
-    if (location.pathname === '/teacher/homework/completion/detail') {
-      // const { query } = location;
-      // const pathname = `${path}?${location.search}`;
-      // console.log('pathname', `${location.pathname}?${location.search}`);
-      // return (
-      //   <Breadcrumb.Item key={path}>
-      //     <Link to={`${pathname}`}>{breadcrumbConfig[path]}</Link>
-      //   </Breadcrumb.Item>
-      // );
+    if (path === '/teacher/homework/completion' || path === '/teacher/homework/completion/detail') {
+      return (
+        <Breadcrumb.Item key={path}>
+          <span>{breadcrumbConfig[path]}</span>
+        </Breadcrumb.Item>
+      )
     }
 
     return (
