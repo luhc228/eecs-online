@@ -6,17 +6,26 @@ from login.models import User
 
 class TeacherManage(models.Manager):
 
-    def teacher_edit(self, id, name, college, gender, password):
-        user = User.objects.get(user_id=id)
-        user.password = password
-        user.save()
+    def teacher_edit(self, id, name, college, gender):
+        # user = User.objects.get(user_id=id)
+        # user.password = password
+        # user.save()
 
-        teacher = Teacher.teacher_manage.get(id=id)
+        teacher = Teacher.teacher_manage.get(id=str(id))
         teacher.teacher_name = name
         teacher.teacher_gender = gender
         teacher.teacher_college = college
         teacher.save()
         return teacher
+
+    def get_teacher(self, teacher_id):
+        teacher = Teacher.teacher_manage.get(id=teacher_id)
+        teacher_information = {}
+        teacher_information['teacherId'] = teacher.id
+        teacher_information['teacherName'] = teacher.teacher_name
+        teacher_information['teacherCollege'] = teacher.teacher_college
+        teacher_information['teacherGender'] = teacher.teacher_gender
+        return teacher_information
 
 
 class Teacher(models.Model):

@@ -7,5 +7,8 @@ from student import views
 urlpatterns = [
     url('detail/pagination', views.paginator_student),
     url('edit', views.edit),
-    url('detail', views.detail)
+    url('detail', views.detail),
+    url('true_class', views.list_class),
+    url('password', views.edit_password),
+    url('get', views.get),
 ]

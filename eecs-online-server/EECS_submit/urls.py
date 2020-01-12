@@ -32,4 +32,5 @@ urlpatterns = [
                   url('api/homework_condition/', include('homework_condition.urls')),
                   url('api/question_lib/', include('question_lib.urls')),
                   url('api/image', include('image.urls')),
+                  url('api/college/', include('college.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

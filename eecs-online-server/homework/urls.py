@@ -11,4 +11,5 @@ urlpatterns = [
     url('teacher/delete', views.delete),
     url('student/pagination', views.paginator_student),
     url('teacher/get', views.get_homework),
+    url('student/question/list', views.get_homework_question)
 ]

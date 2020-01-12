@@ -162,22 +162,27 @@
       <workItem from="1576512890120" duration="263000" />
       <workItem from="1576544316085" duration="8587000" />
       <workItem from="1576561585597" duration="28246000" />
+      <workItem from="1576590849449" duration="70000" />
+      <workItem from="1576591202896" duration="164000" />
+      <workItem from="1576656226034" duration="1830000" />
+      <workItem from="1576675508752" duration="173000" />
+      <workItem from="1576676606842" duration="365000" />
+      <workItem from="1576677774940" duration="50000" />
+      <workItem from="1576737589783" duration="2002000" />
+      <workItem from="1576822294540" duration="467000" />
+      <workItem from="1576824434087" duration="1909000" />
+      <workItem from="1576831997015" duration="111000" />
+      <workItem from="1576835525358" duration="2435000" />
+      <workItem from="1576853784960" duration="3952000" />
+      <workItem from="1576984347240" duration="1151000" />
+      <workItem from="1576985616103" duration="978000" />
+      <workItem from="1576995134542" duration="147000" />
+      <workItem from="1577010410421" duration="268000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/homework_condition/models.py</url>
-          <line>69</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/EECS_submit$Test__student_homework_condition.coverage" NAME="Test: student_homework_condition Coverage Results" MODIFIED="1576503365727" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

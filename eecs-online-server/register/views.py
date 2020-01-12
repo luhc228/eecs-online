@@ -9,12 +9,13 @@ from login.models import User
 
 def teacher(request):
     if request.method == 'POST':
-        teacher_id = request.POST.get('teacherId')
-        teacher_name = request.POST.get('teacherName')
-        password = request.POST.get('password')
+        data = json.loads(request.body.decode())
+        teacher_id = data['teacherId']
+        teacher_name = data['teacherName']
+        password = data['password']
         try:
             User.objects.get(user_id=teacher_id)
-            con = {
+            content = {
                 'success': False,
                 'message': '用户已存在',
                 'data': {
@@ -33,7 +34,7 @@ def teacher(request):
             user.user_id = teacher_id
             user.password = password
             user.save()
-            con = {
+            content = {
                 'success': True,
                 'message': '教师注册成功',
                 'data': {
@@ -41,24 +42,25 @@ def teacher(request):
                     'teacherName': teacher_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误',
         }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')
 
 
 def student(request):
     if request.method == 'POST':
-        student_id = request.POST.get('studentId')
-        student_name = request.POST.get('studentName')
-        password = request.POST.get('password')
+        data = json.loads(request.body.decode())
+        student_id = data['studentId']
+        student_name = data['studentName']
+        password = data['password']
         try:
             User.objects.get(user_id=student_id)
-            con = {
+            content = {
                 'success': False,
                 'message': '用户已存在',
                 'data': {
@@ -76,7 +78,7 @@ def student(request):
             user.user_id = student_id
             user.password = password
             user.save()
-            con = {
+            content = {
                 'success': True,
                 'message': '学生注册成功',
                 'data': {
@@ -84,11 +86,11 @@ def student(request):
                     'studentName': student_name,
                 },
             }
-        return HttpResponse(content=json.dumps(con, ensure_ascii=False),
+        return HttpResponse(content=json.dumps(content, ensure_ascii=False),
                             content_type='application/json;charset = utf-8')
     else:
-        con = {
+        content = {
             'success': False,
             'message': '请求错误',
         }
-    return HttpResponse(content=json.dumps(con, ensure_ascii=False), content_type='application/json;charset = utf-8')
+    return HttpResponse(content=json.dumps(content, ensure_ascii=False), content_type='application/json;charset = utf-8')

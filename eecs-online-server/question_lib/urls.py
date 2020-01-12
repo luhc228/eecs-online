@@ -10,4 +10,5 @@ urlpatterns = [
     url('question/teacher/add', views.add),
     url('question/teacher/update', views.update),
     url('question/teacher/delete', views.delete),
+    url('question/teacher/get', views.all),
 ]

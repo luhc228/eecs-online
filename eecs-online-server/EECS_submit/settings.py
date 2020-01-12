@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import corsheaders
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,7 +24,7 @@ SECRET_KEY = 'vx*hz9eosz+5)!24p0ce3=9qzo0l2#f)ve=bj$l4(&=0gku)wy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'login',
     'register',
     'course',
@@ -45,13 +46,44 @@ INSTALLED_APPS = [
     'question_lib',
     'homework_condition',
     'image',
+    'college',
 ]
+
+#¿çÓòÔö¼ÓºöÂÔ
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = ('http://localhost', 'http://47.97.215.154')
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'VIEW',
+)
+
+CORS_ALLOW_HEADERS = (
+    'XMLHttpRequest',
+    'X_FILENAME',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Pragma',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+##    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -129,5 +161,5 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 # AUTH_USER_MODEL = 'student_homework_condition.QuestionCondition'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')  # è®¾ç½®é™æ€æ–‡ä»¶è·¯å¾„ä¸ºä¸»ç›®å½•ä¸‹çš„mediaæ–‡ä»¶å¤¹
-MEDIA_URL = '/media/'  # urlæ˜ å°„
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')  # ÉèÖÃ¾²Ì¬ÎÄ¼şÂ·¾¶ÎªÖ÷Ä¿Â¼ÏÂµÄmediaÎÄ¼ş¼Ğ
+MEDIA_URL = '/media/'  # urlÓ³Éä

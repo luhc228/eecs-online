@@ -1,7 +1,6 @@
 from django.db import models
 from teacher.models import Teacher
 from student.models import Student
-from utils import str_to_list
 
 
 # Create your models here.
@@ -28,14 +27,12 @@ class VirClassManage(models.Manager):
     def creat_class(self, class_name, student_id_list):
         vir_class = self.model()
         vir_class.class_name = class_name
-        # 将学生id字符串转为id列表
-        student_id_list = str_to_list(student_id_list)
         vir_class.save()
         # 添加到ClassStudent数据库中
         for i in range(len(student_id_list)):
             class_student = ClassStudent()
             class_student.class_id = vir_class
-            class_student.student_id = Student.student_manage.get(id=student_id_list[i])
+            class_student.student_id = Student.student_manage.get(id=str(student_id_list[i]))
             class_student.save()
         return vir_class
 
@@ -52,25 +49,36 @@ class VirClassManage(models.Manager):
             student_list.append(student_dict)
         return student_list
 
-    def edit_class(self, class_id, student_id_list):
+    def edit_class(self, class_id, class_name, student_id_list):
+        vir_class = VirClass.class_manage.get(id=class_id)
         student_class_queryset = ClassStudent.objects.filter(class_id=class_id)
         # 先删除所有的数据,这里不是修改的delted属性，而是直接删除
-        for i in student_class_queryset:
-            i.delete()
-        # 将学生id字符串转为id列表
-        student_id_list = str_to_list(student_id_list)
+        if student_class_queryset:
+            for i in student_class_queryset:
+                i.delete()
         # 添加到ClassStudent数据库中
         for i in range(len(student_id_list)):
             class_student = ClassStudent()
-            class_student.class_id_id = class_id
-            class_student.student_id = Student.student_manage.get(id=student_id_list[i])
+            class_student.class_id = vir_class
+            class_student.student_id = Student.student_manage.get(id=str(student_id_list[i]))
             class_student.save()
-        return None
+        # 如果class_name不是空的就更改
+        if class_name:
+            vir_class.class_name = class_name
+            vir_class.save()
+        return vir_class.class_name
 
     def delete(self, class_id):
         vir_class = VirClass.class_manage.get(id=class_id, deleted=0)  # 获取对应的course对象
         vir_class.deleted = 1
         vir_class.save()
+        # 删除该班级下的学生
+        for class_student in vir_class.classstudent_set.all():
+            class_student.deleted = 1
+            class_student.save()
+        # 取消与班级对应的课程联系
+        for course in vir_class.course_set.filter(class_id=vir_class.id):
+            course.class_id.remove(vir_class)
         return vir_class  # 返回创建的对象
 
 
