@@ -47,3 +47,12 @@ export function fetchHomeworkCondition(homeworkId: number, studentId: string) {
     }
   })
 }
+
+/**
+ * 运行代码获取测试结果
+ */
+export function runCode(answer: string) {
+  return request.post('/homework_condition/code/run', {
+    data: { answer }
+  })
+}

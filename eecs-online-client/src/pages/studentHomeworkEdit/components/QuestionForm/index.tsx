@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Button } from 'antd';
 import CustomForm from '@/components/CustomForm';
 import { CUSTOM_FORM_TYPES, FORM_COMPONENT, JUDGE_VALUE } from '@/enums';
 import { FormItemComponentProps, UmiComponentProps, SelectComponentDatasourceModel } from '@/interfaces/components';
@@ -7,6 +8,7 @@ import { StateType } from '../../models';
 import RouterPrompt from '@/components/RouterPrompt';
 import { HomeworkListItem } from '@/interfaces/studentHomeworkEdit';
 import { getOption } from '@/utils';
+import styles from './index.less';
 
 export interface QuestionFormProps extends UmiComponentProps {
   loading: boolean;
@@ -18,13 +20,26 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   dispatch,
   studentHomeworkEdit
 }) => {
-  const { data, homeworkFields, when, questionFormIdMap } = studentHomeworkEdit;
+  const { data, homeworkFields, when, questionFormIdMap, codeRunResult } = studentHomeworkEdit;
   const {
     singleQuestionList,
     multipleQuestionList,
     judgeQuestionList,
     programQuestionList
   } = data;
+
+  /**
+   * 后端运行程序获取结果
+   * @param answer 学生填写的编程题内容
+   */
+  const handleRunCode = (submitAnswer: string) => {
+    dispatch({
+      type: 'studentHomeworkEdit/runCode',
+      payload: {
+        submitAnswer,
+      }
+    })
+  }
 
   const generateFormConfig = (): FormItemComponentProps[] => {
     let formConfig: FormItemComponentProps[] = [];
@@ -128,6 +143,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         label: (
           <>
             <div>【编程题】 {item.content} （{item.questionScore}分）</div>
+            <div className={styles.runCode}>
+              <Button type="primary" icon="play-circle" onClick={() => {
+                const submitAnswer = homeworkFields[`program${item.questionId}`];
+                handleRunCode(submitAnswer)
+              }}>运行</Button>
+              {codeRunResult && <span>程序运行结果：{codeRunResult}</span>}
+            </div>
             {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string, index: number) => (
               <div key={String(index)}>
                 <img src={imgSrc} alt="questionImage" />
@@ -156,7 +178,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   }
 
   const handleSubmit = (allFields: object) => {
-    console.log(allFields);
     dispatch({
       type: 'studentHomeworkEdit/submitHomeworkAnswer',
       payload: {

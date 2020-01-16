@@ -5,4 +5,5 @@ export default {
   '@layout-sider-background': '#ffffff',
   '@padding-md': '20px',
   '@pagination-item-size': '38px',
+  '@font-size': '15px',
 };

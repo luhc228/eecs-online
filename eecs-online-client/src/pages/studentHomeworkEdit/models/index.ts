@@ -12,6 +12,7 @@ export interface StateType {
   homeworkFields: any;
   when: boolean;
   questionFormIdMap: { [k: string]: number };
+  codeRunResult: string;
 }
 
 const initState = {
@@ -27,7 +28,8 @@ const initState = {
   homeworkFields: {},
   when: true,
   // For example: { formId: questionid }
-  questionFormIdMap: {}
+  questionFormIdMap: {},
+  codeRunResult: undefined,
 }
 
 const studentHomeworkEdit = {
@@ -95,6 +97,13 @@ const studentHomeworkEdit = {
         ...state,
         questionFormIdMap
       }
+    },
+
+    setCodeRunResult(
+      state: StateType,
+      { payload }: { type: string; payload: { data: string } }
+    ) {
+      return { ...state, codeRunResult: payload.data }
     },
 
     changePromptStatus(
@@ -195,6 +204,32 @@ const studentHomeworkEdit = {
           data: submitAnswerField
         }
       })
+    },
+
+    /**
+     * 后端运行代码获取运行的结果
+     */
+    *runCode(
+      { payload }: { type: string; payload: { submitAnswer: string } },
+      { call, put }: EffectsCommandMap
+    ) {
+      const response = yield call(
+        services.runCode,
+        payload.submitAnswer,
+      );
+      const { success, message, result } = response;
+      if (success) {
+        showNotification('运行成功', message, NOTIFICATION_TYPE.success)
+        yield put({
+          type: 'setCodeRunResult',
+          payload: {
+            data: result
+          }
+        })
+        return;
+      }
+
+      showNotification('错误', message)
     },
     /**
      * 暂存答案
