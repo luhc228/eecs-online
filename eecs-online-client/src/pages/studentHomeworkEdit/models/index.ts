@@ -101,7 +101,7 @@ const studentHomeworkEdit = {
 
     setCodeRunResult(
       state: StateType,
-      { payload }: { type: string; payload: { data: string } }
+      { payload }: { type: string; payload: { data?: string } }
     ) {
       return { ...state, codeRunResult: payload.data }
     },
@@ -229,7 +229,12 @@ const studentHomeworkEdit = {
         return;
       }
 
-      showNotification('错误', message)
+      yield put({
+        type: 'setCodeRunResult',
+        payload: {
+          data: undefined
+        }
+      })
     },
     /**
      * 暂存答案

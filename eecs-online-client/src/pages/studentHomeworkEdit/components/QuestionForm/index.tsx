@@ -148,7 +148,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 const submitAnswer = homeworkFields[`program${item.questionId}`];
                 handleRunCode(submitAnswer)
               }}>运行</Button>
-              {codeRunResult && <span>程序运行结果：{codeRunResult}</span>}
+              {codeRunResult && <span className={styles.runCodeResult}>程序运行结果：<span className={styles.resultContainer}>{codeRunResult}</span></span>}
             </div>
             {item.contentImage && item.contentImage !== '' && item.contentImage.split('|').map((imgSrc: string, index: number) => (
               <div key={String(index)}>
